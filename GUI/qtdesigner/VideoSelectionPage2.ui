@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>911</width>
+    <height>613</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(255, 255, 255);</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="1" column="0">
+    <widget class="QLabel" name="description">
+     <property name="styleSheet">
+      <string notr="true">font: 15pt &quot;Rubik Light&quot;;
+background-color: rgba(255, 255, 255, 0);</string>
+     </property>
+     <property name="text">
+      <string>description</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QPushButton" name="done_button">
+     <property name="styleSheet">
+      <string notr="true">border-radius: 20px;
+background-color: rgb(0, 64, 130);
+font: 12pt &quot;Rubik Light&quot;;
+color: rgb(255,255,255);</string>
+     </property>
+     <property name="text">
+      <string>Apri</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QGroupBox" name="videos_box">
+     <property name="font">
+      <font>
+       <family>Rubik Light</family>
+       <pointsize>10</pointsize>
+       <italic>true</italic>
+      </font>
+     </property>
+     <property name="title">
+      <string>videos_box_title</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QGroupBox" name="script_box">
+     <property name="font">
+      <font>
+       <family>Rubik Light</family>
+       <pointsize>10</pointsize>
+       <italic>true</italic>
+      </font>
+     </property>
+     <property name="title">
+      <string>Script</string>
+     </property>
+     <widget class="QPlainTextEdit" name="script_text">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>825</width>
+        <height>775</height>
+       </rect>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>1920</width>
+        <height>1080</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 10pt &quot;Rubik Light&quot;;</string>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+      <property name="plainText">
+       <string/>
+      </property>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+  <zorder>done_button</zorder>
+  <zorder>videos_box</zorder>
+  <zorder>script_box</zorder>
+  <zorder>description</zorder>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
