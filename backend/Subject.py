@@ -1,5 +1,4 @@
 from datetime import datetime, timezone
-import os
 import csv
 
 class Subject:
@@ -51,24 +50,21 @@ class Subject:
             writer = csv.writer(file, delimiter=Subject.sep)
             
             fields = ["id", "age", "gender", "english_level"]
+            row = [self.id, self.age, self.gender, self.english_level]
             
-            writer.writerow(fields)
-            writer.writerow([self.id, self.age, self.gender, self.english_level])
-        
-        # write answer csv
-        for i in range(len(self.video_timestamps)):
+            for i in range(len(self.video_timestamps)):
+                
+                fields.append('video' + str(i) + '_name')
+                fields.append('video' + str(i) + '_start_timestamp')
             
-            with open(self.subject_dir()+'/video'+str(i)+'.csv', 'w', newline='') as file:
-                writer = csv.writer(file, delimiter=Subject.sep)
+                row.append(self.video_names[i])
+                row.append(self.video_timestamps[i])
                 
-                fields = ['SubjectID', 'video_number', 'video_name', 'start_timestamp']
-                row = [self.id, i, self.video_names[i], self.video_timestamps[i]]
-                
-                for i, answer in enumerate(self.video_answers[i]):
-                    fields.append('answer' + str(i))
-                    fields.append('timestamp_answer' + str(i))
+                for j, answer in enumerate(self.video_answers[i]):
+                    fields.append('video' + str(i) + '_answer' + str(j))
+                    fields.append('video' + str(i) + '_answer' + str(j) + '_timestamp')
                     row.append(answer[0].replace("\n"," ").replace("\t"," "))
                     row.append(answer[1])
                 
-                writer.writerow(fields)
-                writer.writerow(row)
+            writer.writerow(fields)
+            writer.writerow(row)
