@@ -51,7 +51,10 @@ class MainWindow(QMainWindow):
         self.stacked_widget = QStackedWidget()
         self.setCentralWidget(self.stacked_widget)
         
-        if self.protocol is None:
+        if self.webcamRecorder.cap is None or not self.webcamRecorder.cap.isOpened():
+            self.add_page(TextPage(self, "Nessuna webcam valida trovata!", "Assicuratevi che un dispositivo webcam sia collegato e funzioni correttamente.", "Esci"))
+            return
+        elif self.protocol is None:
             self.add_page(TextPage(self, "Errore!", "File protocollo non trovato. Assicuratevi che il file sia nominato correttamente.\nExpected name: protocol.csv", "Esci"))
             return
         elif self.protocol.empty:
@@ -99,7 +102,7 @@ class MainWindow(QMainWindow):
         if self.webcamRecorder is not None:
             self.webcamRecorder.stop()
         self.subject.set_session_end_timestamp()
-        if not (self.protocol is None or self.protocol.empty):
+        if not (self.webcamRecorder.cap is None or not self.webcamRecorder.cap.isOpened() or self.protocol is None or self.protocol.empty):
             self.subject.dump_to_file("")
         self.close()
     

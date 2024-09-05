@@ -25,6 +25,10 @@ class WebcamRecorder(threading.Thread):
                 break
         
     def run(self):
+        
+        if self.cap is None:
+            return
+        
         out = cv2.VideoWriter(self.output_file, cv2.VideoWriter_fourcc('m','p','4','v'), self.fps, (self.frame_width,self.frame_height))
         
         t = threading.Thread(target=self.start_capture_thread, args=())
