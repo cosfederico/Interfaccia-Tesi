@@ -84,9 +84,6 @@ class MainWindow(QMainWindow):
         
     def add_page(self, page):
         self.stacked_widget.addWidget(page)
- 
-    def insert_page(self, page):
-        self.stacked_widget.insertWidget(self.stacked_widget.currentIndex()+1, page)
     
     def next_page(self):
         self.stacked_widget.setCurrentIndex(self.stacked_widget.currentIndex() + 1)
