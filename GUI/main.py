@@ -80,7 +80,7 @@ class MainWindow(QMainWindow):
         self.add_page(Poll(self, video_descriptor2.getQuestions()))
         self.add_page(RestPage(self, "attendi", self.rest_time))
             
-        self.add_page(TextPage(self, "La nostra esperienza si è conclusa!", "Grazie mille per la partecipazione.", "Fine", button_slot=self.close))
+        self.add_page(TextPage(self, "La nostra esperienza si è conclusa!", "Grazie mille per la partecipazione.", "Fine", button_slot=self.save))
         
     def add_page(self, page):
         self.stacked_widget.addWidget(page)
@@ -93,11 +93,12 @@ class MainWindow(QMainWindow):
             self.webcamRecorder.start()
         self.subject.set_session_start_timestamp()
         
-    def closeEvent(self, QCloseEvent):
+    def save(self):
         if self.webcamRecorder is not None:
             self.webcamRecorder.stop()
         self.subject.set_session_end_timestamp()
         self.subject.dump_to_file()
+        self.close()
     
 def run_main():
     app = QApplication(sys.argv)
