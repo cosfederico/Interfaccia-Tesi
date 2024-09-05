@@ -114,6 +114,6 @@ def run_main():
     opening_msg.setStandardButtons(QMessageBox.NoButton)
     opening_msg.show()
     window = MainWindow(app, rest_time=1, protocol_file_path="protocol.csv")
-    opening_msg.reject()
     window.showFullScreen()
+    opening_msg.reject()
     sys.exit(app.exec_())
