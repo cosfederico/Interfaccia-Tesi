@@ -18,22 +18,6 @@ class TextPage(QWidget):
         self.text.setText(self.text_str)
         self.ready_button.setText(self.button_text)
         self.ready_button.clicked.connect(self.ready_button_clicked)
-    
-    def setupUI(self):
-        self.initialLayout = QVBoxLayout() 
-        self.label = QLabel(self.text)
-        self.initialLayout.addWidget(self.label, alignment=Qt.AlignCenter)
-
-        self.buttons_widget = QWidget()
-        self.buttonsLayout = QHBoxLayout(self.buttons_widget)
-        
-        self.ready_button = QPushButton("Next")
-        self.ready_button.clicked.connect(self.ready_button_clicked)
-        self.buttonsLayout.addWidget(self.ready_button)
-        
-        self.initialLayout.addWidget(self.buttons_widget)
-        
-        self.setLayout(self.initialLayout)
         
     def ready_button_clicked(self):
         self.parent_window.next_page()

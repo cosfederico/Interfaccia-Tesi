@@ -18,20 +18,6 @@ class QuestionPage(QWidget):
         self.title.setText(self.title_str)
         self.next_button.clicked.connect(self.next_button_clicked)
         self.setContentsMargins(300,300,300,300)
-
-    def loadUI(self):
-        self.initialLayout = QVBoxLayout()
-        
-        self.question = QLabel(self.question_str)
-        self.inputbox = QPlainTextEdit()
-        self.next_button = QPushButton("Next")
-        self.next_button.clicked.connect(self.next_button_clicked)
-        
-        self.initialLayout.addWidget(self.question, alignment=Qt.AlignCenter)
-        self.initialLayout.addWidget(self.inputbox, alignment=Qt.AlignCenter)
-        self.initialLayout.addWidget(self.next_button)
-            
-        self.setLayout(self.initialLayout)
             
     def next_button_clicked(self):
         self.parent_window.add_answer((self.inputbox.toPlainText(), datetime.now(timezone.utc)))

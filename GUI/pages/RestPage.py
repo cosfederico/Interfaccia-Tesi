@@ -12,12 +12,6 @@ class RestPage(QWidget):
         
         loadUi("GUI/qtdesigner/RestPage.ui", self)
         self.label.setText(self.text)
-
-    def setupUI(self):
-        self.initialLayout = QVBoxLayout()
-        self.label = QLabel(self.text)
-        self.initialLayout.addWidget(self.label, alignment=Qt.AlignCenter)
-        self.setLayout(self.initialLayout)
         
     def showEvent(self, QShowEvent):
         self.play()
