@@ -43,7 +43,7 @@ class Subject:
     def add_video_answers(self, answers:list):
         self.video_answers.append(answers)
         
-    def dump_to_file(self, file_path:str):
+    def dump_to_file(self):
         
         # write data csv
         with open(self.subject_dir()+'/data.csv', 'w', newline='') as file:
