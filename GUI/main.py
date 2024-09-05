@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
 
 from GUI.pages.TextPage import *
 from GUI.pages.RestPage import *
@@ -104,7 +105,12 @@ class MainWindow(QMainWindow):
     
 def run_main():
     app = QApplication(sys.argv)
+    opening_msg = QMessageBox()
+    opening_msg.setWindowTitle("Interfaccia")
+    opening_msg.setText("Stiamo caricando tutte le risorse necessarie...\t")
+    opening_msg.setStandardButtons(QMessageBox.NoButton)
+    opening_msg.show()
     window = MainWindow(app, rest_time=1, protocol_file_path="protocol.csv")
-  
+    opening_msg.reject()
     window.showFullScreen()
     sys.exit(app.exec_())
