@@ -23,27 +23,11 @@ class MainWindow(QMainWindow):
         self.app = app
         self.rest_time = rest_time
         self.webcamRecorder = None
+        self.subject = None
+        self.protocol_file_path = protocol_file_path
         
-        subject_id = 0
-        subject_ids = os.listdir(Subject.data_dir)
-        if len(subject_ids) != 0:
-            subject_ids.sort()
-            subject_id = int(subject_ids.pop()) + 1
-        
-        self.subject = Subject(subject_id)
-                
-        try:
-            df = pd.read_csv(protocol_file_path, sep=',')
-        except:
-            self.protocol = None
-        else:
-            self.protocol = df[df['SubjectID'] == subject_id].squeeze()
-            if not self.protocol.empty and not os.path.isdir(self.subject.subject_dir()):
-                os.mkdir(self.subject.subject_dir())
-            self.webcamRecorder = WebcamRecorder(output_file=self.subject.subject_dir() + "/recording.mp4", daemon=True)
-
         self.setupUI()
-    
+        
     def setupUI(self):
         self.setWindowTitle("Interfaccia")
         self.resize(QApplication.desktop().availableGeometry(0).size())
@@ -51,15 +35,40 @@ class MainWindow(QMainWindow):
         self.stacked_widget = QStackedWidget()
         self.setCentralWidget(self.stacked_widget)
         
-        if self.webcamRecorder.cap is None or not self.webcamRecorder.cap.isOpened():
-            self.add_page(TextPage(self, "Nessuna webcam valida trovata!", "Assicuratevi che un dispositivo webcam sia collegato e funzioni correttamente.", "Esci"))
+        self.load_resources()
+        
+    def load_resources(self):
+                    
+        try:
+            df = pd.read_csv(self.protocol_file_path, sep=',')
+        except:
+            self.add_page(TextPage(self, "File protocollo non trovato!", "Assicuratevi che il file sia nominato correttamente.\nExpected name: protocol.csv", "Esci", self.close))
             return
-        elif self.protocol is None:
-            self.add_page(TextPage(self, "Errore!", "File protocollo non trovato. Assicuratevi che il file sia nominato correttamente.\nExpected name: protocol.csv", "Esci"))
+        
+        subject_id = 0
+        subject_ids = os.listdir(Subject.data_dir)
+        if len(subject_ids) != 0:
+            subject_ids.sort()
+            subject_id = int(subject_ids.pop()) + 1
+        self.subject = Subject(subject_id)
+        self.protocol = df[df['SubjectID'] == subject_id].squeeze()
+        
+        if self.protocol.empty:
+            self.add_page(TextPage(self, "Errore!", "Non ho trovato una riga valida nel file di protocollo.\nAssicuratevi che il file di protocollo sia aggiornato e non ci siano linee mancanti.", "Esci", button_slot=self.close))
             return
-        elif self.protocol.empty:
-            self.add_page(TextPage(self, "Errore!", "Non ho trovato una riga valida nel file di protocollo.\nAssicuratevi che il file di protocollo sia aggiornato e non ci siano linee mancanti.", "Esci"))
+        
+        os.mkdir(self.subject.subject_dir())
+        
+        try:
+            self.webcamRecorder = WebcamRecorder(output_file=self.subject.subject_dir() + "/recording.mp4", daemon=True)
+        except:
+            self.add_page(TextPage(self, "Nessuna webcam valida trovata!", "Assicuratevi che un dispositivo webcam sia collegato e funzioni correttamente.", "Esci", button_slot=self.close))
+            os.rmdir(self.subject.subject_dir())
             return
+    
+        self.setup_pages()
+    
+    def setup_pages(self):
         
         self.add_page(TextPage(self, "Benvenuto!", "Oggi parteciperai a un'esperienza.\nPer prima cosa dovrai inserire alcuni tuoi dati.\nPremi Inizia quando sei pronto.", "Inizia"))
         self.add_page(DataCollectionPage(self))
@@ -80,7 +89,7 @@ class MainWindow(QMainWindow):
         self.add_page(Poll(self, video_descriptor2.getQuestions()))
         self.add_page(RestPage(self, "attendi", self.rest_time))
             
-        self.add_page(TextPage(self, "La nostra esperienza si è conclusa!", "Grazie mille per la partecipazione.", "Fine", button_slot=self.save))
+        self.add_page(TextPage(self, "La nostra esperienza si è conclusa!", "Grazie mille per la partecipazione.", "Fine", button_slot=self.save_and_close))
         
     def add_page(self, page):
         self.stacked_widget.addWidget(page)
@@ -91,13 +100,15 @@ class MainWindow(QMainWindow):
     def showEvent(self, QShowEvent):
         if self.webcamRecorder is not None:
             self.webcamRecorder.start()
-        self.subject.set_session_start_timestamp()
+        if self.subject is not None:
+            self.subject.set_session_start_timestamp()
         
-    def save(self):
+    def save_and_close(self):
         if self.webcamRecorder is not None:
             self.webcamRecorder.stop()
-        self.subject.set_session_end_timestamp()
-        self.subject.dump_to_file()
+        if self.subject is not None:    
+            self.subject.set_session_end_timestamp()
+            self.subject.dump_to_file()
         self.close()
     
 def run_main():
