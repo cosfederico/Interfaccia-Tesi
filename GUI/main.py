@@ -80,7 +80,7 @@ class MainWindow(QMainWindow):
         self.add_page(Poll(self, video_descriptor2.getQuestions()))
         self.add_page(RestPage(self, "attendi", self.rest_time))
             
-        self.add_page(TextPage(self, "La nostra esperienza si è conclusa!", "Grazie mille per la partecipazione.", "Fine"))
+        self.add_page(TextPage(self, "La nostra esperienza si è conclusa!", "Grazie mille per la partecipazione.", "Fine", button_slot=self.close))
         
     def add_page(self, page):
         self.stacked_widget.addWidget(page)
@@ -89,22 +89,18 @@ class MainWindow(QMainWindow):
         self.stacked_widget.insertWidget(self.stacked_widget.currentIndex()+1, page)
     
     def next_page(self):
-        if (self.stacked_widget.currentIndex() + 1 >= self.stacked_widget.count()):
-            self.quit()
         self.stacked_widget.setCurrentIndex(self.stacked_widget.currentIndex() + 1)
     
     def showEvent(self, QShowEvent):
         if self.webcamRecorder is not None:
             self.webcamRecorder.start()
         self.subject.set_session_start_timestamp()
-    
-    def quit(self):
+        
+    def closeEvent(self, QCloseEvent):
         if self.webcamRecorder is not None:
             self.webcamRecorder.stop()
         self.subject.set_session_end_timestamp()
-        if not (self.webcamRecorder.cap is None or not self.webcamRecorder.cap.isOpened() or self.protocol is None or self.protocol.empty):
-            self.subject.dump_to_file("")
-        self.close()
+        self.subject.dump_to_file()
     
 def run_main():
     app = QApplication(sys.argv)
