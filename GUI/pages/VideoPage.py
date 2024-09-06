@@ -5,23 +5,6 @@ from PyQt5.QtWidgets import *
 
 from backend.Poll import *
 
-class CustomVideoWidget(QVideoWidget):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.parent = parent
-
-    def keyPressEvent(self, event):
-        if self.parent:
-            self.parent.keyPressEvent(event)
-        else:
-            super().keyPressEvent(event)
-            
-    def mouseDoubleClickEvent(self, event):
-        if self.parent:
-            self.parent.mouseDoubleClickEvent(event)
-        else:
-            super().mouseDoubleClickEvent(event)
-
 class VideoPage(QWidget):
     
     def __init__(self, parent, video_path):
@@ -29,8 +12,8 @@ class VideoPage(QWidget):
         self.parent_window = parent
         self.video_path = video_path
         
-        self.video = CustomVideoWidget(self)
-        self.video.resize(self.parent_window.size())
+        self.video = QVideoWidget(self)
+        self.video.resize(self.parent_window.frameSize())
         
         self.player = QMediaPlayer()
         self.player.setVideoOutput(self.video)
