@@ -12,12 +12,13 @@ Python version 3.9 is required. It is recommended to create a conda virtual envi
 
 ### Dependencies installation
 
-For the time being the only dependecies are:
+For the time being the only dependencies are:
 - PyQt5 (GUI)
+- pyqt5-tools (GUI)
 - OpenCV (Webcam recording)
 
 ```
-pip install PyQt5 opencv-python
+pip install PyQt5 pyqt5-tools opencv-python
 ```
 
 # Usage
