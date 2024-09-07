@@ -22,9 +22,9 @@ class MainWindow(QMainWindow):
     
         self.app = app
         self.rest_time = rest_time
+        self.protocol_file_path = protocol_file_path
         self.webcamRecorder = None
         self.subject = None
-        self.protocol_file_path = protocol_file_path
         
         self.setupUI()
         
@@ -38,7 +38,7 @@ class MainWindow(QMainWindow):
         self.load_resources()
         
     def load_resources(self):
-                    
+ 
         try:
             df = pd.read_csv(self.protocol_file_path, sep=',')
         except:
@@ -83,11 +83,10 @@ class MainWindow(QMainWindow):
    
         self.add_page(VideoPage(self, video_descriptor1.getReal()))
         self.add_page(Poll(self, video_descriptor1.getQuestions()))
-        self.add_page(RestPage(self, "attendi", self.rest_time))
+        self.add_page(RestPage(self, "Ci Prendiamo una piccola pausa!\nA breve ti mostreremo il prossimo video.", self.rest_time))
         
         self.add_page(VideoPage(self, video_descriptor2.getRandomFake()))
         self.add_page(Poll(self, video_descriptor2.getQuestions()))
-        self.add_page(RestPage(self, "attendi", self.rest_time))
             
         self.add_page(TextPage(self, "La nostra esperienza si è conclusa!", "Grazie mille per la partecipazione.", "Fine", button_slot=self.save_and_close))
         
@@ -102,10 +101,12 @@ class MainWindow(QMainWindow):
             self.webcamRecorder.start()
         if self.subject is not None:
             self.subject.set_session_start_timestamp()
-        
-    def save_and_close(self):
+            
+    def closeEvent(self, QCloseEvent):
         if self.webcamRecorder is not None:
             self.webcamRecorder.stop()
+        
+    def save_and_close(self):
         if self.subject is not None:    
             self.subject.set_session_end_timestamp()
             self.subject.dump_to_file()
