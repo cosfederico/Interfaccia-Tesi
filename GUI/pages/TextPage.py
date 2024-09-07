@@ -13,7 +13,7 @@ class TextPage(QWidget):
         self.button_slot = button_slot
         
         loadUi("GUI/qtdesigner/TextPage.ui", self)
-        self.setContentsMargins(500,300,500,300)
+        self.setContentsMargins(0,200,0,200)
         
         self.title.setText(self.title_str)
         self.text.setText(self.text_str)

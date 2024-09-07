@@ -10,7 +10,7 @@ class DataCollectionPage(QWidget):
         self.parent_window = parent
         
         loadUi("GUI/qtdesigner/DataCollectionPage.ui", self)
-        self.setContentsMargins(400,0,400,0)
+        self.setContentsMargins(300,200,300,200)
         
         self.done_button.clicked.connect(self.done_button_clicked)
         self.error_text_str = self.error_text.text()

@@ -35,6 +35,8 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Interfaccia")
         self.resize(QApplication.desktop().availableGeometry(0).size())
         
+        self.setStyleSheet("background-color: white;") 
+        
         self.stacked_widget = QStackedWidget()
         self.setCentralWidget(self.stacked_widget)
         

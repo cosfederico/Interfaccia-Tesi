@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1036</width>
-    <height>643</height>
+    <height>647</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,12 +20,29 @@
    <item row="0" column="0" alignment="Qt::AlignHCenter">
     <widget class="QLabel" name="title">
      <property name="styleSheet">
-      <string notr="true">font: 25pt &quot;Rubik Light&quot;;
+      <string notr="true">font: 34pt &quot;Rubik Light&quot;;
 color: rgb(185,185,185);
 background-color: rgba(255, 255, 255, 0);</string>
      </property>
      <property name="text">
       <string>Titolo</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" alignment="Qt::AlignHCenter">
+    <widget class="QLabel" name="text">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 16pt &quot;Rubik Light&quot;;
+background-color: rgba(255, 255, 255, 0);</string>
+     </property>
+     <property name="text">
+      <string>testo</string>
      </property>
     </widget>
    </item>
@@ -42,32 +59,46 @@ background-color: rgba(255, 255, 255, 0);</string>
      </property>
     </spacer>
    </item>
-   <item row="2" column="0" alignment="Qt::AlignHCenter">
-    <widget class="QLabel" name="text">
+   <item row="5" column="0" alignment="Qt::AlignHCenter">
+    <widget class="QPushButton" name="ready_button">
+     <property name="minimumSize">
+      <size>
+       <width>300</width>
+       <height>50</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>300</width>
+       <height>16777215</height>
+      </size>
+     </property>
      <property name="styleSheet">
-      <string notr="true">font: 12pt &quot;Rubik Light&quot;;
-background-color: rgba(255, 255, 255, 0);</string>
+      <string notr="true">border-radius: 10px;
+font: 15pt &quot;Rubik Light&quot;;
+color: rgb(255,255,255);
+background-color: rgb(0, 64, 130);</string>
      </property>
      <property name="text">
-      <string>testo</string>
+      <string>Pulsante</string>
      </property>
     </widget>
    </item>
    <item row="4" column="0">
-    <widget class="QPushButton" name="ready_button">
-     <property name="styleSheet">
-      <string notr="true">border-radius: 20px;
-background-color: rgb(0, 64, 130);
-font: 12pt &quot;Rubik Light&quot;;
-color: rgb(255,255,255);</string>
+    <spacer name="verticalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
      </property>
-     <property name="text">
-      <string>Pronto</string>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
      </property>
-    </widget>
+    </spacer>
    </item>
    <item row="3" column="0">
-    <spacer name="verticalSpacer_2">
+    <spacer name="verticalSpacer_3">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
@@ -81,8 +112,6 @@ color: rgb(255,255,255);</string>
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="logo_unimi.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

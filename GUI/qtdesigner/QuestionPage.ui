@@ -22,7 +22,7 @@
      <item>
       <widget class="QLabel" name="title">
        <property name="styleSheet">
-        <string notr="true">font: 15pt &quot;Rubik Medium&quot;;
+        <string notr="true">font: 26pt &quot;Rubik SemiBold&quot;;
 color: rgb(0, 51, 102);
 background-color: rgba(255, 255, 255, 0);
 </string>
@@ -32,30 +32,43 @@ background-color: rgba(255, 255, 255, 0);
        </property>
       </widget>
      </item>
-     <item>
+     <item alignment="Qt::AlignTop">
       <widget class="QLabel" name="question">
        <property name="styleSheet">
-        <string notr="true">font: 12pt &quot;Rubik Light&quot;;
+        <string notr="true">font: 15pt &quot;Rubik light&quot;;
 color: rgb(53, 53, 53);
 background-color: rgba(255, 255, 255, 0);</string>
        </property>
        <property name="text">
-        <string>domanda</string>
+        <string>domanda?</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPlainTextEdit" name="inputbox">
        <property name="styleSheet">
-        <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
+        <string notr="true">font: 13pt &quot;Rubik Light&quot;;
+background-color: rgba(255, 255, 255, 0);</string>
        </property>
       </widget>
      </item>
      <item alignment="Qt::AlignRight">
       <widget class="QPushButton" name="next_button">
+       <property name="minimumSize">
+        <size>
+         <width>300</width>
+         <height>50</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>250</width>
+         <height>16777215</height>
+        </size>
+       </property>
        <property name="styleSheet">
-        <string notr="true">border-radius: 20px;
-font: 12pt &quot;Rubik Light&quot;;
+        <string notr="true">border-radius: 10px;
+font: 15pt &quot;Rubik Light&quot;;
 color: rgb(255,255,255);
 background-color: rgb(0, 64, 130);</string>
        </property>
@@ -68,8 +81,6 @@ background-color: rgb(0, 64, 130);</string>
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="logo_unimi.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
