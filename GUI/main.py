@@ -54,7 +54,7 @@ class MainWindow(QMainWindow):
         self.protocol = df[df['SubjectID'] == subject_id].squeeze()
         
         if self.protocol.empty:
-            self.add_page(TextPage(self, "Errore!", "Non ho trovato una riga valida nel file di protocollo.\nAssicuratevi che il file di protocollo sia aggiornato e non ci siano linee mancanti.", "Esci", button_slot=self.close))
+            self.add_page(TextPage(self, "The End?", "Non ho trovato una riga valida nel file di protocollo.\nAssicuratevi che il file di protocollo sia aggiornato e non ci siano linee mancanti.", "Esci", button_slot=self.close))
             return
         
         os.mkdir(self.subject.subject_dir())
