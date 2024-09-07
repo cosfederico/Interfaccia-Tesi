@@ -112,6 +112,9 @@ class MainWindow(QMainWindow):
         self.close()
     
 def run_main():
+    if sys.platform == 'win32':
+        os.environ['QT_MULTIMEDIA_PREFERRED_PLUGINS'] = 'windowsmediafoundation'
+        
     app = QApplication(sys.argv)
     opening_msg = QMessageBox()
     opening_msg.setWindowTitle("Interfaccia")
