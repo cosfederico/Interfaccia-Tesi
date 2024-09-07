@@ -14,6 +14,8 @@ from backend.Subject import *
 import pandas as pd
 import sys
 import os
+import tempfile
+import shutil
 
 class MainWindow(QMainWindow):
     
@@ -25,6 +27,7 @@ class MainWindow(QMainWindow):
         self.protocol_file_path = protocol_file_path
         self.webcamRecorder = None
         self.subject = None
+        self.temp_dir = None
         
         self.setupUI()
         
@@ -57,13 +60,12 @@ class MainWindow(QMainWindow):
             self.add_page(TextPage(self, "The End?", "Non ho trovato una riga valida nel file di protocollo.\nAssicuratevi che il file di protocollo sia aggiornato e non ci siano linee mancanti.", "Esci", button_slot=self.close))
             return
         
-        os.mkdir(self.subject.subject_dir())
+        self.temp_dir = tempfile.mkdtemp()
         
         try:
-            self.webcamRecorder = WebcamRecorder(output_file=self.subject.subject_dir() + "/recording.mp4", daemon=True)
+            self.webcamRecorder = WebcamRecorder(output_file=self.temp_dir + "/recording.mp4", daemon=True)
         except:
             self.add_page(TextPage(self, "Nessuna webcam valida trovata!", "Assicuratevi che un dispositivo webcam sia collegato e funzioni correttamente.", "Esci", button_slot=self.close))
-            os.rmdir(self.subject.subject_dir())
             return
     
         self.setup_pages()
@@ -105,11 +107,16 @@ class MainWindow(QMainWindow):
     def closeEvent(self, QCloseEvent):
         if self.webcamRecorder is not None:
             self.webcamRecorder.stop()
+        if self.temp_dir is not None:
+            shutil.rmtree(self.temp_dir, ignore_errors=True)
         
     def save_and_close(self):
-        if self.subject is not None:    
+        if self.webcamRecorder is not None:
+            self.webcamRecorder.stop()
+        if self.subject is not None:
             self.subject.set_session_end_timestamp()
-            self.subject.dump_to_file()
+            self.subject.dump_to_file(self.temp_dir)
+            shutil.copytree(self.temp_dir, self.subject.subject_dir(), dirs_exist_ok=True)
         self.close()
     
 def run_main():
