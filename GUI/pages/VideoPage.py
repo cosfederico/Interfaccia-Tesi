@@ -17,9 +17,11 @@ class VideoPage(QWidget):
         
         self.player = QMediaPlayer()
         self.player.setVideoOutput(self.video)
+        
+        self.player.setMedia(QMediaContent(QUrl(self.video_path)))
       
         self.player.mediaStatusChanged.connect(self.statusChanged)
-     
+
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Space and self.player.state() == QMediaPlayer.PlayingState:
             self.player.pause()
@@ -30,19 +32,15 @@ class VideoPage(QWidget):
         else:
             super(VideoPage, self).keyPressEvent(event)
  
-    def load_video(self):
-        self.player.setMedia(QMediaContent(QUrl(self.video_path)))
- 
     def play(self):
-        self.load_video()
         self.player.setPosition(0)
         self.video.show()
         self.player.play()
         
     def statusChanged(self, status):
         if status == QMediaPlayer.EndOfMedia:
-            self.player.stop()
             self.video_ended()
+            self.player.stop()
                     
     def video_ended(self):
         self.parent_window.next_page()
