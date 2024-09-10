@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+import os
 import csv
 
 class Subject:
@@ -43,10 +44,9 @@ class Subject:
     def add_video_answers(self, answers:list):
         self.video_answers.append(answers)
         
-    def dump_to_file(self, dir:str):
+    def dump_to_file(self, dest_dir:str):
         
-        # write data csv
-        with open(dir+'/data.csv', 'w', newline='') as file:
+        with open(os.path.join(dest_dir, 'data.csv'), 'w', newline='') as file:
             writer = csv.writer(file, delimiter=Subject.sep)
             
             fields = ["id", "age", "gender", "english_level"]
