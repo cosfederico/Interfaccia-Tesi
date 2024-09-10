@@ -65,9 +65,16 @@ class MainWindow(QMainWindow):
         self.temp_dir = tempfile.mkdtemp()
         
         try:
-            self.webcamRecorder = WebcamRecorder(output_file=self.temp_dir + "/recording.mp4", daemon=True)
+            self.webcamRecorder = WebcamRecorder(output_file=os.path.join(self.temp_dir, "recording.mp4"), daemon=True)
         except:
             self.add_page(TextPage(self, "Nessuna webcam valida trovata!", "Assicuratevi che un dispositivo webcam sia collegato e funzioni correttamente.", "Esci", button_slot=self.close))
+            return
+    
+        self.video_descriptor1 = VideoDescriptor(self.protocol.video_path1)
+        self.video_descriptor2 = VideoDescriptor(self.protocol.video_path2)
+        
+        if self.video_descriptor1.type == self.video_descriptor2.type:
+            self.add_page(TextPage(self, "Errore nel file di protocollo!", "C'è qualcosa che nei video selezionati. Controllare il file di protocollo.", "Esci", button_slot=self.close))
             return
     
         self.setup_pages()
@@ -78,19 +85,12 @@ class MainWindow(QMainWindow):
         self.add_page(DataCollectionPage(self))
         self.add_page(TextPage(self, "Bene!", "Ora ti mostreremo due video, su cui ti verranno fatte alcune domande.\nQuando se pronto, premi Avanti, e inizierà il primo video.", "Avanti"))
         
-        self.load_videos()
-        
-    def load_videos(self):
-        
-        video_descriptor1 = VideoDescriptor(self.protocol.video1)
-        video_descriptor2 = VideoDescriptor(self.protocol.video2)
-   
-        self.add_page(VideoPage(self, video_descriptor1.getReal()))
-        self.add_page(Poll(self, video_descriptor1.getQuestions()))
+        self.add_page(VideoPage(self, self.video_descriptor1.video_path))
+        self.add_page(Poll(self, self.video_descriptor1.getQuestions()))
         self.add_page(RestPage(self, "Ci Prendiamo una piccola pausa!\nA breve ti mostreremo il prossimo video.", self.rest_time))
         
-        self.add_page(VideoPage(self, video_descriptor2.getRandomFake()))
-        self.add_page(Poll(self, video_descriptor2.getQuestions()))
+        self.add_page(VideoPage(self, self.video_descriptor2.video_path))
+        self.add_page(Poll(self, self.video_descriptor2.getQuestions()))
             
         self.add_page(TextPage(self, "La nostra esperienza si è conclusa!", "Grazie mille per la partecipazione.", "Fine", button_slot=self.save_and_close))
         
