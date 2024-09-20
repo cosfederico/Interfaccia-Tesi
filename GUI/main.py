@@ -74,7 +74,7 @@ class MainWindow(QMainWindow):
         self.video_descriptor2 = VideoDescriptor(self.protocol.video_path2)
         
         if self.video_descriptor1.type == self.video_descriptor2.type:
-            self.add_page(TextPage(self, "Errore nel file di protocollo!", "C'è qualcosa che nei video selezionati. Controllare il file di protocollo.", "Esci", button_slot=self.close))
+            self.add_page(TextPage(self, "Errore nel file di protocollo!", "C'è qualcosa che non va nei video selezionati. Controllare il file di protocollo.", "Esci", button_slot=self.close))
             return
     
         self.setup_pages()
@@ -83,16 +83,18 @@ class MainWindow(QMainWindow):
         
         self.add_page(TextPage(self, "Benvenuto!", "Oggi parteciperai a un'esperienza.\nPer prima cosa dovrai inserire alcuni tuoi dati.\nPremi Inizia quando sei pronto.", "Inizia"))
         self.add_page(DataCollectionPage(self))
-        self.add_page(TextPage(self, "Bene!", "Ora ti mostreremo due video, su cui ti verranno fatte alcune domande.\nQuando se pronto, premi Avanti, e inizierà il primo video.", "Avanti"))
+        self.add_page(TextPage(self, "Bene!", "Ora ti mostreremo due video, su cui ti verranno fatte alcune domande.\nQuando sei pronto, premi Avanti, e inizierà il primo video.", "Avanti"))
         
         self.add_page(VideoPage(self, self.video_descriptor1.video_path))
+        self.add_page(TextPage(self, "Question Time!", "Quando sei pronto, premi Avanti per iniziare il questionario associato al video che hai appena visto.", "Avanti"))
         self.add_page(Poll(self, self.video_descriptor1.getQuestions()))
         self.add_page(RestPage(self, "Ci Prendiamo una piccola pausa!\nA breve ti mostreremo il prossimo video.", self.rest_time))
         
         self.add_page(VideoPage(self, self.video_descriptor2.video_path))
+        self.add_page(TextPage(self, "Quasi Fatto!", "Quando sei pronto, premi Avanti per iniziare il questionario associato al video che hai appena visto.", "Avanti"))
         self.add_page(Poll(self, self.video_descriptor2.getQuestions()))
             
-        self.add_page(TextPage(self, "La nostra esperienza si è conclusa!", "Grazie mille per la partecipazione.", "Fine", button_slot=self.save_and_close))
+        self.add_page(TextPage(self, "Grazie mille!", "La nostra esperienza si è conclusa, grazie mille per la partecipazione.\nPremi Fine per uscire.", "Fine", button_slot=self.save_and_close))
         
     def add_page(self, page):
         self.stacked_widget.addWidget(page)
