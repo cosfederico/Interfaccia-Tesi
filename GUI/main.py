@@ -3,6 +3,7 @@ from PyQt5.QtGui import *
 
 from GUI.pages.TextPage import *
 from GUI.pages.DataCollectionPage import *
+from GUI.pages.CountDownPage import *
 from GUI.pages.VideoPage import *
 
 from backend.Poll import *
@@ -84,10 +85,14 @@ class MainWindow(QMainWindow):
         self.add_page(DataCollectionPage(self))
         self.add_page(TextPage(self, "Bene!", "Ora ti mostreremo due video, su cui ti verranno fatte alcune domande.\nQuando sei pronto, premi Avanti, e inizierà il primo video.", "Avanti"))
         
+        self.add_page(CountDownPage(self, seconds=3))
+        
         self.add_page(VideoPage(self, self.video_descriptor1.video_path))
         self.add_page(TextPage(self, "Question Time!", "Quando sei pronto, premi Avanti per iniziare il questionario associato al video che hai appena visto.", "Avanti"))
         self.add_page(Poll(self, self.video_descriptor1.getQuestions()))
         self.add_page(TextPage(self, "Grazie mille delle risposte","Puoi fare una breve pausa.\nQuando sei pronto premi Avanti per iniziare il prossimo video.", "Avanti"))
+        
+        self.add_page(CountDownPage(self, seconds=3))
         
         self.add_page(VideoPage(self, self.video_descriptor2.video_path))
         self.add_page(TextPage(self, "Quasi Fatto!", "Quando sei pronto, premi Avanti per iniziare il questionario associato al video che hai appena visto.", "Avanti"))
