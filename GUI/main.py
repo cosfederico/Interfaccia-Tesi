@@ -2,7 +2,6 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 
 from GUI.pages.TextPage import *
-from GUI.pages.RestPage import *
 from GUI.pages.DataCollectionPage import *
 from GUI.pages.VideoPage import *
 
@@ -88,7 +87,7 @@ class MainWindow(QMainWindow):
         self.add_page(VideoPage(self, self.video_descriptor1.video_path))
         self.add_page(TextPage(self, "Question Time!", "Quando sei pronto, premi Avanti per iniziare il questionario associato al video che hai appena visto.", "Avanti"))
         self.add_page(Poll(self, self.video_descriptor1.getQuestions()))
-        self.add_page(RestPage(self, "Ci Prendiamo una piccola pausa!\nA breve ti mostreremo il prossimo video.", self.rest_time))
+        self.add_page(TextPage(self, "Grazie mille delle risposte","Puoi fare una breve pausa.\nQuando sei pronto premi Avanti per iniziare il prossimo video.", "Avanti"))
         
         self.add_page(VideoPage(self, self.video_descriptor2.video_path))
         self.add_page(TextPage(self, "Quasi Fatto!", "Quando sei pronto, premi Avanti per iniziare il questionario associato al video che hai appena visto.", "Avanti"))
