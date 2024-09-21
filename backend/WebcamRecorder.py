@@ -14,39 +14,38 @@ class WebcamRecorder(threading.Thread):
         self.frame_width = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         self.frame_height = int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         self.fps = self.cap.get(cv2.CAP_PROP_FPS)
-        self.recording = False
+
         self.buffer = queue.Queue()
         self.output_file = output_file
         self.daemon = daemon
+        
+        self.recording = False
+        self.out = None
 
     def start_capture_thread(self):
-        while True:
+        while self.recording:
             _, frame = self.cap.read()
             self.buffer.put(frame)
-
-            if (not self.recording):
-                self.cap.release()
-                break
         
     def run(self):
-        
-        if self.cap is None:
-            return
-        
-        out = cv2.VideoWriter(self.output_file, cv2.VideoWriter_fourcc('m','p','4','v'), self.fps, (self.frame_width,self.frame_height))
-        
-        t = threading.Thread(target=self.start_capture_thread, args=())
-        t.start()
+        self.out = cv2.VideoWriter(self.output_file, cv2.VideoWriter_fourcc('m','p','4','v'), self.fps, (self.frame_width,self.frame_height))
         
         self.recording = True
-        while True:            
-            if (not self.buffer.empty()):
-                out.write(self.buffer.get())
-            
-            if (not self.recording):
-                break
+        self.capture_thread = threading.Thread(target=self.start_capture_thread, args=())
+        self.capture_thread.start()
         
-        out.release()
+        while self.recording:
+            if (not self.buffer.empty()):
+                self.out.write(self.buffer.get())
         
     def stop(self):
         self.recording = False
+        
+        if self.capture_thread is not None:
+            self.capture_thread.join()
+        
+        while not self.buffer.empty():
+                self.out.write(self.buffer.get())
+                
+        self.cap.release()
+        self.out.release()
