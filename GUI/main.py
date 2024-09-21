@@ -54,8 +54,8 @@ class MainWindow(QMainWindow):
         
         try:
             videos = [VideoDescriptor(os.path.join(self.video_pool_folder, video)) for video in next(os.walk(self.video_pool_folder))[1]]
-        except:
-            self.add_page(TextPage(self, "Video non valido trovato", "Cartella dei video formattata male", "Esci", button_slot=self.close))
+        except Exception as e:
+            self.add_page(TextPage(self, "Errore nel caricamento video", str(e), "Esci", button_slot=self.close))
             return
         
         if len(videos) == 0:
@@ -69,8 +69,8 @@ class MainWindow(QMainWindow):
         self.temp_dir = tempfile.mkdtemp()
         try:
             self.webcamRecorder = WebcamRecorder(output_file=os.path.join(self.temp_dir, "recording.mp4"), daemon=True)
-        except:
-            self.add_page(TextPage(self, "Nessuna webcam valida trovata!", "Assicuratevi che un dispositivo webcam sia collegato e funzioni correttamente.", "Esci", button_slot=self.close))
+        except Exception as e:
+            self.add_page(TextPage(self, str(e), "Assicuratevi che un dispositivo webcam sia collegato e funzioni correttamente.", "Esci", button_slot=self.close))
             return
         
         subject_id = 0
