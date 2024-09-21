@@ -19,15 +19,15 @@ import shutil
 
 class MainWindow(QMainWindow):
     
-    def __init__(self, app, rest_time=5, protocol_file_path=None):
+    def __init__(self, app, video_pool_folder):
         super().__init__()
     
         self.app = app
-        self.rest_time = rest_time
-        self.protocol_file_path = protocol_file_path
         self.webcamRecorder = None
         self.subject = None
         self.temp_dir = None
+        
+        self.video_pool_folder = video_pool_folder
         
         self.setupUI()
         
@@ -43,11 +43,34 @@ class MainWindow(QMainWindow):
         self.load_resources()
         
     def load_resources(self):
- 
+        
+        self.index = None
         try:
-            df = pd.read_csv(self.protocol_file_path, sep=',')
+            with open(os.path.join(self.video_pool_folder, 'index'), 'r') as f:
+                self.index = int(f.readline())
         except:
-            self.add_page(TextPage(self, "File protocollo non trovato!", "Assicuratevi che il file sia nominato correttamente.\nExpected name: protocol.csv", "Esci", self.close))
+            self.add_page(TextPage(self, "Errore", "Il file di indice dei video è invalido o inesistente.", "Esci", button_slot=self.close))
+            return
+        
+        try:
+            videos = [VideoDescriptor(os.path.join(self.video_pool_folder, video)) for video in next(os.walk(self.video_pool_folder))[1]]
+        except:
+            self.add_page(TextPage(self, "Video non valido trovato", "Cartella dei video formattata male", "Esci", button_slot=self.close))
+            return
+        
+        if len(videos) == 0:
+            self.add_page(TextPage(self, "Cartella video vuota", "Nessun video da riprodurre trovato.\nPer favore carica dei video da riprodurre e riavvia il programma.", "Esci", self.close))
+            return
+        
+        self.video1 = videos[self.index % len(videos)]
+        self.video2 = videos[(self.index + 1) % len(videos)]
+        self.index = (self.index + 2) % len(videos)
+        
+        self.temp_dir = tempfile.mkdtemp()
+        try:
+            self.webcamRecorder = WebcamRecorder(output_file=os.path.join(self.temp_dir, "recording.mp4"), daemon=True)
+        except:
+            self.add_page(TextPage(self, "Nessuna webcam valida trovata!", "Assicuratevi che un dispositivo webcam sia collegato e funzioni correttamente.", "Esci", button_slot=self.close))
             return
         
         subject_id = 0
@@ -56,26 +79,6 @@ class MainWindow(QMainWindow):
             subject_ids.sort()
             subject_id = int(subject_ids.pop()) + 1
         self.subject = Subject(subject_id)
-        self.protocol = df[df['SubjectID'] == subject_id].squeeze()
-        
-        if self.protocol.empty:
-            self.add_page(TextPage(self, "The End?", "Non ho trovato una riga valida nel file di protocollo.\nAssicuratevi che il file di protocollo sia aggiornato e non ci siano linee mancanti.", "Esci", button_slot=self.close))
-            return
-        
-        self.temp_dir = tempfile.mkdtemp()
-        
-        try:
-            self.webcamRecorder = WebcamRecorder(output_file=os.path.join(self.temp_dir, "recording.mp4"), daemon=True)
-        except:
-            self.add_page(TextPage(self, "Nessuna webcam valida trovata!", "Assicuratevi che un dispositivo webcam sia collegato e funzioni correttamente.", "Esci", button_slot=self.close))
-            return
-    
-        self.video_descriptor1 = VideoDescriptor(self.protocol.video_path1)
-        self.video_descriptor2 = VideoDescriptor(self.protocol.video_path2)
-        
-        if self.video_descriptor1.type == self.video_descriptor2.type:
-            self.add_page(TextPage(self, "Errore nel file di protocollo!", "C'è qualcosa che non va nei video selezionati. Controllare il file di protocollo.", "Esci", button_slot=self.close))
-            return
     
         self.setup_pages()
     
@@ -85,20 +88,21 @@ class MainWindow(QMainWindow):
         self.add_page(DataCollectionPage(self))
         self.add_page(TextPage(self, "Bene!", "Ora ti mostreremo due video, su cui ti verranno fatte alcune domande.\nQuando sei pronto, premi Avanti, e inizierà il primo video.", "Avanti"))
         
-        self.add_page(CountDownPage(self, seconds=3))
+        real = random.choice([True, False])
         
-        self.add_page(VideoPage(self, self.video_descriptor1.video_path))
+        self.add_page(CountDownPage(self, seconds=3))     
+        self.add_page(VideoPage(self, self.video1.getRandomVideo(real=real)))
         self.add_page(TextPage(self, "Question Time!", "Quando sei pronto, premi Avanti per iniziare il questionario associato al video che hai appena visto.", "Avanti"))
-        self.add_page(Poll(self, self.video_descriptor1.getQuestions()))
+        self.add_page(Poll(self, self.video1.getQuestions()))
+        
         self.add_page(TextPage(self, "Grazie mille delle risposte","Puoi fare una breve pausa.\nQuando sei pronto premi Avanti per iniziare il prossimo video.", "Avanti"))
-        
-        self.add_page(CountDownPage(self, seconds=3))
-        
-        self.add_page(VideoPage(self, self.video_descriptor2.video_path))
-        self.add_page(TextPage(self, "Quasi Fatto!", "Quando sei pronto, premi Avanti per iniziare il questionario associato al video che hai appena visto.", "Avanti"))
-        self.add_page(Poll(self, self.video_descriptor2.getQuestions()))
-            
-        self.add_page(TextPage(self, "Grazie mille!", "La nostra esperienza si è conclusa, grazie mille per la partecipazione.\nPremi Fine per uscire.", "Fine", button_slot=self.save_and_close))
+  
+        self.add_page(CountDownPage(self, seconds=3)) 
+        self.add_page(VideoPage(self, self.video2.getRandomVideo(real=not real)))
+        self.add_page(TextPage(self, "Question Time!", "Quando sei pronto, premi Avanti per iniziare il questionario associato al video che hai appena visto.", "Avanti"))
+        self.add_page(Poll(self, self.video2.getQuestions()))
+           
+        self.add_page(TextPage(self, "Fine!", "La nostra esperienza si è conclusa, grazie mille per la partecipazione.\nPremi Fine per uscire.", "Fine", button_slot=self.save_and_close))
         
     def add_page(self, page):
         self.stacked_widget.addWidget(page)
@@ -125,8 +129,13 @@ class MainWindow(QMainWindow):
             self.subject.set_session_end_timestamp()
             self.subject.dump_to_file(self.temp_dir)
             shutil.copytree(self.temp_dir, self.subject.subject_dir(), dirs_exist_ok=True)
+        try:
+            with open(os.path.join(self.video_pool_folder, 'index'), 'w') as f:
+                f.write(str(self.index))
+        except:
+            pass
         self.close()
-    
+        
 def run_main():
     if sys.platform == 'win32':
         os.environ['QT_MULTIMEDIA_PREFERRED_PLUGINS'] = 'windowsmediafoundation'
@@ -137,7 +146,7 @@ def run_main():
     opening_msg.setText("Stiamo caricando tutte le risorse necessarie...\t")
     opening_msg.setStandardButtons(QMessageBox.NoButton)
     opening_msg.show()
-    window = MainWindow(app, rest_time=1, protocol_file_path="protocol.csv")
+    window = MainWindow(app, video_pool_folder='videos')
     window.showFullScreen()
     opening_msg.reject()
     sys.exit(app.exec_())
