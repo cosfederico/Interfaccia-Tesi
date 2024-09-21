@@ -49,8 +49,8 @@ class Subject:
         with open(os.path.join(dest_dir, 'data.csv'), 'w', newline='') as file:
             writer = csv.writer(file, delimiter=Subject.sep)
             
-            fields = ["id", "age", "gender", "english_level"]
-            row = [self.id, self.age, self.gender, self.english_level]
+            fields = ["id", "age", "gender", "english_level", "session_start_timestamp", "session_end_timestamp"]
+            row = [self.id, self.age, self.gender, self.english_level, self.session_start_timestamp, self.session_end_timestamp]
             
             for i in range(len(self.video_timestamps)):
                 
