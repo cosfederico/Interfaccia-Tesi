@@ -2,9 +2,6 @@ import threading
 import cv2
 import queue
 
-class WebcamNotFoundError(Exception):
-    pass
-
 class WebcamRecorder(threading.Thread):
     
     def __init__(self, output_file, daemon):
@@ -12,7 +9,7 @@ class WebcamRecorder(threading.Thread):
         
         self.cap = cv2.VideoCapture(0)
         if not self.cap.isOpened():
-            raise WebcamNotFoundError
+            raise Exception("Webcam non trovata o non disponibile")
         
         self.frame_width = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         self.frame_height = int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
