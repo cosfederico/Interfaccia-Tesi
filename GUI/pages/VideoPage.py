@@ -3,8 +3,6 @@ from PyQt5.QtCore import *
 from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtWidgets import *
 
-from backend.Poll import *
-
 class VideoPage(QWidget):
     
     def __init__(self, parent, video_path):
@@ -18,8 +16,8 @@ class VideoPage(QWidget):
         self.player = QMediaPlayer()
         self.player.setVideoOutput(self.video)
         
-        self.player.setMedia(QMediaContent(QUrl(self.video_path)))
-      
+        self.player.setMedia(QMediaContent(QUrl.fromLocalFile(self.video_path)))
+    
         self.player.mediaStatusChanged.connect(self.statusChanged)
 
     def keyPressEvent(self, event):
@@ -28,7 +26,7 @@ class VideoPage(QWidget):
             event.accept()
         elif event.key() == Qt.Key_Space and self.player.state() == QMediaPlayer.PausedState:
             self.player.play()
-            event.accept()            
+            event.accept()
         else:
             super(VideoPage, self).keyPressEvent(event)
  
@@ -39,8 +37,8 @@ class VideoPage(QWidget):
         
     def statusChanged(self, status):
         if status == QMediaPlayer.EndOfMedia:
-            self.video_ended()
             self.player.stop()
+            self.video_ended()
                     
     def video_ended(self):
         self.parent_window.next_page()
