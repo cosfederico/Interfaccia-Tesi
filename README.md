@@ -9,8 +9,8 @@ The program makes use of the built-in webcam (necessary) to capture the whole se
 To add videos you can simply add another directory in the `videos` folder. It is **very important** that you setup the folder structure properly when adding new videos.
 
 A video folder must contain:
-- `real/`: a folder containing the original video *(.mp4, .avi, ...)*
-- `fake/`: a folder containing all the fakes generated from the real video *(.mp4, .avi, ...)*
+- `real/`: a folder containing the original video *(`.mp4` or `.avi`)*
+- `fake/`: a folder containing all the fakes generated from the real video *(`.mp4` or `.avi`)*
 - `questions.txt` : a file containing five questions associated with the video, the questions are in natural language, line separated
 - `script.txt` (optional): a file containing the script of the video. Currently unused, could be useful in future developments
 
@@ -26,7 +26,7 @@ Question number 5?
 ```
 For now the number of questions is hard-coded to be five. This is partly a side effect of working with `.csv` files, which require e predetermined number of columns. Hopefully this can be improved.
 
-The videos can be in any common video format (es. .mp4, .avi, ...), and in different formats. You can technically put more than one video in the `real` folder, if there are more real videos that follow the same script.
+The videos can be in `.mp4` or `.avi` format, and in different formats. You can technically put more than one video in the `real` folder, if there are more real videos that follow the same script.
 
 # Installation
 
