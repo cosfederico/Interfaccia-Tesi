@@ -117,7 +117,7 @@ class MainWindow(QMainWindow):
             self.subject.set_session_start_timestamp()
             
     def closeEvent(self, QCloseEvent):
-        if self.webcamRecorder is not None:
+        if self.webcamRecorder is not None and self.webcamRecorder.recording:
             self.webcamRecorder.stop()
         if self.temp_dir is not None:
             shutil.rmtree(self.temp_dir, ignore_errors=True)
