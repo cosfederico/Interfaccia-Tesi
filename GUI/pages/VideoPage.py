@@ -41,8 +41,9 @@ class VideoPage(QWidget):
             self.video_ended()
                     
     def video_ended(self):
+        self.parent_window.subject.add_video_end_timestamp()
         self.parent_window.next_page()
         
     def showEvent(self, QShowEvent):
         self.play()
-        self.parent_window.subject.add_video_timestamp(self.video_path)
+        self.parent_window.subject.add_video_start_timestamp(self.video_path)
