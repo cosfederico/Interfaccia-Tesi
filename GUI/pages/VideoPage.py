@@ -29,21 +29,15 @@ class VideoPage(QWidget):
             event.accept()
         else:
             super(VideoPage, self).keyPressEvent(event)
- 
-    def play(self):
-        self.player.setPosition(0)
-        self.video.show()
-        self.player.play()
         
     def statusChanged(self, status):
         if status == QMediaPlayer.EndOfMedia:
+            self.video.hide()
             self.player.stop()
-            self.video_ended()
-                    
-    def video_ended(self):
-        self.parent_window.subject.add_video_end_timestamp()
-        self.parent_window.next_page()
-        
+            self.parent_window.next_page()
+            self.parent_window.subject.add_video_end_timestamp()
+
     def showEvent(self, QShowEvent):
-        self.play()
+        self.player.play()
+        self.video.show()
         self.parent_window.subject.add_video_start_timestamp(self.video_path)
