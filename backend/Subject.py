@@ -23,7 +23,7 @@ class Subject:
         self.video_names = []
         
     def timestamp(self):
-        return datetime.now(timezone.utc)
+        return datetime.now(timezone.utc).timestamp()
     
     def subject_dir(self):
         return Subject.data_dir + "/" + str(self.id)

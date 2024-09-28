@@ -20,5 +20,5 @@ class QuestionPage(QWidget):
         self.setContentsMargins(300,300,300,300)
             
     def next_button_clicked(self):
-        self.parent_window.add_answer((self.inputbox.toPlainText(), datetime.now(timezone.utc)))
+        self.parent_window.add_answer((self.inputbox.toPlainText(), datetime.now(timezone.utc).timestamp()))
         self.parent_window.next_page()
