@@ -36,7 +36,8 @@ while True:
             try:
                 avro_file_path = download_empatica_data(start_ts, subject_dir, date=date, participant="TEST")
             except:
-                print("\tError - No Empatica data found for subject ", subject, ", skipping")
+                print("\tError - No Empatica data found for subject " + subject + ", skipping")
+                open(os.path.join(subject_dir, "NO-DATA-FOUND-FOR-THIS-SUBJECT"), 'a').close()
                 continue
             
             print("\tConverting Empatica Data to csv...")
