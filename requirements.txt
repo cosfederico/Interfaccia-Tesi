@@ -1,0 +1,9 @@
+PyQt5
+opencv-python
+pandas
+numpy
+boto3
+avro
+pywt
+scipy
+libreface
