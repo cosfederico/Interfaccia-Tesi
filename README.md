@@ -2,7 +2,7 @@
 
 ## Data Acquisition
 
-A simple wizard-like application to automate the experimentation process for my thesis research.
+A simple wizard-like application to automate the data acquisition and analysis process for my thesis research.
 
 The program makes use of the built-in webcam (necessary) to capture the whole session. Please make sure a valid webcam is connected to the machine before running the application.
 
@@ -28,11 +28,11 @@ Question number 5?
 ```
 For now the number of questions is hard-coded to be five. This is partly a side effect of working with `.csv` files, which require e predetermined number of columns. Hopefully this can be improved.
 
-The videos can be in `.mp4` or `.avi` format, and in different formats. You can technically put more than one video in the `real` folder, if there are more real videos that follow the same script.
+The videos can be in `.mp4` or `.avi` format. You can technically put more than one video in the `real` folder, if there are more real videos that follow the same script. A random video will be picked to be displayed.
 
 ### Capturing Data
 
-To start capturing data, make sure you haveinstalled Python >= 3.9 and all the required dependencies, then run:
+To start capturing data, make sure you have installed Python >= 3.9 and all the required dependencies, then run:
 
 ```
 python Program.py
