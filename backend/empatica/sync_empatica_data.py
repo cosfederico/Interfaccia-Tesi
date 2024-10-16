@@ -3,7 +3,7 @@ import os
 
 def sync_empatica_data(subject_dir):
 
-    data = pd.read_csv(os.path.join(subject_dir, 'data.csv'), sep=';')
+    data = pd.read_csv(os.path.join(subject_dir, 'data.csv'), sep=';', encoding='latin1')
     bvp = pd.read_csv(os.path.join(subject_dir, 'bvp.csv'), sep=',')
     peaks = pd.read_csv(os.path.join(subject_dir, 'systolic_peaks.csv'), sep=',')
     
@@ -16,5 +16,5 @@ def sync_empatica_data(subject_dir):
     if bvp.empty or peaks.empty:
         raise ValueError("Nessun dato Empatica rimasto durante la sincronizzazione dei dati RAW con il video, sono stati scaricati i dati sbagliati?")
     
-    bvp.to_csv(os.path.join(subject_dir, 'bvp.csv'))
-    bvp.to_csv(os.path.join(subject_dir, 'systolic_peaks.csv'))
+    bvp.to_csv(os.path.join(subject_dir, 'bvp.csv'), index=False)
+    peaks.to_csv(os.path.join(subject_dir, 'systolic_peaks.csv'), index=False)

@@ -86,10 +86,9 @@ def estimate_rr(subject_dir, fs=64, bvp_file='bvp.csv', respiratory_band=(0.1, 0
         
     ## RIDGE DETECTION
 
-    ridge_freqs = find_ridge_greedy(coefficients, frequencies, freq_band=respiratory_band,
-                                                                penalty_factor=penalty_factor, 
-                                                                init_window=init_window,
-                                                                search_window_size=search_window_size)
+    ridge_freqs = find_ridge_greedy(coefficients, frequencies, penalty_factor=penalty_factor, 
+                                                            init_window=init_window,
+                                                            search_window_size=search_window_size)
 
     ## SAVE RESULTS
 
@@ -98,7 +97,7 @@ def estimate_rr(subject_dir, fs=64, bvp_file='bvp.csv', respiratory_band=(0.1, 0
     rr = pd.DataFrame({"unix_timestamp":bvp.unix_timestamp, "rr":upsampled_rr})
     
     if save_to_file:
-        rr.to_csv(os.path.join(subject_dir, 'rr.csv'))
+        rr.to_csv(os.path.join(subject_dir, 'rr.csv'), index=False)
     
     if delete_bvp_file_after:
         try:
