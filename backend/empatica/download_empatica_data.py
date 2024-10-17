@@ -17,7 +17,7 @@ def download_empatica_data(start_ts, subject_dir, date, participant):
     
     bucket_objects = bucket.objects.filter(Prefix = filter)
     if len(list(bucket_objects)) == 0:
-        raise ValueError("\nNo data found for the selected date: " + date + " and participant: " + participant)
+        raise ValueError("No data found for the selected date: " + date + " and participant: " + participant)
 
     for my_bucket_object in bucket_objects:
         
@@ -32,8 +32,11 @@ def download_empatica_data(start_ts, subject_dir, date, participant):
         if avro_ts <= start_ts:
             timestamps.append(avro_ts)
             keys.append(key)
-            
-    selected_files = np.rec.fromarrays((timestamps, keys), names=('ts', 'keys'))
+      
+    if len(timestamps) == 0:
+        raise ValueError("No recorded data found for the time of this session")
+  
+    selected_files = np.rec.fromarrays((timestamps, keys), names=('ts', 'keys'))    
     file_to_download = selected_files.keys[np.argmax(selected_files.ts)]
     filename = os.path.split(file_to_download)[1]
 
