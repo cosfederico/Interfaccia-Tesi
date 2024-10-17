@@ -22,6 +22,9 @@ After installation, open any terminal, then run:
 > Default output format [None]: <LEAVE_EMPTY>
 
 Re-run the script and it should work just fine.
+
+If you still have problems accessing Empatica Data, please refer to their official guide for Data Access:
+https://manuals.empatica.com/ehmp/careportal/data_access/v2.7e/en.pdf
 '''
 )
 
@@ -59,7 +62,7 @@ subjects = os.listdir(DATA_FOLDER)
 print("Found subjects:", subjects)
 
 while True:
-    ans = input("Start data synchronization? [yes/no] ").lower()
+    ans = input("Start data download and synchronization? [yes/no] ").lower()
     
     if ans == 'yes' or ans == 'y':
         print("Starting..")
@@ -77,10 +80,14 @@ while True:
             print("\tDownloading Empatica Data...")
             try:
                 avro_file_path = download_empatica_data(start_ts, subject_dir, date=date, participant="TEST")
-            except:
-                print("\tError - No Empatica data found for subject " + subject + ", skipping")
+            except ValueError as e:
+                print("\t", e, "- skipping")
                 open(os.path.join(subject_dir, "NO-DATA-FOUND-FOR-THIS-SUBJECT"), 'a').close()
                 continue
+            except Exception as e:
+                print("\n", e)
+                print("Something went wrong while downloading data from Empatica. Are the shared access credentials correct?")
+                quit()
             
             print("\tConverting Empatica Data to csv...")
             convert_empatica_data_to_csv(avro_file_path, delete_avro_after=True)
@@ -93,7 +100,7 @@ while True:
             print("\tExtracting landmarks and REF from video with Libreface...")
             process_video(subject_dir)
             
-        print("\nAll data has been synchronized and is ready for analysis.")
+        print("\nAll available data has been downloaded synchronized and is ready for analysis.")
                 
         break
     
