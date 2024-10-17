@@ -1,6 +1,48 @@
-print("loading resources...")
 
 import os
+import argparse
+
+parser = argparse.ArgumentParser(
+                    formatter_class=argparse.RawTextHelpFormatter,
+                    description='''This script automatically downloads data from the Empatica S3 Bucket and
+synchronizes it with the recorded sessions.''',
+                    epilog=
+'''HOW TO SET UP YOUR AWS CREDENTIALS
+
+Download and Install the AWS CLI:
+https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+- direct download for Windows:  https://awscli.amazonaws.com/AWSCLIV2.msi
+
+After installation, open any terminal, then run:
+
+> aws configure
+> AWS Access Key ID [None]: <YOUR_ACCESS_KEY_ID>
+> AWS Secret Access Key [None]: <YOU_SECRET_ACCESS_KEY_ID>
+> Default region name [None]: <LEAVE_EMPTY>
+> Default output format [None]: <LEAVE_EMPTY>
+
+Re-run the script and it should work just fine.
+'''
+)
+
+parser.parse_args()
+
+HOME = os.getenv('HOME')
+if not HOME:
+    HOME = os.getenv('USERPROFILE')
+if not HOME:
+    HOME = '~'
+    
+if not os.path.isdir(os.path.join(HOME, '.aws')) or not os.path.isfile(os.path.join(HOME, '.aws', 'credentials')):
+    import sys
+    print("ERROR: No AWS shared credentials found in your system.")
+    print("Please download the AWS CLI and setup your access credentials before running this script.")
+    print("Read the README.md or run the following command for instructions on how to do that:")
+    print("\n\tpython", os.path.split(sys.argv[0])[1], "-h\n")
+    quit()
+
+print("loading resources...")
+
 import pandas as pd
 
 from backend.video.process_video import process_video
