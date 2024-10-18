@@ -83,7 +83,11 @@ If you still have problems accessing Empatica Data, please refer to their offici
 
 # Config File
 
+<<<<<<< HEAD
 The behaviour of the application is customizable by modifying the config file `config.json`.
+=======
+The behaviour of the application is customizable by modifiyng the config file `config.json`.
+>>>>>>> 9c8dd3d961325a56c7c5c34715318eda477660d2
 
 A brief summary of implemented fields follows.
 
