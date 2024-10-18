@@ -151,6 +151,7 @@ For the time being the dependencies are, for the GUI:
 - PyQt5
 - OpenCV
 - pandas
+- jsonschema
 
 For the data analyisis:
 - numpy
@@ -159,9 +160,10 @@ For the data analyisis:
 - pywt
 - scipy
 - libreface
+- jsonschema
 
 ```
-pip install PyQt5 opencv-python pandas numpy boto3 avro pywt scipy libreface
+pip install PyQt5 opencv-python pandas numpy boto3 avro pywt scipy libreface jsonschema
 ```
 
 Or you can also simply use the `requirements.txt` file:
