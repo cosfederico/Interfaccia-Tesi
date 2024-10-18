@@ -81,6 +81,64 @@ Open any terminal, then run:
 
 If you still have problems accessing Empatica Data, please refer to their official guide for Data Access (https://manuals.empatica.com/ehmp/careportal/data_access/v2.7e/en.pdf).
 
+# Config File
+
+The behaviour of the application is customizable by modifying the config file `config.json`.
+
+A brief summary of implemented fields follows.
+
+For the main application:
+- `""DATA_FOLDER"`: the folder where recorded data will be saved, it contains the folders for each subject/session
+- `"VIDEO_FOLDER"`: the folder where videos are selected for playback, refer to the "Videos" section for more details
+
+For downloading data from Empatica:
+- `"BUCKET_NAME"`: The S3 Data Bucket of your organization provided by Empatica
+- `"PREFIX"`: The tail of the data bucket url (ex. `"v2/716/"`)
+- `"PARTICIPANT_ID"`: The ID of the participant used to collect data with Empatica. Can be max 10 characters long, only capital letters and numbers
+- `"ORG_ID"`: The ID of your organization provided by Empatica
+- `"STUDY_ID":`The ID of the study
+- `"SAMPLE_RATE"`: The sample rate at which raw data is recorded by your particular Empatica device. For our study this was `64`. It might change for your device. Please check the sample rate before running any analysis on the recorded data
+
+## JSON Schema
+
+This is the [JSON Schema](https://json-schema.org) associated with the `config.json` file:
+
+
+``` json
+{
+  "type": "object",
+  "properties": {
+    "app": {
+      "type": "object",
+      "properties": {
+        "DATA_FOLDER": { "type": "string" },
+        "VIDEO_FOLDER": { "type": "string" }
+      },
+      "required": ["DATA_FOLDER", "VIDEO_FOLDER"]
+    },
+    "empatica": {
+      "type": "object",
+      "properties": {
+        "BUCKET_NAME": { "type": "string" },
+        "PREFIX": { "type": "string" },
+        "PARTICIPANT_ID": { "type": "string" },
+        "ORG_ID": { "type": "string" },
+        "STUDY_ID": { "type": "string" },
+        "SAMPLE_RATE": { "type": "integer" }
+      },
+      "required": [
+        "BUCKET_NAME", "PREFIX", "PARTICIPANT_ID",
+        "ORG_ID", "STUDY_ID", "SAMPLE_RATE"
+      ]
+    }
+  },
+  "required": ["app", "empatica"]
+}
+
+```
+
+It specifies data type for each field and required fields.
+
 # Installation
 
 ## Detailed Installation (Python Environment Setup)
