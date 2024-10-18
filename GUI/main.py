@@ -6,6 +6,7 @@ from GUI.pages.DataCollectionPage import *
 from GUI.pages.CountDownPage import *
 from GUI.pages.VideoPage import *
 
+from backend.config import load_config
 from backend.Poll import *
 from backend.WebcamRecorder import *
 from backend.VideoDescriptor import *
@@ -19,7 +20,7 @@ import shutil
 
 class MainWindow(QMainWindow):
     
-    def __init__(self, app, video_pool_folder):
+    def __init__(self, app, config_file='config.json'):
         super().__init__()
     
         self.app = app
@@ -27,8 +28,12 @@ class MainWindow(QMainWindow):
         self.subject = None
         self.temp_dir = None
         
-        self.video_pool_folder = video_pool_folder
+
+        config = load_config(config_file)
         
+        self.VIDEO_FOLDER = config['app']['VIDEO_FOLDER']
+        self.DATA_FOLDER = config['app']['DATA_FOLDER']
+                
         self.setupUI()
         
     def setupUI(self):
@@ -46,14 +51,14 @@ class MainWindow(QMainWindow):
         
         self.index = None
         try:
-            with open(os.path.join(self.video_pool_folder, 'index'), 'r') as f:
+            with open(os.path.join(self.VIDEO_FOLDER, 'index'), 'r') as f:
                 self.index = int(f.readline())
         except:
             self.add_page(TextPage(self, "Errore", "Il file di indice dei video è invalido o inesistente.", "Esci", button_slot=self.close))
             return
         
         try:
-            videos = [VideoDescriptor(os.path.join(self.video_pool_folder, video)) for video in next(os.walk(self.video_pool_folder))[1]]
+            videos = [VideoDescriptor(os.path.join(self.VIDEO_FOLDER, video)) for video in next(os.walk(self.VIDEO_FOLDER))[1]]
         except Exception as e:
             self.add_page(TextPage(self, "Errore nel caricamento video", str(e), "Esci", button_slot=self.close))
             return
@@ -74,11 +79,11 @@ class MainWindow(QMainWindow):
             return
         
         subject_id = 0
-        subject_ids = os.listdir(Subject.data_dir)
+        subject_ids = os.listdir(self.DATA_FOLDER)
         if len(subject_ids) != 0:
             subject_ids.sort()
             subject_id = int(subject_ids.pop()) + 1
-        self.subject = Subject(subject_id)
+        self.subject = Subject(subject_id, self.DATA_FOLDER)
     
         self.setup_pages()
     
@@ -130,7 +135,7 @@ class MainWindow(QMainWindow):
             self.subject.dump_to_file(self.temp_dir)
             shutil.copytree(self.temp_dir, self.subject.subject_dir(), dirs_exist_ok=True)
         try:
-            with open(os.path.join(self.video_pool_folder, 'index'), 'w') as f:
+            with open(os.path.join(self.VIDEO_FOLDER, 'index'), 'w') as f:
                 f.write(str(self.index))
         except:
             pass
@@ -146,7 +151,7 @@ def run_main():
     opening_msg.setText("Stiamo caricando tutte le risorse necessarie...\t")
     opening_msg.setStandardButtons(QMessageBox.NoButton)
     opening_msg.show()
-    window = MainWindow(app, video_pool_folder='videos')
+    window = MainWindow(app)
     window.showFullScreen()
     opening_msg.reject()
     sys.exit(app.exec_())

@@ -4,11 +4,11 @@ import csv
 
 class Subject:
     
-    data_dir = "data"
     sep = ';'
     
-    def __init__(self, id:int):
+    def __init__(self, id:int, data_dir:str):
         self.id = id
+        self.data_dir = data_dir
         
         self.age = None
         self.gender = None
@@ -26,7 +26,7 @@ class Subject:
         return datetime.now(timezone.utc).timestamp()
     
     def subject_dir(self):
-        return Subject.data_dir + "/" + str(self.id)
+        return os.path.join(self.data_dir, str(self.id))
         
     def set_data(self, age:int, gender:str, english_level:str):
         self.age=age
