@@ -1,0 +1,14 @@
+{
+    "app": {
+        "DATA_FOLDER": "data",
+        "VIDEO_FOLDER": "videos"
+    },
+    "empatica": {
+        "BUCKET_NAME": "empatica-us-east-1-prod-data",
+        "PREFIX": "v2/716/",
+        "PARTICIPANT_ID": "TEST",
+        "ORG_ID": "1",
+        "STUDY_ID": "1",
+        "SAMPLE_RATE": 64
+    }
+}

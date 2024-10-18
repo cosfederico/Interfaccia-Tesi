@@ -63,7 +63,7 @@ def estimate_rr(subject_dir, fs=64, bvp_file='bvp.csv', respiratory_band=(0.1, 0
         bvp = pd.read_csv(os.path.join(subject_dir, bvp_file), sep=',')
     except Exception as e:
         print(e)
-        raise FileNotFoundError("No bvp.csv file found in the subject dir: " + subject_dir)
+        raise FileNotFoundError("No " + bvp_file + " file found in the subject dir: " + subject_dir)
     
     if skip_start:
         bvp = bvp[len(bvp)//20:]

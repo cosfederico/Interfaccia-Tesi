@@ -1,4 +1,3 @@
-
 import os
 import argparse
 
@@ -48,6 +47,19 @@ print("loading resources...")
 
 import pandas as pd
 
+from backend.config import load_config
+
+config = load_config()
+print("successfully loaded config")
+
+DATA_FOLDER = config['app']['DATA_FOLDER'] 
+BUCKET_NAME = config['empatica']['BUCKET_NAME']
+PREFIX = config['empatica']['PREFIX']
+PARTICIPANT_ID = config['empatica']['PARTICIPANT_ID']
+ORG_ID = config['empatica']['ORG_ID']
+STUDY_ID = config['empatica']['STUDY_ID']
+FS = config['empatica']['SAMPLE_RATE']
+
 from backend.video.process_video import process_video
 from backend.empatica.sync_empatica_data import sync_empatica_data
 from backend.empatica.download_empatica_data import download_empatica_data
@@ -55,10 +67,7 @@ from backend.empatica.avro_to_csv import convert_empatica_data_to_csv
 from backend.empatica.hr import estimate_hr
 from backend.empatica.rr import estimate_rr
 
-DATA_FOLDER = 'data'
-
 subjects = os.listdir(DATA_FOLDER)
-
 print("Found subjects:", subjects)
 
 while True:
@@ -79,7 +88,13 @@ while True:
 
             print("\tDownloading Empatica Data...")
             try:
-                avro_file_path = download_empatica_data(start_ts, subject_dir, date=date, participant="TEST")
+                avro_file_path = download_empatica_data(start_ts, subject_dir,
+                                                        date=date,
+                                                        participant=PARTICIPANT_ID,
+                                                        bucket_name=BUCKET_NAME,
+                                                        prefix=PREFIX,
+                                                        org_id=ORG_ID,
+                                                        study_id=STUDY_ID)
             except ValueError as e:
                 print("\t", e, "- skipping")
                 open(os.path.join(subject_dir, "NO-DATA-FOUND-FOR-THIS-SUBJECT"), 'a').close()
@@ -96,7 +111,7 @@ while True:
             print("\tExtracting Heart Rate (HR)...")
             estimate_hr(subject_dir, save_to_file=True, delete_peaks_file_after=True)
             print("\tExtracting Respiratory Rate (RR)...")
-            estimate_rr(subject_dir, save_to_file=True, delete_bvp_file_after=True)
+            estimate_rr(subject_dir, fs=FS, save_to_file=True, delete_bvp_file_after=True)
             print("\tExtracting landmarks and REF from video with Libreface...")
             process_video(subject_dir)
             

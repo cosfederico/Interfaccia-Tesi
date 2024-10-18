@@ -2,15 +2,12 @@ import boto3
 import os
 import numpy as np
 
-BUCKET_NAME = "empatica-us-east-1-prod-data"
-PREFIX = "v2/716/"
-
-def download_empatica_data(start_ts, subject_dir, date, participant):
+def download_empatica_data(start_ts, subject_dir, date, participant, bucket_name, prefix, org_id, study_id):
     
     s3_resource = boto3.resource('s3')
-    bucket = s3_resource.Bucket(BUCKET_NAME)
+    bucket = s3_resource.Bucket(bucket_name)
     
-    filter = PREFIX + "1/1/participant_data/"+ date + "/" + participant
+    filter = prefix + org_id + "/" + study_id + "/participant_data/"+ date + "/" + participant
 
     timestamps = []
     keys = []
