@@ -40,7 +40,7 @@ For now the number of questions is hard-coded to be five. This is partly a side 
 
 ## Empatica 
 
-The software is designed to be used in parallel with an Empatica EmbracePlus watch worn on the user wrist, to monitor non-invasely values like Heart Rate (HR) and Respiratory Rate (RR). If you wish to use Empatica to accompany the data capture process, please make sure to setup the watch and start capturing data with Empatica **before** running the application.
+The software is designed to be used in parallel with an Empatica EmbracePlus watch worn on the user wrist, to monitor non-invasely values like Heart Rate (HR), Respiratory Rate (RR) and ElectroDermal Activity (EDA). If you wish to use Empatica to accompany the data capture process, please make sure to setup the watch and start capturing data with Empatica **before** running the application.
 
 It is included with the application a script for automating the process of downloading the recorded data from Empatica after the session and synchronizing it with the video capture.
 
