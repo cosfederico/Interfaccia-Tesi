@@ -32,6 +32,14 @@ def convert_empatica_data_to_csv(avro_file_path, output_dir=None, delete_avro_af
         writer = csv.writer(f)
         writer.writerow(["systolic_peak_timestamp"])
         writer.writerows([[sp] for sp in sps["peaksTimeNanos"]])
+            
+    eda = data["rawData"]["eda"]
+    timestamp = [round(eda["timestampStart"] + i * (1e6 / eda["samplingFrequency"]))
+        for i in range(len(eda["values"]))]
+    with open(os.path.join(output_dir, 'eda.csv'), 'w', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(["unix_timestamp", "eda"])
+        writer.writerows([[ts, eda] for ts, eda in zip(timestamp, eda["values"])])
     
     reader.close()
     
