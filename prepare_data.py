@@ -1,5 +1,6 @@
 import os
 import argparse
+import json
 
 parser = argparse.ArgumentParser(
                     formatter_class=argparse.RawTextHelpFormatter,
@@ -58,7 +59,6 @@ PREFIX = config['empatica']['PREFIX']
 PARTICIPANT_ID = config['empatica']['PARTICIPANT_ID']
 ORG_ID = config['empatica']['ORG_ID']
 STUDY_ID = config['empatica']['STUDY_ID']
-FS = config['empatica']['SAMPLE_RATE']
 
 from backend.video.process_video import process_video
 from backend.empatica.sync_empatica_data import sync_empatica_data
@@ -111,7 +111,9 @@ while True:
             print("\tExtracting Heart Rate (HR)...")
             estimate_hr(subject_dir, save_to_file=True, delete_peaks_file_after=True)
             print("\tExtracting Respiratory Rate (RR)...")
-            estimate_rr(subject_dir, fs=FS, save_to_file=True, delete_bvp_file_after=False)
+            with open(os.path.join(subject_dir, "fs.json"), 'r') as f:
+                fs = json.load(f)      
+            estimate_rr(subject_dir, fs=int(fs["bvp"]), save_to_file=True, delete_bvp_file_after=False)
             print("\tExtracting landmarks and REF from video with Libreface...")
             process_video(subject_dir)
             
