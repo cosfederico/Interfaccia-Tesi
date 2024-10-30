@@ -1,6 +1,7 @@
 from avro.datafile import DataFileReader
 from avro.io import DatumReader
 import os
+import json
 import csv
 
 def convert_empatica_data_to_csv(avro_file_path, output_dir=None, delete_avro_after=False):
@@ -42,6 +43,9 @@ def convert_empatica_data_to_csv(avro_file_path, output_dir=None, delete_avro_af
         writer.writerows([[ts, eda] for ts, eda in zip(timestamp, eda["values"])])
     
     reader.close()
+    
+    with open(os.path.join(output_dir, 'fs.json'), 'w') as f:
+        json.dump({"bvp": bvp["samplingFrequency"], "eda": eda["samplingFrequency"]}, f, indent=4)
     
     if delete_avro_after:
         try:
