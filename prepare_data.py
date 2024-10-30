@@ -111,7 +111,7 @@ while True:
             print("\tExtracting Heart Rate (HR)...")
             estimate_hr(subject_dir, save_to_file=True, delete_peaks_file_after=True)
             print("\tExtracting Respiratory Rate (RR)...")
-            estimate_rr(subject_dir, fs=FS, save_to_file=True, delete_bvp_file_after=True)
+            estimate_rr(subject_dir, fs=FS, save_to_file=True, delete_bvp_file_after=False)
             print("\tExtracting landmarks and REF from video with Libreface...")
             process_video(subject_dir)
             
