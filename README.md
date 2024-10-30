@@ -97,7 +97,6 @@ For downloading data from Empatica:
 - `"PARTICIPANT_ID"`: The ID of the participant used to collect data with Empatica. Can be max 10 characters long, only capital letters and numbers
 - `"ORG_ID"`: The ID of your organization provided by Empatica
 - `"STUDY_ID":`The ID of the study
-- `"SAMPLE_RATE"`: The sample rate at which raw data is recorded by your particular Empatica device. For our study this was `64`. It might change for your device. Please check the sample rate before running any analysis on the recorded data
 
 ## JSON Schema
 
@@ -123,12 +122,11 @@ This is the [JSON Schema](https://json-schema.org) associated with the `config.j
         "PREFIX": { "type": "string" },
         "PARTICIPANT_ID": { "type": "string" },
         "ORG_ID": { "type": "string" },
-        "STUDY_ID": { "type": "string" },
-        "SAMPLE_RATE": { "type": "integer" }
+        "STUDY_ID": { "type": "string" }
       },
       "required": [
         "BUCKET_NAME", "PREFIX", "PARTICIPANT_ID",
-        "ORG_ID", "STUDY_ID", "SAMPLE_RATE"
+        "ORG_ID", "STUDY_ID"
       ]
     }
   },
