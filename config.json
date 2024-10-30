@@ -8,7 +8,6 @@
         "PREFIX": "v2/716/",
         "PARTICIPANT_ID": "TEST",
         "ORG_ID": "1",
-        "STUDY_ID": "1",
-        "SAMPLE_RATE": 64
+        "STUDY_ID": "1"
     }
 }

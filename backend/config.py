@@ -28,12 +28,11 @@ def load_config(config_file='config.json'):
                     "PREFIX": { "type": "string" },
                     "PARTICIPANT_ID": { "type": "string" },
                     "ORG_ID": { "type": "string" },
-                    "STUDY_ID": { "type": "string" },
-                    "SAMPLE_RATE": { "type": "integer" }
+                    "STUDY_ID": { "type": "string" }
                 },
                 "required": [
                     "BUCKET_NAME", "PREFIX", "PARTICIPANT_ID",
-                    "ORG_ID", "STUDY_ID", "SAMPLE_RATE"
+                    "ORG_ID", "STUDY_ID"
                 ]
             }
         },
