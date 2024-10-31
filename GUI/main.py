@@ -11,6 +11,7 @@ from backend.Poll import *
 from backend.WebcamRecorder import *
 from backend.VideoDescriptor import *
 from backend.Subject import *
+from backend.eye_tracking.EyeTracker import *
 
 import pandas as pd
 import sys
@@ -25,6 +26,7 @@ class MainWindow(QMainWindow):
     
         self.app = app
         self.webcamRecorder = None
+        self.eyeTracker = None
         self.subject = None
         self.temp_dir = None
         
@@ -84,7 +86,10 @@ class MainWindow(QMainWindow):
             subject_ids.sort()
             subject_id = int(subject_ids.pop()) + 1
         self.subject = Subject(subject_id, self.DATA_FOLDER)
-    
+        
+        self.eyeTracker = EyeTracker(self.temp_dir, 'test')
+        self.eyeTracker.setup_tracking()
+
         self.setup_pages()
     
     def setup_pages(self):
@@ -120,10 +125,17 @@ class MainWindow(QMainWindow):
             self.webcamRecorder.start()
         if self.subject is not None:
             self.subject.set_session_start_timestamp()
+        if self.eyeTracker is not None:
+            self.eyeTracker.start_recording(self.subject.id)
             
     def closeEvent(self, QCloseEvent):
         if self.webcamRecorder is not None and self.webcamRecorder.recording:
             self.webcamRecorder.stop()
+        if self.eyeTracker is not None:
+            try:
+                self.eyeTracker.stop_recording()
+            except:
+                pass
         if self.temp_dir is not None:
             shutil.rmtree(self.temp_dir, ignore_errors=True)
         
@@ -133,7 +145,12 @@ class MainWindow(QMainWindow):
         if self.subject is not None:
             self.subject.set_session_end_timestamp()
             self.subject.dump_to_file(self.temp_dir)
-            shutil.copytree(self.temp_dir, self.subject.subject_dir(), dirs_exist_ok=True)
+        if self.eyeTracker is not None:
+            try:
+                self.eyeTracker.stop_recording()
+            except:
+                pass
+        shutil.copytree(self.temp_dir, self.subject.subject_dir(), dirs_exist_ok=True)
         try:
             with open(os.path.join(self.VIDEO_FOLDER, 'index'), 'w') as f:
                 f.write(str(self.index))
