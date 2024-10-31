@@ -75,11 +75,10 @@
 from __future__ import division
 from __future__ import print_function
 
-import time
+import datetime
 import sys
 import os
 import pylink
-
 
 # some global constants
 RIGHT_EYE = 1
@@ -118,8 +117,9 @@ def do_trial(trial, duration):
     smp = None
 
     # open a plain text file to save the sample data
-    txt_file = os.path.join('results', 'samples_trial_%d.txt' % (trial + 1))
+    txt_file = os.path.join('results', 'samples_trial_%d.csv' % (trial + 1))
     sample_txt = open(txt_file, 'w')
+    sample_txt.write('timestamp,x,y\n')
 
     # get the currently active tracker object (connection)
     el_active = pylink.getEYELINK()
@@ -242,8 +242,8 @@ def do_trial(trial, duration):
                 # PC users do not need to (and we do not recommend) recording
                 # sample data this way. We write samples to the TXT file here
                 # only for illustration purposes.
-                smp_to_save = (smp.getTime(), sample[0], sample[1])
-                sample_txt.write('%.1f\t%.2f\t%.2f\n' % smp_to_save)
+                smp_to_save = (smp.getTime() + TS_START, sample[0], sample[1])
+                sample_txt.write('%.1f,%.2f,%.2f\n' % smp_to_save)
 
     # close the TXT file
     sample_txt.close()
@@ -321,6 +321,8 @@ try:
 except RuntimeError as error:
     print('ERROR:', error)
     sys.exit()
+    
+TS_START = datetime.datetime.now(datetime.timezone.utc).timestamp * 1e3
 
 # Step 2: Initializes the graphics (for calibration & stimulus presentation)
 # INSERT THIRD PARTY GRAPHICS (e.g., Pygame) INITIALIZATION HERE IF NEEDED
