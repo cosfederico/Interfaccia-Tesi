@@ -170,6 +170,7 @@ def run_main():
     app = QApplication(sys.argv)
     opening_msg = QMessageBox()
     opening_msg.setWindowTitle("Interfaccia")
+    opening_msg.setWindowIcon(QIcon(os.path.join('GUI', 'icons', 'webcam.png')))
     opening_msg.setText("Stiamo caricando tutte le risorse necessarie...\t")
     opening_msg.setStandardButtons(QMessageBox.NoButton)
     opening_msg.show()
