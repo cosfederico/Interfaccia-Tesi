@@ -155,13 +155,13 @@ For the data analyisis:
 - numpy
 - boto3
 - avro
-- pywt
+- PyWavelets
 - scipy
 - libreface
 - jsonschema
 
 ```
-pip install PyQt5 opencv-python pandas numpy boto3 avro pywt scipy libreface jsonschema
+pip install PyQt5 opencv-python pandas numpy boto3 avro PyWavelets scipy libreface jsonschema
 ```
 
 Or you can also simply use the `requirements.txt` file:
