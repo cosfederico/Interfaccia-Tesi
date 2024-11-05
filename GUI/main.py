@@ -168,15 +168,28 @@ def run_main():
         os.environ['QT_MULTIMEDIA_PREFERRED_PLUGINS'] = 'windowsmediafoundation'
         
     app = QApplication(sys.argv)
+    
     opening_msg = QMessageBox()
     opening_msg.setWindowTitle("Interfaccia")
     opening_msg.setWindowIcon(QIcon(os.path.join('GUI', 'icons', 'webcam.png')))
     opening_msg.setText("Stiamo caricando tutte le risorse necessarie...\t")
     opening_msg.setStandardButtons(QMessageBox.NoButton)
     opening_msg.show()
+    
     cap = cv2.VideoCapture(0)
-    window = MainWindow(app, cap)    
-    webcam_window = WebcamPopup(app, cap, action=window.showFullScreen)
-    webcam_window.show()
-    opening_msg.reject()
-    sys.exit(app.exec_())
+
+    if cap is None or not cap.isOpened():
+        error_msg = QMessageBox()
+        error_msg.setIcon(QMessageBox.Critical)
+        error_msg.setWindowIcon(QIcon(os.path.join('GUI', 'icons', 'webcam.png')))
+        error_msg.setWindowTitle("Webcam Unavailable")
+        error_msg.setText("Impossibile avviare la webcam.\nAssicurati che sia connessa correttamente e non sia in uso da un altro programma.")
+        opening_msg.reject()
+        error_msg.exec_()
+        sys.exit()
+    else:
+        window = MainWindow(app, cap)
+        webcam_window = WebcamPopup(app, cap, action=window.showFullScreen)
+        webcam_window.show()
+        opening_msg.reject()
+        sys.exit(app.exec_())
