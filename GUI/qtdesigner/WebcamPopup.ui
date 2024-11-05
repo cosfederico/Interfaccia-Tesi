@@ -75,6 +75,18 @@ background-color: rgba(255, 255, 255, 0);</string>
     </spacer>
    </item>
    <item alignment="Qt::AlignHCenter">
+    <widget class="QLabel" name="label_3">
+     <property name="styleSheet">
+      <string notr="true">font:10pt &quot;Rubik Light&quot;;
+color: rgb(255, 0, 0);
+background-color: rgba(255, 255, 255, 0);</string>
+     </property>
+     <property name="text">
+      <string>Assicurati di essere in un ambiente tranquillo e ben illuminato.</string>
+     </property>
+    </widget>
+   </item>
+   <item alignment="Qt::AlignHCenter">
     <widget class="QPushButton" name="ok_button">
      <property name="minimumSize">
       <size>
