@@ -5,6 +5,7 @@ from GUI.pages.TextPage import *
 from GUI.pages.DataCollectionPage import *
 from GUI.pages.CountDownPage import *
 from GUI.pages.VideoPage import *
+from GUI.pages.WebcamPopup import *
 
 from backend.config import load_config
 from backend.Poll import *
@@ -13,7 +14,6 @@ from backend.VideoDescriptor import *
 from backend.Subject import *
 from backend.eye_tracking.EyeTracker import *
 
-import pandas as pd
 import sys
 import os
 import tempfile
@@ -21,7 +21,7 @@ import shutil
 
 class MainWindow(QMainWindow):
     
-    def __init__(self, app, config_file='config.json'):
+    def __init__(self, app, cap=None, config_file='config.json'):
         super().__init__()
     
         self.app = app
@@ -29,7 +29,7 @@ class MainWindow(QMainWindow):
         self.eyeTracker = None
         self.subject = None
         self.temp_dir = None
-        
+        self.cap = cap
 
         config = load_config(config_file)
         
@@ -75,7 +75,7 @@ class MainWindow(QMainWindow):
         
         self.temp_dir = tempfile.mkdtemp()
         try:
-            self.webcamRecorder = WebcamRecorder(output_file=os.path.join(self.temp_dir, "recording.mp4"), daemon=True)
+            self.webcamRecorder = WebcamRecorder(output_file=os.path.join(self.temp_dir, "recording.mp4"), daemon=True, cap=self.cap)
         except Exception as e:
             self.add_page(TextPage(self, str(e), "Assicuratevi che un dispositivo webcam sia collegato e funzioni correttamente.", "Esci", button_slot=self.close))
             return
@@ -173,7 +173,9 @@ def run_main():
     opening_msg.setText("Stiamo caricando tutte le risorse necessarie...\t")
     opening_msg.setStandardButtons(QMessageBox.NoButton)
     opening_msg.show()
-    window = MainWindow(app)
-    window.showFullScreen()
+    cap = cv2.VideoCapture(0)
+    window = MainWindow(app, cap)    
+    webcam_window = WebcamPopup(app, cap, action=window.showFullScreen)
+    webcam_window.show()
     opening_msg.reject()
     sys.exit(app.exec_())

@@ -4,10 +4,14 @@ import queue
 
 class WebcamRecorder(threading.Thread):
     
-    def __init__(self, output_file, daemon):
+    def __init__(self, output_file, daemon, cap=None):
         super(WebcamRecorder, self).__init__()
         
-        self.cap = cv2.VideoCapture(0)
+        self.cap = cap
+        
+        if not self.cap:
+            self.cap = cv2.VideoCapture(0)
+            
         if not self.cap.isOpened():
             raise Exception("Webcam non trovata o non disponibile")
         
