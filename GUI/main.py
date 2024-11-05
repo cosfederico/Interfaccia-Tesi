@@ -87,8 +87,13 @@ class MainWindow(QMainWindow):
             subject_id = int(subject_ids.pop()) + 1
         self.subject = Subject(subject_id, self.DATA_FOLDER)
         
-        self.eyeTracker = EyeTracker(self.temp_dir, 'test')
-        self.eyeTracker.setup_tracking()
+        try:
+            self.eyeTracker = EyeTracker(self.temp_dir, 'test')
+        except:
+            print("Could not find EyeTracker. Launching without eye-tracking..")
+        
+        if self.eyeTracker is not None:
+            self.eyeTracker.setup_tracking()
 
         self.setup_pages()
     
