@@ -33,6 +33,7 @@ class WebcamPopup(QDialog):
         self.timer.start(int(1e3/self.fps))
             
     def ok_button_clicked(self):
+        self.timer.stop()
         if self.action is not None:
             self.action()
         self.close()
