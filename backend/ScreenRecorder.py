@@ -8,7 +8,7 @@ import time
 
 class ScreenRecorder(threading.Thread):
     
-    def __init__(self, output_file="screen.mp4", fps=30.0, daemon=False):
+    def __init__(self, output_file="screen.mp4", fps=24.0, resolution=(1920, 1080), daemon=False):
         super(ScreenRecorder, self).__init__()
                 
         self.output_file = output_file
@@ -16,7 +16,8 @@ class ScreenRecorder(threading.Thread):
         self.daemon = daemon
 
         self.buffer = queue.Queue()
-        self.resolution = (1920, 1080)
+        self.resolution = resolution
+        print(self.resolution)
         self.recording = False
         self.frame_interval = 1.0 / self.fps
         

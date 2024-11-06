@@ -89,7 +89,8 @@ class MainWindow(QMainWindow):
             subject_id = int(subject_ids.pop()) + 1
         self.subject = Subject(subject_id, self.DATA_FOLDER)
         
-        self.screenRecorder = ScreenRecorder(output_file=os.path.join(self.temp_dir, "screen.mp4"), fps=24.0, daemon=True)
+        screen_size = self.app.primaryScreen().size()
+        self.screenRecorder = ScreenRecorder(output_file=os.path.join(self.temp_dir, "screen.mp4"), fps=24.0, resolution=(screen_size.width(), screen_size.height()), daemon=True)
         
         try:
             self.eyeTracker = EyeTracker(self.temp_dir, 'test')
