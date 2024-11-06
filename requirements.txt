@@ -8,3 +8,4 @@ PyWavelets
 scipy
 libreface
 jsonschema
+mss
