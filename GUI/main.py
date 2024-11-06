@@ -10,6 +10,7 @@ from GUI.pages.WebcamPopup import *
 from backend.config import load_config
 from backend.Poll import *
 from backend.WebcamRecorder import *
+from backend.ScreenRecorder import *
 from backend.VideoDescriptor import *
 from backend.Subject import *
 from backend.eye_tracking.EyeTracker import *
@@ -26,6 +27,7 @@ class MainWindow(QMainWindow):
     
         self.app = app
         self.webcamRecorder = None
+        self.screenRecorder = None
         self.eyeTracker = None
         self.subject = None
         self.temp_dir = None
@@ -87,14 +89,16 @@ class MainWindow(QMainWindow):
             subject_id = int(subject_ids.pop()) + 1
         self.subject = Subject(subject_id, self.DATA_FOLDER)
         
+        self.screenRecorder = ScreenRecorder(output_file=os.path.join(self.temp_dir, "screen.mp4"), fps=24.0, daemon=True)
+        
         try:
             self.eyeTracker = EyeTracker(self.temp_dir, 'test')
         except:
-            print("Could not find EyeTracker. Launching without eye-tracking..")
-        
-        if self.eyeTracker is not None:
-            self.eyeTracker.setup_tracking()
+            print("No eye-tracker found. Starting without eye-tracker..")
 
+        if self.eyeTracker:
+            self.eyeTracker.setup_tracking()
+            
         self.setup_pages()
     
     def setup_pages(self):
@@ -128,6 +132,8 @@ class MainWindow(QMainWindow):
     def showEvent(self, QShowEvent):
         if self.webcamRecorder is not None:
             self.webcamRecorder.start()
+        if self.screenRecorder is not None:
+            self.screenRecorder.start()
         if self.subject is not None:
             self.subject.set_session_start_timestamp()
         if self.eyeTracker is not None:
@@ -136,6 +142,8 @@ class MainWindow(QMainWindow):
     def closeEvent(self, QCloseEvent):
         if self.webcamRecorder is not None and self.webcamRecorder.recording:
             self.webcamRecorder.stop()
+        if self.screenRecorder is not None and self.screenRecorder.recording:
+            self.screenRecorder.stop()
         if self.eyeTracker is not None:
             try:
                 self.eyeTracker.stop_recording()
@@ -147,6 +155,8 @@ class MainWindow(QMainWindow):
     def save_and_close(self):
         if self.webcamRecorder is not None:
             self.webcamRecorder.stop()
+        if self.screenRecorder is not None:
+            self.screenRecorder.stop()
         if self.subject is not None:
             self.subject.set_session_end_timestamp()
             self.subject.dump_to_file(self.temp_dir)
