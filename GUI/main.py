@@ -39,7 +39,9 @@ class MainWindow(QMainWindow):
         self.DATA_FOLDER = config['app']['DATA_FOLDER']
                 
         self.setupUI()
-        
+        self.load_resources()
+        self.setup_pages()
+
     def setupUI(self):
         self.setWindowTitle("Interfaccia")
         self.resize(QApplication.desktop().availableGeometry(0).size())
@@ -48,8 +50,6 @@ class MainWindow(QMainWindow):
         
         self.stacked_widget = QStackedWidget()
         self.setCentralWidget(self.stacked_widget)
-        
-        self.load_resources()
         
     def load_resources(self):
         
@@ -100,8 +100,6 @@ class MainWindow(QMainWindow):
         if self.eyeTracker:
             self.eyeTracker.setup_tracking()
             
-        self.setup_pages()
-    
     def setup_pages(self):
         
         self.add_page(TextPage(self, "Benvenuto!", "Oggi parteciperai a un'esperienza.\nPer prima cosa dovrai inserire alcuni tuoi dati.\nPremi Inizia quando sei pronto.", "Inizia"))
@@ -140,38 +138,48 @@ class MainWindow(QMainWindow):
         if self.eyeTracker is not None:
             self.eyeTracker.start_recording(self.subject.id)
             
-    def closeEvent(self, QCloseEvent):
-        if self.webcamRecorder is not None and self.webcamRecorder.recording:
-            self.webcamRecorder.stop()
+    def release_resources(self):
         if self.screenRecorder is not None and self.screenRecorder.recording:
             self.screenRecorder.stop()
+        if self.webcamRecorder is not None and self.webcamRecorder.recording:
+            self.webcamRecorder.stop()
         if self.eyeTracker is not None:
             try:
                 self.eyeTracker.stop_recording()
             except:
                 pass
+            
+    def closeEvent(self, QCloseEvent):
+        self.release_resources()
         if self.temp_dir is not None:
             shutil.rmtree(self.temp_dir, ignore_errors=True)
         
     def save_and_close(self):
-        if self.webcamRecorder is not None:
-            self.webcamRecorder.stop()
-        if self.screenRecorder is not None:
-            self.screenRecorder.stop()
+        self.hide()
+        
+        msg = QMessageBox(self)
+        msg.setWindowTitle("Interfaccia")
+        msg.setWindowIcon(QIcon(os.path.join('GUI', 'icons', 'webcam.png')))
+        msg.setText("Salvataggio dei dati raccolti...\t")
+        msg.setStandardButtons(QMessageBox.NoButton)
+        msg.show()
+        self.app.processEvents()
+                
         if self.subject is not None:
             self.subject.set_session_end_timestamp()
             self.subject.dump_to_file(self.temp_dir)
-        if self.eyeTracker is not None:
-            try:
-                self.eyeTracker.stop_recording()
-            except:
-                pass
+        
+        self.release_resources()
+        
         shutil.copytree(self.temp_dir, self.subject.subject_dir(), dirs_exist_ok=True)
+        
         try:
             with open(os.path.join(self.VIDEO_FOLDER, 'index'), 'w') as f:
                 f.write(str(self.index))
         except:
             pass
+        
+        msg.close()
         self.close()
         
 def run_main():
@@ -183,24 +191,23 @@ def run_main():
     opening_msg = QMessageBox()
     opening_msg.setWindowTitle("Interfaccia")
     opening_msg.setWindowIcon(QIcon(os.path.join('GUI', 'icons', 'webcam.png')))
-    opening_msg.setText("Stiamo caricando tutte le risorse necessarie...\t")
+    opening_msg.setText("Stiamo caricando le risorse necessarie...\t")
     opening_msg.setStandardButtons(QMessageBox.NoButton)
     opening_msg.show()
     
     cap = cv2.VideoCapture(0)
-
+    opening_msg.reject()
+  
     if cap is None or not cap.isOpened():
         error_msg = QMessageBox()
         error_msg.setIcon(QMessageBox.Critical)
         error_msg.setWindowIcon(QIcon(os.path.join('GUI', 'icons', 'webcam.png')))
         error_msg.setWindowTitle("Webcam Unavailable")
         error_msg.setText("Impossibile avviare la webcam.\nAssicurati che sia connessa correttamente e non sia in uso da un altro programma.")
-        opening_msg.reject()
         error_msg.exec_()
         sys.exit()
-    else:
-        window = MainWindow(app, cap)
-        webcam_window = WebcamPopup(app, cap, action=window.showFullScreen)
-        webcam_window.show()
-        opening_msg.reject()
-        sys.exit(app.exec_())
+        
+    window = MainWindow(app, cap)
+    webcam_window = WebcamPopup(app, cap, action=window.showFullScreen)
+    webcam_window.show()
+    sys.exit(app.exec_())
