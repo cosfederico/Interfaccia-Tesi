@@ -62,7 +62,7 @@ background-color: rgba(255, 255, 255, 0);</string>
      <property name="minimumSize">
       <size>
        <width>600</width>
-       <height>200</height>
+       <height>300</height>
       </size>
      </property>
      <property name="maximumSize">
@@ -136,6 +136,35 @@ selection-background-color: rgb(0, 64, 130);</string>
             <string>F</string>
            </property>
           </item>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <item>
+         <widget class="QLabel" name="nationality_label">
+          <property name="styleSheet">
+           <string notr="true">font: 14pt &quot;Rubik Light&quot;;
+background-color: rgba(255, 255, 255, 0);</string>
+          </property>
+          <property name="text">
+           <string>Nazionalità</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="nationality">
+          <property name="maximumSize">
+           <size>
+            <width>250</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(255, 255, 255);
+font: 14pt &quot;Rubik Light&quot;;</string>
+          </property>
          </widget>
         </item>
        </layout>
@@ -221,7 +250,7 @@ selection-color: rgb(255, 255, 255);</string>
      </property>
     </spacer>
    </item>
-   <item alignment="Qt::AlignHCenter|Qt::AlignBottom">
+   <item alignment="Qt::AlignHCenter">
     <widget class="QLabel" name="error_text">
      <property name="maximumSize">
       <size>

@@ -12,6 +12,7 @@ class Subject:
         
         self.age = None
         self.gender = None
+        self.nationality = None
         self.english_level = None
         
         self.session_start_timestamp = None
@@ -28,9 +29,10 @@ class Subject:
     def subject_dir(self):
         return os.path.join(self.data_dir, str(self.id))
         
-    def set_data(self, age:int, gender:str, english_level:str):
+    def set_data(self, age:int, gender:str, nationality:str, english_level:str):
         self.age=age
         self.gender=gender
+        self.nationality=nationality
         self.english_level=english_level
         
     def set_session_start_timestamp(self):
@@ -56,8 +58,8 @@ class Subject:
             
             date = datetime.today().strftime('%Y-%m-%d')
             
-            fields = ["id", "age", "gender", "english_level", "date", "session_start_timestamp", "session_end_timestamp"]
-            row = [self.id, self.age, self.gender, self.english_level, date, self.session_start_timestamp, self.session_end_timestamp]
+            fields = ["id", "age", "gender", "nationality", "english_level", "date", "session_start_timestamp", "session_end_timestamp"]
+            row = [self.id, self.age, self.gender, self.nationality, self.english_level, date, self.session_start_timestamp, self.session_end_timestamp]
             
             for i in range(len(self.video_start_timestamps)):
                 
