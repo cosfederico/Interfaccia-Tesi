@@ -40,6 +40,7 @@ class IntroPage(QWidget):
             return
         
         self.parent_window.next_page()
+        self.parent_window.participant.add_answer(self.checkbox.text(), "Si")
         
     def exit_button_clicked(self):
         self.parent_window.close()

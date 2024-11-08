@@ -38,7 +38,7 @@ class DataCollectionPage(QWidget):
             self.error_text.setText("Inserire un'età valida.")
         else:
             if (age > 18 and age < 100):
-                self.parent_window.subject.set_data(age, gender, nationality, english_level)
+                self.parent_window.participant.set_data(age, gender, nationality, english_level)
                 self.parent_window.next_page()
             else:
                 self.error_text.setText("Inserire un'età valida.")

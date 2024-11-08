@@ -2,17 +2,18 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 
 from GUI.pages.TextPage import *
+from GUI.pages.IntroPage import *
 from GUI.pages.DataCollectionPage import *
+from GUI.pages.QuestionScalePage import *
 from GUI.pages.CountDownPage import *
 from GUI.pages.VideoPage import *
 from GUI.pages.WebcamPopup import *
 
 from backend.config import load_config
-from backend.Poll import *
 from backend.WebcamRecorder import *
 from backend.ScreenRecorder import *
 from backend.VideoDescriptor import *
-from backend.Subject import *
+from backend.Participant import *
 from backend.eye_tracking.EyeTracker import *
 
 import sys
@@ -29,7 +30,7 @@ class MainWindow(QMainWindow):
         self.webcamRecorder = None
         self.screenRecorder = None
         self.eyeTracker = None
-        self.subject = None
+        self.participant = None
         self.temp_dir = None
         self.cap = cap
 
@@ -37,6 +38,15 @@ class MainWindow(QMainWindow):
         
         self.VIDEO_FOLDER = config['app']['VIDEO_FOLDER']
         self.DATA_FOLDER = config['app']['DATA_FOLDER']
+        
+        try:
+            self.QUESTIONS_BEFORE = config['app']['QUESTIONS']['BEFORE']
+        except KeyError as e:
+            self.QUESTIONS_BEFORE = []
+        try:
+            self.QUESTIONS_AFTER = config['app']['QUESTIONS']['AFTER']
+        except KeyError as e:
+            self.QUESTIONS_AFTER= []
                 
         self.setupUI()
         self.load_resources()
@@ -72,23 +82,22 @@ class MainWindow(QMainWindow):
             self.add_page(TextPage(self, "Cartella video vuota", "Nessun video da riprodurre trovato.\nPer favore carica dei video da riprodurre e riavvia il programma.", "Esci", self.close))
             return
         
-        self.video1 = videos[self.index % len(videos)]
-        self.video2 = videos[(self.index + 1) % len(videos)]
-        self.index = (self.index + 2) % len(videos)
+        self.video = videos[self.index % len(videos)]
+        self.index = (self.index + 1) % len(videos)
         
         self.temp_dir = tempfile.mkdtemp()
         try:
-            self.webcamRecorder = WebcamRecorder(output_file=os.path.join(self.temp_dir, "recording.mp4"), daemon=True, cap=self.cap)
+            self.webcamRecorder = WebcamRecorder(output_file=os.path.join(self.temp_dir, "webcam.mp4"), daemon=True, cap=self.cap)
         except Exception as e:
             self.add_page(TextPage(self, str(e), "Assicuratevi che un dispositivo webcam sia collegato e funzioni correttamente.", "Esci", button_slot=self.close))
             return
         
-        subject_id = 0
-        subject_ids = os.listdir(self.DATA_FOLDER)
-        if len(subject_ids) != 0:
-            subject_ids.sort()
-            subject_id = int(subject_ids.pop()) + 1
-        self.subject = Subject(subject_id, self.DATA_FOLDER)
+        participant_id = 0
+        participant_ids = os.listdir(self.DATA_FOLDER)
+        if len(participant_ids) != 0:
+            participant_ids.sort()
+            participant_id = int(participant_ids.pop()) + 1
+        self.participant = Participant(participant_id, self.DATA_FOLDER)
         
         screen_size = self.app.primaryScreen().size()
         self.screenRecorder = ScreenRecorder(output_file=os.path.join(self.temp_dir, "screen.mp4"), fps=24.0, resolution=(screen_size.width(), screen_size.height()), daemon=True)
@@ -103,25 +112,23 @@ class MainWindow(QMainWindow):
             
     def setup_pages(self):
         
-        self.add_page(TextPage(self, "Benvenuto!", "Oggi parteciperai a un'esperienza.\nPer prima cosa dovrai inserire alcuni tuoi dati.\nPremi Inizia quando sei pronto.", "Inizia"))
+        self.add_page(IntroPage(self, "Benvenuto!", "Grazie per aver accettato di partecipare a questo studio.\nDurante la sessione, ti sarà richiesto di guardare una breve videolezione di circa 5-10 minuti su un tema didattico. Mentre guardi il video, alcuni dispositivi registreranno automaticamente i tuoi movimenti oculari e il tuo battito cardiaco, e sarà inoltre monitorata l’espressione facciale per analizzare le reazioni emotive.\n\nDopo la visione, ti chiederemo di completare alcuni questionari. L’intera sessione durerà circa 20-30 minuti. Ti invitiamo a seguire il video con attenzione e a rispondere ai questionari finali.", "Inizia", bottom_text="I dati raccolti saranno utilizzati esclusivamente per scopi di ricerca, e tutte le informazioni rimarranno anonime.\nSe in qualsiasi momento desideri interrompere l’esperimento, sei libero di farlo. Buona visione e grazie per il tuo tempo!", error_text="Per favore fornisci il tuo consenso per iniziare lo studio", exit_button_slot=self.close))
         self.add_page(DataCollectionPage(self))
-        self.add_page(TextPage(self, "Bene!", "Ora ti mostreremo due video, su cui ti verranno fatte alcune domande.\nQuando sei pronto, premi Avanti, e inizierà il primo video.", "Avanti"))
+        # self.add_page(PANAS(self))
+        for question in self.QUESTIONS_BEFORE:
+            self.add_page(QuestionScalePage(self, "Questionario Preparatorio", question))
+        self.add_page(TextPage(self, "È tutto pronto!", "Quando sei pronto, premi Avanti per iniziare. Il video inizierà a seguito di un breve conto alla rovescia.", "Avanti"))
         
         real = random.choice([True, False])
         
         self.add_page(CountDownPage(self, seconds=3))     
-        self.add_page(VideoPage(self, self.video1.getRandomVideo(real=real)))
-        self.add_page(TextPage(self, "Question Time!", "Quando sei pronto, premi Avanti per iniziare il questionario associato al video che hai appena visto.", "Avanti"))
-        self.add_page(Poll(self, self.video1.getQuestions()))
-        
-        self.add_page(TextPage(self, "Grazie mille delle risposte","Puoi fare una breve pausa.\nQuando sei pronto premi Avanti per iniziare il prossimo video.", "Avanti"))
+        self.add_page(VideoPage(self, self.video.getRandomVideo(real=real), video_type='real' if real else 'fake'))
+        self.add_page(TextPage(self, "Question Time!", "Quando sei pronto, premi Avanti per iniziare il questionario.", "Avanti"))
+        # self.add_page(PANAS(self))
+        for i, question in enumerate(self.QUESTIONS_AFTER):
+            self.add_page(QuestionScalePage(self, "Domanda " + str(i), question))
   
-        self.add_page(CountDownPage(self, seconds=3)) 
-        self.add_page(VideoPage(self, self.video2.getRandomVideo(real=not real)))
-        self.add_page(TextPage(self, "Question Time!", "Quando sei pronto, premi Avanti per iniziare il questionario associato al video che hai appena visto.", "Avanti"))
-        self.add_page(Poll(self, self.video2.getQuestions()))
-           
-        self.add_page(TextPage(self, "Fine!", "La nostra esperienza si è conclusa, grazie mille per la partecipazione.\nPremi Fine per uscire.", "Fine", button_slot=self.save_and_close))
+        self.add_page(TextPage(self, "Fine!", "Il nostro esperimento si è concluso, grazie mille per la partecipazione.\nPremi Fine per uscire.", "Fine", button_slot=self.save_and_close))
         
     def add_page(self, page):
         self.stacked_widget.addWidget(page)
@@ -134,10 +141,10 @@ class MainWindow(QMainWindow):
             self.webcamRecorder.start()
         if self.screenRecorder is not None:
             self.screenRecorder.start()
-        if self.subject is not None:
-            self.subject.set_session_start_timestamp()
+        if self.participant is not None:
+            self.participant.set_session_start_timestamp()
         if self.eyeTracker is not None:
-            self.eyeTracker.start_recording(self.subject.id)
+            self.eyeTracker.start_recording(self.participant.id)
             
     def release_resources(self):
         if self.screenRecorder is not None and self.screenRecorder.recording:
@@ -166,13 +173,13 @@ class MainWindow(QMainWindow):
         msg.show()
         self.app.processEvents()
                 
-        if self.subject is not None:
-            self.subject.set_session_end_timestamp()
-            self.subject.dump_to_file(self.temp_dir)
+        if self.participant is not None:
+            self.participant.set_session_end_timestamp()
+            self.participant.dump_to_file(self.temp_dir)
         
         self.release_resources()
         
-        shutil.copytree(self.temp_dir, self.subject.subject_dir(), dirs_exist_ok=True)
+        shutil.copytree(self.temp_dir, self.participant.participant_dir(), dirs_exist_ok=True)
         
         try:
             with open(os.path.join(self.VIDEO_FOLDER, 'index'), 'w') as f:

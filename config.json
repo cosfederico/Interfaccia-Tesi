@@ -1,7 +1,28 @@
 {
     "app": {
         "DATA_FOLDER": "data",
-        "VIDEO_FOLDER": "videos"
+        "VIDEO_FOLDER": "videos",
+        "QUESTIONS": {
+            "BEFORE": [
+                "Quanto frequentemente fai utilizzo di contenuti video per l'apprendimento?\n(ad es., lezioni online, tutorial, corsi su piattaforme digitali)"
+            ],
+            "AFTER": [
+                "Quanto hai trovato chiari i contenuti della lezione?",
+                "Quanto sono stati facili da comprendere i concetti presentati nella lezione?",
+                "Quanto hai trovato ben organizzata la presentazione dei contenuti?",
+                "Quanto pensi di aver appreso dai contenuti presentati?",
+                "Quanto ti senti sicuro/a di ricordare le informazioni apprese nella lezione?",
+                "Quanto ti senti preparato/a ad applicare i concetti appresi?",
+                "Quanto ritieni utile la lezione per il tuo apprendimento?",
+                "Quanto la lezione ha stimolato il tuo interesse per l’argomento?",
+                "Quanto ti senti motivato/a a saperne di più sull’argomento dopo aver visto la lezione?",
+                "Come descriveresti il modo di presentare del relatore?",
+                "Quanto hai trovato efficace il relatore nella trasmissione dei contenuti?",
+                "Quanto ti è sembrato chiaro e sicuro il relatore durante la spiegazione?",
+                "Quanto ti sei sentito/a in sintonia con il relatore?",
+                "Quanto il presentatore ti è sembrato naturale e realistico nella presentazione dei contenuti?"
+            ]
+        }
     },
     "empatica": {
         "BUCKET_NAME": "empatica-us-east-1-prod-data",
