@@ -17,6 +17,7 @@ class TextPage(QWidget):
         
         self.title.setText(self.title_str)
         self.text.setText(self.text_str)
+        self.text.setWordWrap(True)
         self.ready_button.setText(self.button_text)
         
         if self.button_slot is not None:
