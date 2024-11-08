@@ -2,42 +2,19 @@ import os
 import json
 import jsonschema
 
-def load_config(config_file='config.json'):
+def load_config(config_file='config.json', schema_file='schema.json'):
     
     try:
         with open(config_file, 'r', encoding='utf-8') as f:
             config = json.load(f)
-    except:
+    except FileNotFoundError as e:
         raise FileNotFoundError("Config file \"" + config_file + "\" not found.")
-        
-    schema = {
-        "type": "object",
-        "properties": {
-            "app": {
-                "type": "object",
-                "properties": {
-                    "DATA_FOLDER": { "type": "string" },
-                    "VIDEO_FOLDER": { "type": "string" }
-                    },
-                "required": ["DATA_FOLDER", "VIDEO_FOLDER"]
-            },
-            "empatica": {
-                "type": "object",
-                "properties": {
-                    "BUCKET_NAME": { "type": "string" },
-                    "PREFIX": { "type": "string" },
-                    "PARTICIPANT_ID": { "type": "string" },
-                    "ORG_ID": { "type": "string" },
-                    "STUDY_ID": { "type": "string" }
-                },
-                "required": [
-                    "BUCKET_NAME", "PREFIX", "PARTICIPANT_ID",
-                    "ORG_ID", "STUDY_ID"
-                ]
-            }
-        },
-        "required": ["app", "empatica"]
-    }
+       
+    try:
+        with open(schema_file, 'r', encoding='utf-8') as f:
+            schema = json.load(f)
+    except FileNotFoundError as e:
+        raise FileNotFoundError("Config file \"" + schema_file + "\" not found.")
 
     try:
         jsonschema.validate(config, schema=schema)

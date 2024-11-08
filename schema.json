@@ -1,0 +1,40 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+        "app": {
+            "type": "object",
+            "properties": {
+                "DATA_FOLDER": { "type": "string" },
+                "VIDEO_FOLDER": { "type": "string" },
+                "QUESTIONS": {
+                    "type": "object",
+                    "properties": {
+                        "BEFORE": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                        },
+                        "AFTER": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                        }
+                    },
+                    "required": ["BEFORE", "AFTER"]
+                }
+            },
+            "required": ["DATA_FOLDER", "VIDEO_FOLDER", "QUESTIONS"]
+        },
+        "empatica": {
+            "type": "object",
+            "properties": {
+                "BUCKET_NAME": { "type": "string" },
+                "PREFIX": { "type": "string" },
+                "PARTICIPANT_ID": { "type": "string" },
+                "ORG_ID": { "type": "string" },
+                "STUDY_ID": { "type": "string" }
+            },
+            "required": ["BUCKET_NAME", "PREFIX", "PARTICIPANT_ID", "ORG_ID", "STUDY_ID"]
+        }
+    },
+    "required": ["app","empatica"]
+}
