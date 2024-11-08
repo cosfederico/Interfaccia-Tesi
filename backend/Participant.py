@@ -54,7 +54,7 @@ class Participant:
         
     def add_answer(self, question:str, answer:str):
         self.questions.append(question.replace('\n', '').replace('\t',''))
-        self.answers.append(answer.replace('\n', '').replace('\t',''))
+        self.answers.append(answer)
         
     def dump_to_file(self, dest_dir:str, filename='data.csv'):
         
