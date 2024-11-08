@@ -103,7 +103,7 @@ class MainWindow(QMainWindow):
         self.screenRecorder = ScreenRecorder(output_file=os.path.join(self.temp_dir, "screen.mp4"), fps=24.0, resolution=(screen_size.width(), screen_size.height()), daemon=True)
         
         try:
-            self.eyeTracker = EyeTracker(self.temp_dir, 'test')
+            self.eyeTracker = EyeTracker(self.temp_dir)
         except:
             print("No eye-tracker found. Starting without eye-tracker..")
 
@@ -138,7 +138,6 @@ class MainWindow(QMainWindow):
     
     def start_capture(self):
         if self.eyeTracker is not None:
-            self.eyeTracker.setup_tracking()
             self.eyeTracker.start_recording(self.participant.id)
         if self.webcamRecorder is not None:
             self.webcamRecorder.start()
