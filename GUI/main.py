@@ -126,7 +126,7 @@ class MainWindow(QMainWindow):
         self.add_page(TextPage(self, "Question Time!", "Quando sei pronto, premi Avanti per iniziare il questionario.", "Avanti"))
         # self.add_page(PANAS(self))
         for i, question in enumerate(self.QUESTIONS_AFTER):
-            self.add_page(QuestionScalePage(self, "Domanda " + str(i), question))
+            self.add_page(QuestionScalePage(self, "Domanda " + str(i+1), question))
   
         self.add_page(TextPage(self, "Fine!", "Il nostro esperimento si è concluso, grazie mille per la partecipazione.\nPremi Fine per uscire.", "Fine", button_slot=self.save_and_close))
         
