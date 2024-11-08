@@ -112,7 +112,7 @@ class MainWindow(QMainWindow):
             
     def setup_pages(self):
         
-        self.add_page(IntroPage(self, "Benvenuto!", "Grazie per aver accettato di partecipare a questo studio.\nDurante la sessione, ti sarà richiesto di guardare una breve videolezione di circa 5-10 minuti su un tema didattico. Mentre guardi il video, alcuni dispositivi registreranno automaticamente i tuoi movimenti oculari e il tuo battito cardiaco, e sarà inoltre monitorata l’espressione facciale per analizzare le reazioni emotive.\n\nDopo la visione, ti chiederemo di completare alcuni questionari. L’intera sessione durerà circa 20-30 minuti. Ti invitiamo a seguire il video con attenzione e a rispondere ai questionari finali.", "Inizia", bottom_text="I dati raccolti saranno utilizzati esclusivamente per scopi di ricerca, e tutte le informazioni rimarranno anonime.\nSe in qualsiasi momento desideri interrompere l’esperimento, sei libero di farlo. Buona visione e grazie per il tuo tempo!", error_text="Per favore fornisci il tuo consenso per iniziare lo studio", exit_button_slot=self.close))
+        self.add_page(IntroPage(self, "Benvenuto!", "Grazie per aver accettato di partecipare a questo studio.\nDurante la sessione, ti sarà richiesto di guardare una breve videolezione di circa 5-10 minuti su un tema didattico. Mentre guardi il video, alcuni dispositivi registreranno automaticamente i tuoi movimenti oculari e il tuo battito cardiaco, e sarà inoltre monitorata l’espressione facciale per analizzare le reazioni emotive.\n\nDopo la visione, ti chiederemo di completare alcuni questionari. L’intera sessione durerà circa 20-30 minuti. Ti invitiamo a seguire il video con attenzione e a rispondere ai questionari finali.", "Inizia", bottom_text="I dati raccolti saranno utilizzati esclusivamente per scopi di ricerca, e tutte le informazioni rimarranno anonime.\nSe in qualsiasi momento desideri interrompere l’esperimento, sei libero di farlo. Buona visione e grazie per il tuo tempo!", error_text="Per favore fornisci il tuo consenso per iniziare lo studio", exit_button_slot=self.close, button_slot=self.start_capture))
         self.add_page(DataCollectionPage(self))
         # self.add_page(PANAS(self))
         for question in self.QUESTIONS_BEFORE:
@@ -136,19 +136,19 @@ class MainWindow(QMainWindow):
     def next_page(self):
         self.stacked_widget.setCurrentIndex(self.stacked_widget.currentIndex() + 1)
     
-    def showEvent(self, QShowEvent):
+    def start_capture(self):
+        if self.eyeTracker is not None:
+            self.eyeTracker.setup_tracking()
+            self.eyeTracker.start_recording(self.participant.id)
         if self.webcamRecorder is not None:
             self.webcamRecorder.start()
         if self.screenRecorder is not None:
             self.screenRecorder.start()
         if self.participant is not None:
             self.participant.set_session_start_timestamp()
-        if self.eyeTracker is not None:
-            self.eyeTracker.start_recording(self.participant.id)
+        self.next_page()
             
-    def release_resources(self):
-        if self.screenRecorder is not None and self.screenRecorder.recording:
-            self.screenRecorder.stop()
+    def stop_capture(self):
         if self.webcamRecorder is not None and self.webcamRecorder.recording:
             self.webcamRecorder.stop()
         if self.eyeTracker is not None:
@@ -156,9 +156,11 @@ class MainWindow(QMainWindow):
                 self.eyeTracker.stop_recording()
             except:
                 pass
+        if self.screenRecorder is not None and self.screenRecorder.recording:
+            self.screenRecorder.stop()
             
     def closeEvent(self, QCloseEvent):
-        self.release_resources()
+        self.stop_capture()
         if self.temp_dir is not None:
             shutil.rmtree(self.temp_dir, ignore_errors=True)
         
@@ -177,7 +179,7 @@ class MainWindow(QMainWindow):
             self.participant.set_session_end_timestamp()
             self.participant.dump_to_file(self.temp_dir)
         
-        self.release_resources()
+        self.stop_capture()
         
         shutil.copytree(self.temp_dir, self.participant.participant_dir(), dirs_exist_ok=True)
         
