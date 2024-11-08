@@ -4,7 +4,7 @@
 
 A simple wizard-like application to automate the data acquisition and analysis process for my thesis research.
 
-The intent of the research is to analyize the effects on viewers of AI Generated Videos in education. The application shows the viewer a short educational video, asking experience-evaluation questions, on a scale from 1 to 5, and open questions about the topic discussed in the videos. The video displayed will be randomly picked to be a real video or a "fake" video, generated with Artificial Intelligence (AI).
+The intent of the research is to analyize the effects on viewers of AI Generated Videos in education. The application shows the viewer a short educational video, asking generic experience-evaluation questions, with answers on a scale from 1 to 5, and open questions specific about the topic discussed in the videos. The video displayed will be randomly picked to be a real video or a "fake" video, as in a video generated with Artificial Intelligence (AI).
 
 The whole session is recorded via the built-in webcam and data about the experiment is saved to a `.csv` file, like the time of start and end of the session, the answers to each question, what video was showed, if it was real or fake, and the timestamps of each event.
 
