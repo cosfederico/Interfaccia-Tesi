@@ -4,7 +4,7 @@ import queue
 
 class WebcamRecorder(threading.Thread):
     
-    def __init__(self, output_file, daemon, cap=None):
+    def __init__(self, output_file='webcam.mp4', daemon=True, cap=None):
         super(WebcamRecorder, self).__init__()
         
         self.cap = cap
