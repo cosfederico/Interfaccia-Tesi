@@ -4,9 +4,9 @@
 
 A simple wizard-like application to automate the data acquisition and analysis process for my thesis research.
 
-The intent of the research is to analyize the effects on viewers of AI Generated Videos in education. The application shows the viewer two short educational videos, asking open questions about the topic discussed in the videos. One of the videos is real, while the other is an AI generated video (fake), but the viewer is not aware of that.
+The intent of the research is to analyize the effects on viewers of AI Generated Videos in education. The application shows the viewer a short educational video, asking experience-evaluation questions, on a scale from 1 to 5, and open questions about the topic discussed in the videos. The video displayed will be randomly picked to be a real video or a "fake" video, generated with Artificial Intelligence (AI).
 
-The whole session is recorded via the built-in webcam and data about the experiment is saved to a `.csv` file, like the time of start and end of the session, the answers to each question, what videos were showed, if they were real or fake, and the timestamps of each event.
+The whole session is recorded via the built-in webcam and data about the experiment is saved to a `.csv` file, like the time of start and end of the session, the answers to each question, what video was showed, if it was real or fake, and the timestamps of each event.
 
 The program makes use of the built-in webcam (necessary) to capture the whole session. Please make sure a valid webcam is connected to the machine before running the application.
 
@@ -21,22 +21,8 @@ To add videos you can simply add another directory in the `videos` folder. It is
 A video folder must contain:
 - `real/`: a folder containing the original video *(`.mp4` or `.avi`)*
 - `fake/`: a folder containing all the fakes generated from the real video *(`.mp4` or `.avi`)*
-- `questions.txt` : a file containing five questions associated with the video; the questions are in natural language, line separated
-- `script.txt` (optional): a file containing the script of the video. Currently unused, could be useful in future developments
 
 The videos can be in `.mp4` or `.avi` format. You can technically put more than one video in the `real` folder, if there are more real videos that follow the same script. A random video will be picked for display.
-
-#### Examples
-
-A valid `questions.txt` might look like this:
-```
-Question number 1?
-Question number 2?
-Question number 3?
-Question number 4?
-Question number 5?
-```
-For now the number of questions is hard-coded to be five. This is partly a side effect of working with `.csv` files, which require e predetermined number of columns. Hopefully this can be improved.
 
 ## Empatica 
 
@@ -90,6 +76,9 @@ A brief summary of implemented fields follows.
 For the main application:
 - `""DATA_FOLDER"`: the folder where recorded data will be saved, it contains the folders for each subject/session
 - `"VIDEO_FOLDER"`: the folder where videos are selected for playback, refer to the "Videos" section for more details
+- `"QUESTIONS"`: dictionary containing the keys `"BEFORE"` and `"AFTER"`, for specifying the questions to be asked before and after watching the video. The questions and its relative answers are automatically saved inside the CSV file, with answers on a scale from 1 to 5
+- `"QUESTIONS":"BEFORE"`: list of questions to ask before watching the video, with answers on a scale from 1 to 5
+- `"QUESTIONS":"AFTER"`: list of questions to ask after watching the video, with answers on a scale from 1 to 5  
 
 For downloading data from Empatica:
 - `"BUCKET_NAME"`: The S3 Data Bucket of your organization provided by Empatica
@@ -105,37 +94,48 @@ This is the [JSON Schema](https://json-schema.org) associated with the `config.j
 
 ``` json
 {
-  "type": "object",
-  "properties": {
-    "app": {
-      "type": "object",
-      "properties": {
-        "DATA_FOLDER": { "type": "string" },
-        "VIDEO_FOLDER": { "type": "string" }
-      },
-      "required": ["DATA_FOLDER", "VIDEO_FOLDER"]
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+        "app": {
+            "type": "object",
+            "properties": {
+                "DATA_FOLDER": { "type": "string" },
+                "VIDEO_FOLDER": { "type": "string" },
+                "QUESTIONS": {
+                    "type": "object",
+                    "properties": {
+                        "BEFORE": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                        },
+                        "AFTER": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                        }
+                    },
+                    "required": ["BEFORE", "AFTER"]
+                }
+            },
+            "required": ["DATA_FOLDER", "VIDEO_FOLDER", "QUESTIONS"]
+        },
+        "empatica": {
+            "type": "object",
+            "properties": {
+                "BUCKET_NAME": { "type": "string" },
+                "PREFIX": { "type": "string" },
+                "PARTICIPANT_ID": { "type": "string" },
+                "ORG_ID": { "type": "string" },
+                "STUDY_ID": { "type": "string" }
+            },
+            "required": ["BUCKET_NAME", "PREFIX", "PARTICIPANT_ID", "ORG_ID", "STUDY_ID"]
+        }
     },
-    "empatica": {
-      "type": "object",
-      "properties": {
-        "BUCKET_NAME": { "type": "string" },
-        "PREFIX": { "type": "string" },
-        "PARTICIPANT_ID": { "type": "string" },
-        "ORG_ID": { "type": "string" },
-        "STUDY_ID": { "type": "string" }
-      },
-      "required": [
-        "BUCKET_NAME", "PREFIX", "PARTICIPANT_ID",
-        "ORG_ID", "STUDY_ID"
-      ]
-    }
-  },
-  "required": ["app", "empatica"]
+    "required": ["app","empatica"]
 }
-
 ```
 
-It specifies data type for each field and required fields.
+It's specified in the `schema.json` file and it specifies data type for each field and required fields.
 
 # Installation
 
@@ -159,9 +159,10 @@ For the data analyisis:
 - scipy
 - libreface
 - jsonschema
+- mss
 
 ```
-pip install PyQt5 opencv-python pandas numpy boto3 avro PyWavelets scipy libreface jsonschema
+pip install PyQt5 opencv-python pandas numpy boto3 avro PyWavelets scipy libreface jsonschema mss
 ```
 
 Or you can also simply use the `requirements.txt` file:
