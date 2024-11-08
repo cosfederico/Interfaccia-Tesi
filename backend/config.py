@@ -5,7 +5,7 @@ import jsonschema
 def load_config(config_file='config.json'):
     
     try:
-        with open(config_file, 'r') as f:
+        with open(config_file, 'r', encoding='utf-8') as f:
             config = json.load(f)
     except:
         raise FileNotFoundError("Config file \"" + config_file + "\" not found.")
