@@ -8,20 +8,21 @@ import cv2
 from PyQt5.QtGui import QImage, QPixmap, QIcon
 from PyQt5.QtCore import QTimer
 
-class WebcamPopup(QDialog):
+class WebcamPreviewWindow(QDialog):
     
-    def __init__(self, parent, cap, action=None):
+    okClicked = pyqtSignal()
+    
+    def __init__(self, parent, cap):
         super().__init__()
                 
         self.parent_window = parent
-        self.action = action
-        
+
         self.cap = cap
         self.frame_width = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         self.frame_height = int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         self.fps = self.cap.get(cv2.CAP_PROP_FPS)
         
-        loadUi("GUI/qtdesigner/WebcamPopup.ui", self)
+        loadUi("GUI/qtdesigner/WebcamPreviewWindow.ui", self)
         self.ok_button.clicked.connect(self.ok_button_clicked)
         self.setContentsMargins(20,20,20,20)
         self.setWindowTitle("Calibrazione Webcam")
@@ -34,8 +35,7 @@ class WebcamPopup(QDialog):
             
     def ok_button_clicked(self):
         self.timer.stop()
-        if self.action is not None:
-            self.action()
+        self.okClicked.emit()
         self.close()
         
     def update_frame(self):

@@ -7,7 +7,8 @@ from GUI.pages.DataCollectionPage import *
 from GUI.pages.QuestionScalePage import *
 from GUI.pages.CountDownPage import *
 from GUI.pages.VideoPage import *
-from GUI.pages.WebcamPopup import *
+from GUI.pages.WebcamPreviewWindow import *
+from GUI.pages.WebcamSelectionWindow import *
 
 from backend.config import load_config
 from backend.WebcamRecorder import *
@@ -23,7 +24,7 @@ import shutil
 
 class MainWindow(QMainWindow):
     
-    def __init__(self, app, cap=None, config_file='config.json'):
+    def __init__(self, app, config_file='config.json'):
         super().__init__()
     
         self.app = app
@@ -32,7 +33,10 @@ class MainWindow(QMainWindow):
         self.eyeTracker = None
         self.participant = None
         self.temp_dir = None
-        self.cap = cap
+        self.cap = None
+        
+        self.webcam_selection_window = WebcamSelectionWindow(app)
+        self.webcam_selection_window.capSelected.connect(self.show_webcam_preview_window)
 
         config = load_config(config_file)
         
@@ -47,10 +51,20 @@ class MainWindow(QMainWindow):
             self.QUESTIONS_AFTER = config['app']['QUESTIONS']['AFTER']
         except KeyError as e:
             self.QUESTIONS_AFTER= []
-                
-        self.setupUI()
+            
+        self.setup_eye_tracker()
+             
+    def launch(self):
+        self.setupUI()        
         self.load_resources()
         self.setup_pages()
+        self.showFullScreen()
+
+    def show_webcam_preview_window(self, cap):
+        self.cap = cap
+        self.webcam_preview_window = WebcamPreviewWindow(self, self.cap)
+        self.webcam_preview_window.okClicked.connect(self.launch)        
+        self.webcam_preview_window.show()
 
     def setupUI(self):
         self.setWindowTitle("Interfaccia")
@@ -85,6 +99,9 @@ class MainWindow(QMainWindow):
         self.video = videos[self.index % len(videos)]
         self.index = (self.index + 1) % len(videos)
         
+        if self.cap is None:
+            raise RuntimeError("Cap not initialized")
+        
         self.temp_dir = tempfile.mkdtemp()
         try:
             self.webcamRecorder = WebcamRecorder(output_file=os.path.join(self.temp_dir, "webcam.mp4"), daemon=True, cap=self.cap)
@@ -102,6 +119,7 @@ class MainWindow(QMainWindow):
         screen_size = self.app.primaryScreen().size()
         self.screenRecorder = ScreenRecorder(output_file=os.path.join(self.temp_dir, "screen.mp4"), fps=24.0, resolution=(screen_size.width(), screen_size.height()), daemon=True)
         
+    def setup_eye_tracker(self):
         try:
             self.eyeTracker = EyeTracker(self.temp_dir)
         except:
@@ -203,20 +221,7 @@ def run_main():
     opening_msg.setText("Stiamo caricando le risorse necessarie...\t")
     opening_msg.setStandardButtons(QMessageBox.NoButton)
     opening_msg.show()
-    
-    cap = cv2.VideoCapture(0)
+    window = MainWindow(app)
+    window.webcam_selection_window.show()
     opening_msg.reject()
-  
-    if cap is None or not cap.isOpened():
-        error_msg = QMessageBox()
-        error_msg.setIcon(QMessageBox.Critical)
-        error_msg.setWindowIcon(QIcon(os.path.join('GUI', 'icons', 'webcam.png')))
-        error_msg.setWindowTitle("Webcam Unavailable")
-        error_msg.setText("Impossibile avviare la webcam.\nAssicurati che sia connessa correttamente e non sia in uso da un altro programma.")
-        error_msg.exec_()
-        sys.exit()
-        
-    window = MainWindow(app, cap)
-    webcam_window = WebcamPopup(app, cap, action=window.showFullScreen)
-    webcam_window.show()
     sys.exit(app.exec_())

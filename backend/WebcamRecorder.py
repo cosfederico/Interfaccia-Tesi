@@ -28,7 +28,11 @@ class WebcamRecorder(threading.Thread):
 
     def start_capture_thread(self):
         while self.recording:
-            _, frame = self.cap.read()
+            ret, frame = self.cap.read()
+            
+            if not ret:
+                raise RuntimeError("Unable to read frame from webcam")
+            
             self.buffer.put(frame)
         
     def run(self):
