@@ -6,6 +6,7 @@ from PyQt5.uic import loadUi
 from GUI.pages.WebcamPreviewWindow import *
 
 import cv2
+import sys
 
 class CameraBox(QGroupBox):
     selected = pyqtSignal(QWidget)
@@ -91,7 +92,16 @@ class WebcamSelectionWindow(QDialog):
     def load_cams(self):
         
         cams = self.get_working_webcams()
-    
+        
+        if len(cams) == 0:
+            error_msg = QMessageBox()
+            error_msg.setIcon(QMessageBox.Critical)
+            error_msg.setWindowIcon(QIcon(os.path.join('GUI', 'icons', 'webcam.png')))
+            error_msg.setWindowTitle("Interfaccia")
+            error_msg.setText("Nessuna webcam disponibile trovata.\nAssicurati di avere almeno una webcam collegata al computer, non in uso da un altro programma.")
+            error_msg.exec_()
+            sys.exit()
+            
         videos_layout = QGridLayout()
         
         for i, cam in enumerate(cams):
