@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1046</width>
-    <height>678</height>
+    <height>737</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -36,7 +36,6 @@
      </property>
      <property name="styleSheet">
       <string notr="true">font: 34pt &quot;Rubik Light&quot;;
-color: rgb(185,185,185);
 background-color: rgba(255, 255, 255, 0);</string>
      </property>
      <property name="text">

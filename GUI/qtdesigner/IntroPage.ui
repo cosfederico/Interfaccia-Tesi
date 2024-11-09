@@ -21,7 +21,6 @@
     <widget class="QLabel" name="title">
      <property name="styleSheet">
       <string notr="true">font: 36pt &quot;Rubik Light&quot;;
-color: rgb(180, 180, 180);
 background-color: rgba(255, 255, 255, 0);</string>
      </property>
      <property name="text">
@@ -141,7 +140,6 @@ background-color: rgb(0, 64, 130);</string>
      </property>
      <property name="styleSheet">
       <string notr="true">font: 12pt &quot;Rubik Light&quot;;
-color: rgb(150, 150, 150);
 background-color: rgba(255, 255, 255, 0);</string>
      </property>
      <property name="text">
