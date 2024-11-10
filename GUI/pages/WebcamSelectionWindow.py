@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
+from PyQt5.QtMultimedia import *
 from PyQt5.uic import loadUi
 
 from GUI.pages.WebcamPreviewWindow import *
@@ -68,11 +69,13 @@ class WebcamSelectionWindow(QDialog):
     
     capSelected = pyqtSignal(cv2.VideoCapture)
         
-    def __init__(self, app, text="Prima di iniziare, scegli la webcam da utilizzare"):
+    def __init__(self, app, text="Scegli la webcam da utilizzare per la cattura del volto", text2="Premi il pulsante sottostante per verificare che l'audio funzioni correttamente", text3="Se non senti nessun suono premendo il bottone, verifica il dispositivo audio in uso, e riprova prima di cominciare."):
         super().__init__()
         
         self.app = app
         self.text_str = text
+        self.text2_str = text2
+        self.text3_str = text3
         self.boxes = []
         self.selected_box = None
                         
@@ -80,14 +83,28 @@ class WebcamSelectionWindow(QDialog):
                 
     def setupUI(self):
         loadUi("GUI/qtdesigner/WebcamSelectionWindow.ui",self)
-        self.setContentsMargins(100,100,100,100)
+        self.setContentsMargins(50,50,50,50)
         self.setWindowTitle("Selezione Webcam")
         self.setWindowIcon(QIcon(os.path.join('GUI', 'icons','webcam.png')))
                 
         self.text.setText(self.text_str)
+        self.text2.setText(self.text2_str)
+        self.text3.setText(self.text3_str)
         self.done_button.clicked.connect(self.done_button_clicked)
+        self.audio_button.clicked.connect(self.play)
         
+        audio_test_file = os.path.join('GUI', 'sounds', 'test.mp3')
+        self.player = QMediaPlayer()
+        self.player.mediaStatusChanged.connect(self.media_status_changed)
+        self.media_content = QMediaContent(QUrl.fromLocalFile(audio_test_file))
+        self.player.setMedia(self.media_content)
+        self.player.setVolume(100)
+                            
         self.load_cams()
+        
+    def media_status_changed(self, state):
+        if state == QMediaPlayer.EndOfMedia:
+            self.audio_icon.clear()
         
     def load_cams(self):
         
@@ -151,3 +168,7 @@ class WebcamSelectionWindow(QDialog):
             camera_idx +=1
 
         return cams
+    
+    def play(self):
+        self.player.play()    
+        self.audio_icon.setPixmap(QPixmap.fromImage(QImage(os.path.join('GUI', 'icons', 'speaker.png'))).scaledToHeight(self.audio_button.geometry().height()))
