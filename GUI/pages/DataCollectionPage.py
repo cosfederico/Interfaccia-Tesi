@@ -2,6 +2,9 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import Qt
 from PyQt5.uic import loadUi
 
+import os
+import json
+
 class DataCollectionPage(QWidget):
     
     def __init__(self, parent):
@@ -15,21 +18,22 @@ class DataCollectionPage(QWidget):
         self.done_button.clicked.connect(self.done_button_clicked)
         self.error_text_str = self.error_text.text()
         self.error_text.setText("")
+        
+        with open(os.path.join('GUI', 'country.json')) as f:
+            countries = json.load(f)
+
+        countries = list(countries.values())
+        self.nationality.addItems(countries)
+        self.nationality.setCurrentIndex(countries.index("Italia"))
               
     def done_button_clicked(self):
         age = self.age.text()
         gender = self.gender.currentText()
         english_level = self.english_level.currentText()
-        nationality = self.nationality.text()
-        
-        nationality = str(nationality)
-        
-        if (len(age)==0 or len(nationality)==0 or not gender or not english_level):
+        nationality = self.nationality.currentText()
+                
+        if (len(age)==0 or not nationality or not gender or not english_level):
             self.error_text.setText("Per favore compila tutti i campi.")
-            return
-        
-        if not nationality.isalpha():
-            self.error_text.setText("Inserire una nazionalità valida.")
             return
         
         try:
