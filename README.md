@@ -157,12 +157,12 @@ For the data analyisis:
 - avro
 - PyWavelets
 - scipy
-- libreface
+- py-feat
 - jsonschema
 - mss
 
 ```
-pip install PyQt5 opencv-python pandas numpy boto3 avro PyWavelets scipy libreface jsonschema mss
+pip install PyQt5 opencv-python pandas numpy boto3 avro PyWavelets scipy py-feat jsonschema mss
 ```
 
 Or you can also simply use the `requirements.txt` file:
