@@ -7,7 +7,10 @@ import os
 
 class IntroPage(QWidget):
     
-    def __init__(self, parent, title, text, button_text="Avanti", bottom_text="", warning_text="", error_text="", button_slot=None, exit_button_slot=None):
+    readyClicked = pyqtSignal()
+    exitClicked = pyqtSignal()
+    
+    def __init__(self, parent, title, text, button_text="Avanti", bottom_text="", warning_text="", error_text=""):
         super().__init__()
         self.parent_window = parent
         self.title_str = title
@@ -15,8 +18,6 @@ class IntroPage(QWidget):
         self.error_text_str = error_text
         self.warning_text_str = warning_text
         self.button_text = button_text
-        self.button_slot = button_slot
-        self.exit_button_slot = exit_button_slot
         
         loadUi("GUI/qtdesigner/IntroPage.ui", self)
         self.setContentsMargins(200,50,200,10)
@@ -33,23 +34,22 @@ class IntroPage(QWidget):
         
         self.warning_icon.setPixmap(QPixmap.fromImage(QImage(os.path.join('GUI', 'icons', 'warning.png'))).scaledToWidth(self.warning_frame.geometry().width()))
         
-        if self.button_slot is not None:
-            self.ready_button.clicked.connect(self.button_slot)
-        else:
-            self.ready_button.clicked.connect(self.ready_button_clicked)
+        self.checkbox.toggled.connect(self.checkbox_toggled)
+        self.ready_button.clicked.connect(self.ready_button_clicked)
+        self.exit_button.clicked.connect(self.exit_button_clicked)
         
-        if self.exit_button_slot is not None:    
-            self.exit_button.clicked.connect(self.exit_button_slot)
-        else:
-            self.exit_button.clicked.connect(self.exit_button_clicked)
+    def checkbox_toggled(self):
+        if self.sender().isChecked():
+            self.error_text.setText("")
         
     def ready_button_clicked(self):
         if not self.checkbox.isChecked():
             self.error_text.setText(self.error_text_str)
             return
         
+        self.readyClicked.emit()
         self.parent_window.next_page()
         self.parent_window.participant.add_answer(self.checkbox.text(), "Si")
         
     def exit_button_clicked(self):
-        self.parent_window.close()
+        self.exitClicked.emit()
