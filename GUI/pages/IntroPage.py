@@ -15,7 +15,7 @@ class IntroPage(QWidget):
         self.exit_button_slot = exit_button_slot
         
         loadUi("GUI/qtdesigner/IntroPage.ui", self)
-        self.setContentsMargins(200,150,200,10)
+        self.setContentsMargins(200,50,200,10)
         
         self.title.setText(self.title_str)
         self.text.setText(self.text_str)
