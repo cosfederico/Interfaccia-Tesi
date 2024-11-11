@@ -6,6 +6,6 @@ boto3
 avro
 PyWavelets
 scipy
-libreface
+py-feat
 jsonschema
 mss

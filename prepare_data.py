@@ -67,8 +67,8 @@ from backend.empatica.avro_to_csv import convert_empatica_data_to_csv
 from backend.empatica.hr import estimate_hr
 from backend.empatica.rr import estimate_rr
 
-subjects = os.listdir(DATA_FOLDER)
-print("Found subjects:", subjects)
+participants = os.listdir(DATA_FOLDER)
+print("Found participants:", participants)
 
 while True:
     ans = input("Start data download and synchronization? [yes/no] ").lower()
@@ -76,19 +76,19 @@ while True:
     if ans == 'yes' or ans == 'y':
         print("Starting..")
                   
-        for subject in subjects:
+        for participant in participants:
             
-            subject_dir = os.path.join(DATA_FOLDER, subject)
+            participant_dir = os.path.join(DATA_FOLDER, participant)
 
-            print("\nSynchronizing data for Subject", subject)
+            print("\nSynchronizing data for participant", participant)
 
-            subject_data = pd.read_csv(os.path.join(subject_dir, 'data.csv'), sep=';', encoding="latin1") # per le è/é accentate
-            start_ts = subject_data['session_start_timestamp'].iloc[0]
-            date = subject_data['date'].iloc[0]
+            participant_data = pd.read_csv(os.path.join(participant_dir, 'data.csv'), sep=';', encoding="latin1") # per le è/é accentate
+            start_ts = participant_data['session_start_timestamp'].iloc[0]
+            date = participant_data['date'].iloc[0]
 
             print("\tDownloading Empatica Data...")
             try:
-                avro_file_path = download_empatica_data(start_ts, subject_dir,
+                avro_file_path = download_empatica_data(start_ts, participant_dir,
                                                         date=date,
                                                         participant=PARTICIPANT_ID,
                                                         bucket_name=BUCKET_NAME,
@@ -97,7 +97,7 @@ while True:
                                                         study_id=STUDY_ID)
             except ValueError as e:
                 print("\t", e, "- skipping")
-                open(os.path.join(subject_dir, "NO-DATA-FOUND-FOR-THIS-SUBJECT"), 'a').close()
+                open(os.path.join(participant_dir, "NO-DATA-FOUND-FOR-THIS-PARTICIPANT"), 'a').close()
                 continue
             except Exception as e:
                 print("\n", e)
@@ -107,15 +107,15 @@ while True:
             print("\tConverting Empatica Data to csv...")
             convert_empatica_data_to_csv(avro_file_path, delete_avro_after=True)
             print("\tSynchronizing Empatica data with video capture...")
-            sync_empatica_data(subject_dir)
+            sync_empatica_data(participant_dir)
             print("\tExtracting Heart Rate (HR)...")
-            estimate_hr(subject_dir, save_to_file=True, delete_peaks_file_after=True)
+            estimate_hr(participant_dir, save_to_file=True, delete_peaks_file_after=True)
             print("\tExtracting Respiratory Rate (RR)...")
-            with open(os.path.join(subject_dir, "fs.json"), 'r') as f:
+            with open(os.path.join(participant_dir, "fs.json"), 'r') as f:
                 fs = json.load(f)      
-            estimate_rr(subject_dir, fs=int(fs["bvp"]), save_to_file=True, delete_bvp_file_after=False)
-            print("\tExtracting landmarks and REF from video with Libreface...")
-            process_video(subject_dir)
+            estimate_rr(participant_dir, fs=int(fs["bvp"]), save_to_file=True, delete_bvp_file_after=False)
+            print("\tExtracting AU, landmarks and REF from video...")
+            process_video(participant_dir)
             
         print("\nAll available data has been downloaded synchronized and is ready for analysis.")
                 

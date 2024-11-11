@@ -1,19 +1,10 @@
-import libreface
-import shutil
+from feat import Detector
 import os
 
-this_dir = os.path.join(os.getcwd(), 'backend', 'video')
-
-def process_video(subject_dir, device='cuda:0', video_file_name="recording.mp4", output_save_path="face_data.csv"):
+def process_video(participant_dir, device='cpu', video_file_name="webcam.mp4", output_file_name="face.csv"):
+        
+    video_path = os.path.join(participant_dir, video_file_name)
     
-    temp_dir = os.path.join(subject_dir, 'tmp')
-    
-    video_path = os.path.join(subject_dir, video_file_name)
-    libreface.get_facial_attributes(video_path,
-                                    device=device,
-                                    output_save_path=output_save_path,
-                                    temp_dir=temp_dir,
-                                    weights_download_dir =this_dir)
-    
-    shutil.rmtree(temp_dir, ignore_errors=True)
-    
+    detector = Detector(device=device)
+    detections = detector.detect_video(video_path)
+    detections.to_csv(os.path.join(participant_dir, output_file_name))
