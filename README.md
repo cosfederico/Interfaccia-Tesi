@@ -150,6 +150,7 @@ For the time being the dependencies are, for the GUI:
 - OpenCV
 - pandas
 - jsonschema
+- mss
 
 For the data analyisis:
 - numpy
@@ -159,7 +160,6 @@ For the data analyisis:
 - scipy
 - py-feat
 - jsonschema
-- mss
 
 ```
 pip install PyQt5 opencv-python pandas numpy boto3 avro PyWavelets scipy py-feat jsonschema mss
