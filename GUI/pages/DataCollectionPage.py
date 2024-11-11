@@ -20,20 +20,29 @@ class DataCollectionPage(QWidget):
         self.error_text.setText("")
         
         with open(os.path.join('GUI', 'country.json')) as f:
-            countries = json.load(f)
+            self.countries = json.load(f)
 
-        countries = list(countries.values())
-        self.nationality.addItems(countries)
-        self.nationality.setCurrentIndex(countries.index("Italia"))
+        self.countries = list(self.countries.values())
+        self.nationality.addItems(self.countries)
+        self.nationality.setCurrentIndex(self.countries.index("Italia"))
+        
+        self.nationality.setEditable(True)
+        self.nationality.setInsertPolicy(QComboBox.NoInsert)
+        self.nationality.completer().setCompletionMode(QCompleter.PopupCompletion)
+
               
     def done_button_clicked(self):
         age = self.age.text()
         gender = self.gender.currentText()
         english_level = self.english_level.currentText()
         nationality = self.nationality.currentText()
-                
+                            
         if (len(age)==0 or not nationality or not gender or not english_level):
             self.error_text.setText("Per favore compila tutti i campi.")
+            return
+        
+        if nationality not in self.countries:
+            self.error_text.setText("Per favore scegli una nazionalità valida.")
             return
         
         try:
