@@ -69,13 +69,14 @@ class WebcamSelectionWindow(QDialog):
     
     capSelected = pyqtSignal(cv2.VideoCapture)
         
-    def __init__(self, app, text="Scegli la webcam da utilizzare per la cattura del volto", text2="Premi il pulsante sottostante per verificare che l'audio funzioni correttamente", text3="Se non senti nessun suono premendo il bottone, verifica il dispositivo audio in uso, e riprova prima di cominciare."):
+    def __init__(self, app, text="Scegli la webcam da utilizzare per la cattura del volto", text2="Premi il pulsante sottostante per verificare che l'audio funzioni correttamente", text3="Se non senti nessun suono premendo il bottone, verifica il dispositivo audio in uso, e riprova prima di cominciare.", error_text="Scegli una webcam per cominciare."):
         super().__init__()
         
         self.app = app
         self.text_str = text
         self.text2_str = text2
         self.text3_str = text3
+        self.error_text_str = error_text
         self.boxes = []
         self.selected_box = None
                         
@@ -90,6 +91,7 @@ class WebcamSelectionWindow(QDialog):
         self.text.setText(self.text_str)
         self.text2.setText(self.text2_str)
         self.text3.setText(self.text3_str)
+        self.error_text.setText("")
         self.done_button.clicked.connect(self.done_button_clicked)
         self.audio_button.clicked.connect(self.play)
         
@@ -135,6 +137,7 @@ class WebcamSelectionWindow(QDialog):
             if box.isSelected:
                 box.select(False)
         self.selected_box = selected_box
+        self.error_text.setText("")
         
     def box_deselected(self):
         self.selected_box = None
@@ -142,6 +145,7 @@ class WebcamSelectionWindow(QDialog):
     def done_button_clicked(self):
         
         if not self.selected_box:
+            self.error_text.setText(self.error_text_str)
             return
         
         for box in self.boxes:
