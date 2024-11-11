@@ -184,4 +184,5 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 
 # Credits
-The AI generated videos were created with HeyGen. (https://www.heygen.com/)
+- The AI generated videos were created with [HeyGen](https://www.heygen.com/).
+- The list of countries to select nationality was taken from [this repository](https://github.com/umpirsky/country-list).
