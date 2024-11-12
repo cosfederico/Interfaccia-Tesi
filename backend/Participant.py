@@ -52,12 +52,13 @@ class Participant:
     def set_video_end_timestamp(self):
         self.video_end_timestamp = self.timestamp()
         
-    def add_answer(self, question:str, answer:str):
+    def add_answer(self, question:str, answer:str, save_timestamp=True):
         question = question.replace('\n', '').replace('\t','')
         self.questions.append(question)
-        self.answers.append(answer) 
-        self.questions.append(question + "_TS")
-        self.answers.append(self.timestamp())
+        self.answers.append(answer)
+        if save_timestamp:
+            self.questions.append(question + "_TS")
+            self.answers.append(self.timestamp())
         
     def add_answers(self, questions:list[str], answers:list[str], timestamp_tag):
         if len(questions) != len(answers):

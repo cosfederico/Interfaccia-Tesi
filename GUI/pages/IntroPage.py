@@ -49,7 +49,7 @@ class IntroPage(QWidget):
         
         self.readyClicked.emit()
         self.parent_window.next_page()
-        self.parent_window.participant.add_answer(self.checkbox.text(), "Si")
+        self.parent_window.participant.add_answer(self.checkbox.text(), "Si", save_timestamp=False)
         
     def exit_button_clicked(self):
         self.exitClicked.emit()
