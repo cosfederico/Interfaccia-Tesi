@@ -79,10 +79,12 @@ For the main application:
 - `""DATA_FOLDER"`: the folder where recorded data will be saved, it contains the folders for each subject/session
 - `"VIDEO_FOLDER"`: the folder where videos are selected for playback, refer to the "Videos" section for more details
 - `"QUESTIONS"`: dictionary containing the keys `"BEFORE"` and `"AFTER"`, for specifying the questions to be asked before and after watching the video. The questions and its relative answers are automatically saved inside the CSV file, with answers on a scale from 1 to 5
-- `"QUESTIONS":"BEFORE"`: list of questions to ask before watching the video, with answers on a scale from 1 to 5
-- `"QUESTIONS":"AFTER"`: list of questions to ask after watching the video, with answers on a scale from 1 to 5  
-- `"QUESTIONS":"PANAS"`: list of emotions to build the PANAS self-evaluation questionnaire
-- `"QUESTIONS":"SCALE"`: verbal frequency scale for all the questions on a scale of 1-to-5 (ie. "from not at all" to "very much")
+- `"[QUESTIONS"]["BEFORE"]`: list of questions to ask before watching the video, with answers on a scale from 1 to 5
+- `"[QUESTIONS"]["AFTER"]`: list of questions to ask after watching the video, with answers on a scale from 1 to 5  
+- `"[QUESTIONS"]["PANAS"]["EMOTIONS"]`: list of emotions to build the PANAS self-evaluation questionnaire
+- `"[QUESTIONS"]["PANAS"]["SCALE"]`: verbal frequency scale for the PANAS self-evaluation questionnaire (ie. "from not at all" to "very much")
+- `"[QUESTIONS"]["PANAS"]["POSITIVE"]`: indexes (*starting from 1*) of **positive** emotions in the list of emotions provided
+- `"[QUESTIONS"]["PANAS"]["NEGATIVE"]`:indexes (*starting from 1*) of **negative** emotions in the list of emotions provided
 
 For downloading data from Empatica:
 - `"BUCKET_NAME"`: The S3 Data Bucket of your organization provided by Empatica
@@ -109,13 +111,27 @@ This is the [JSON Schema](https://json-schema.org) associated with the `config.j
                 "QUESTIONS": {
                     "type": "object",
                     "properties": {
-                        "SCALE": {
-                            "type": "array",
-                            "items": { "type": "string" }
-                        },
                         "PANAS": {
-                            "type": "array",
-                            "items": { "type": "string" }
+                            "type": "object",
+                            "properties": {
+                                "SCALE": {
+                                    "type": "array",
+                                    "items": { "type": "string" }
+                                },
+                                "EMOTIONS": {
+                                    "type": "array",
+                                    "items": { "type": "string" }
+                                },
+                                "POSITIVE": {
+                                    "type": "array",
+                                    "items": { "type": "integer" }
+                                },
+                                "NEGATIVE": {
+                                    "type": "array",
+                                    "items": { "type": "integer" }
+                                }
+                            },
+                            "required": ["SCALE", "EMOTIONS", "POSITIVE", "NEGATIVE"]
                         },
                         "BEFORE": {
                             "type": "array",
@@ -126,7 +142,7 @@ This is the [JSON Schema](https://json-schema.org) associated with the `config.j
                             "items": { "type": "string" }
                         }
                     },
-                    "required": ["SCALE", "PANAS", "BEFORE", "AFTER"]
+                    "required": ["PANAS", "BEFORE", "AFTER"]
                 }
             },
             "required": ["DATA_FOLDER", "VIDEO_FOLDER", "QUESTIONS"]
