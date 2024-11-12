@@ -10,13 +10,27 @@
                 "QUESTIONS": {
                     "type": "object",
                     "properties": {
-                        "SCALE": {
-                            "type": "array",
-                            "items": { "type": "string" }
-                        },
                         "PANAS": {
-                            "type": "array",
-                            "items": { "type": "string" }
+                            "type": "object",
+                            "properties": {
+                                "SCALE": {
+                                    "type": "array",
+                                    "items": { "type": "string" }
+                                },
+                                "EMOTIONS": {
+                                    "type": "array",
+                                    "items": { "type": "string" }
+                                },
+                                "POSITIVE": {
+                                    "type": "array",
+                                    "items": { "type": "integer" }
+                                },
+                                "NEGATIVE": {
+                                    "type": "array",
+                                    "items": { "type": "integer" }
+                                }
+                            },
+                            "required": ["SCALE", "EMOTIONS", "POSITIVE", "NEGATIVE"]
                         },
                         "BEFORE": {
                             "type": "array",
@@ -27,7 +41,7 @@
                             "items": { "type": "string" }
                         }
                     },
-                    "required": ["SCALE", "PANAS", "BEFORE", "AFTER"]
+                    "required": ["PANAS", "BEFORE", "AFTER"]
                 }
             },
             "required": ["DATA_FOLDER", "VIDEO_FOLDER", "QUESTIONS"]
