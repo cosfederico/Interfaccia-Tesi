@@ -20,9 +20,7 @@ class ScreenRecorder(threading.Thread):
         print(self.resolution)
         self.recording = False
         self.frame_interval = 1.0 / self.fps
-        
-        self.out = cv2.VideoWriter(self.output_file, cv2.VideoWriter_fourcc('m','p','4','v'), self.fps, self.resolution)
-        
+                
         self.writing_thread = threading.Thread(target=self.start_writing_thread, args=(), daemon=self.daemon)
         self.capture_thread = threading.Thread(target=self.start_capture_thread, args=(), daemon=self.daemon)
 
@@ -54,6 +52,7 @@ class ScreenRecorder(threading.Thread):
             self.out.write(self.screenshot_to_frame(screenshot))
             
     def run(self):
+        self.out = cv2.VideoWriter(self.output_file, cv2.VideoWriter_fourcc('m','p','4','v'), self.fps, self.resolution)
         self.recording = True
         self.capture_thread.start()
         self.writing_thread.start()
