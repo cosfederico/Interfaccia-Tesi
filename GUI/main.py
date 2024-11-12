@@ -7,6 +7,7 @@ from GUI.pages.DataCollectionPage import *
 from GUI.pages.QuestionScalePage import *
 from GUI.pages.CountDownPage import *
 from GUI.pages.VideoPage import *
+from GUI.pages.PANAS import *
 from GUI.pages.WebcamPreviewWindow import *
 from GUI.pages.WebcamSelectionWindow import *
 
@@ -42,6 +43,8 @@ class MainWindow(QMainWindow):
         
         self.VIDEO_FOLDER = config['app']['VIDEO_FOLDER']
         self.DATA_FOLDER = config['app']['DATA_FOLDER']
+        self.QUESTIONS_SCALE = config['app']['QUESTIONS']['SCALE']
+        self.PANAS_EMOTIONS = config['app']['QUESTIONS']['PANAS']
         
         try:
             self.QUESTIONS_BEFORE = config['app']['QUESTIONS']['BEFORE']
@@ -135,7 +138,8 @@ class MainWindow(QMainWindow):
         intro_page.exitClicked.connect(self.close)
         
         self.add_page(DataCollectionPage(self))
-        # self.add_page(PANAS(self))
+        panas_page_before = self.add_page(PANAS(self, emotions=self.PANAS_EMOTIONS, scale=self.QUESTIONS_SCALE, flag="PRIMA"))
+        panas_page_before.nextClicked.connect(self.participant.add_answers)
         for question in self.QUESTIONS_BEFORE:
             self.add_page(QuestionScalePage(self, "Questionario Preparatorio", question))
         self.add_page(TextPage(self, "È tutto pronto!", "Quando sei pronto, premi Avanti per iniziare. Il video inizierà a seguito di un breve conto alla rovescia.", "Avanti"))
@@ -145,7 +149,8 @@ class MainWindow(QMainWindow):
         self.add_page(CountDownPage(self, seconds=3))     
         self.add_page(VideoPage(self, self.video.getRandomVideo(real=real), video_type='real' if real else 'fake'))
         self.add_page(TextPage(self, "Question Time!", "Quando sei pronto, premi Avanti per iniziare il questionario.", "Avanti"))
-        # self.add_page(PANAS(self))
+        panas_page_after = self.add_page(PANAS(self, emotions=self.PANAS_EMOTIONS, scale=self.QUESTIONS_SCALE, flag="DOPO"))
+        panas_page_after.nextClicked.connect(self.participant.add_answers)
         for i, question in enumerate(self.QUESTIONS_AFTER):
             self.add_page(QuestionScalePage(self, "Domanda " + str(i+1), question))
   

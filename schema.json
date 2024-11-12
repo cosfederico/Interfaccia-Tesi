@@ -10,6 +10,14 @@
                 "QUESTIONS": {
                     "type": "object",
                     "properties": {
+                        "SCALE": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                        },
+                        "PANAS": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                        },
                         "BEFORE": {
                             "type": "array",
                             "items": { "type": "string" }
@@ -19,7 +27,7 @@
                             "items": { "type": "string" }
                         }
                     },
-                    "required": ["BEFORE", "AFTER"]
+                    "required": ["SCALE", "PANAS", "BEFORE", "AFTER"]
                 }
             },
             "required": ["DATA_FOLDER", "VIDEO_FOLDER", "QUESTIONS"]

@@ -3,6 +3,35 @@
         "DATA_FOLDER": "data",
         "VIDEO_FOLDER": "videos",
         "QUESTIONS": {
+            "SCALE": [
+                "Per niente",
+                "Poco",
+                "Abbastanza",
+                "Molto",
+                "Moltissimo"
+            ],
+            "PANAS": [
+                "Nervoso",
+                "Attento",
+                "Entusiasta",
+                "Orgoglioso",
+                "Interessato",
+                "Deciso",
+                "Vigile",
+                "Turbato",
+                "Vergognoso",
+                "Impaurito",
+                "Eccitato",
+                "Colpevole",
+                "Agitato",
+                "Ispirato",
+                "Irritabile",
+                "Angosciato",
+                "Ostile",
+                "Spaventato",
+                "Attivo",
+                "Energetico"
+            ],
             "BEFORE": [
                 "Quanto frequentemente fai utilizzo di contenuti video per l'apprendimento?\n(ad es., lezioni online, tutorial, corsi su piattaforme digitali)"
             ],

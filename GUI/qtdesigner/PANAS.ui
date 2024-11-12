@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1280</width>
+    <height>720</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(255, 255, 255);</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="title">
+     <property name="styleSheet">
+      <string notr="true">font: 26pt &quot;Rubik SemiBold&quot;;
+color: rgb(0, 51, 102);
+background-color: rgba(255, 255, 255, 0);
+</string>
+     </property>
+     <property name="text">
+      <string>PANAS</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="question">
+     <property name="styleSheet">
+      <string notr="true">font: 15pt &quot;Rubik light&quot;;
+color: rgb(53, 53, 53);
+background-color: rgba(255, 255, 255, 0);</string>
+     </property>
+     <property name="text">
+      <string>Questa scala consiste in una serie di parole che descrivono differenti sentimenti ed emozioni.
+Leggi ciascun item e segna, nell’apposito spazio accanto alla parola, la risposta appropriata che descrive come ti senti in questo esatto momento.</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QScrollArea" name="scrollArea">
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>1256</width>
+        <height>440</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <layout class="QFormLayout" name="formLayout">
+         <item row="0" column="0">
+          <widget class="QLabel" name="emozione_label_5">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <layout class="QHBoxLayout" name="LabelsHLayout">
+           <item alignment="Qt::AlignHCenter">
+            <widget class="QLabel" name="scale_1">
+             <property name="styleSheet">
+              <string notr="true">font: 12pt &quot;Rubik light&quot;;</string>
+             </property>
+             <property name="text">
+              <string>Per niente</string>
+             </property>
+            </widget>
+           </item>
+           <item alignment="Qt::AlignHCenter">
+            <widget class="QLabel" name="scale_2">
+             <property name="styleSheet">
+              <string notr="true">font: 12pt &quot;Rubik light&quot;;</string>
+             </property>
+             <property name="text">
+              <string>Poco</string>
+             </property>
+            </widget>
+           </item>
+           <item alignment="Qt::AlignHCenter">
+            <widget class="QLabel" name="scale_3">
+             <property name="styleSheet">
+              <string notr="true">font: 12pt &quot;Rubik light&quot;;</string>
+             </property>
+             <property name="text">
+              <string>Abbastanza</string>
+             </property>
+            </widget>
+           </item>
+           <item alignment="Qt::AlignHCenter">
+            <widget class="QLabel" name="scale_4">
+             <property name="styleSheet">
+              <string notr="true">font: 12pt &quot;Rubik light&quot;;</string>
+             </property>
+             <property name="text">
+              <string>Molto</string>
+             </property>
+            </widget>
+           </item>
+           <item alignment="Qt::AlignHCenter">
+            <widget class="QLabel" name="scale_5">
+             <property name="styleSheet">
+              <string notr="true">font: 12pt &quot;Rubik light&quot;;</string>
+             </property>
+             <property name="text">
+              <string>Moltissimo</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item row="1" column="1">
+          <widget class="Line" name="line">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="emozione_label">
+           <property name="styleSheet">
+            <string notr="true">font: 12pt &quot;Rubik Light&quot;;</string>
+           </property>
+           <property name="text">
+            <string>Emozione1</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item alignment="Qt::AlignHCenter">
+            <widget class="QRadioButton" name="radioButton">
+             <property name="text">
+              <string/>
+             </property>
+             <attribute name="buttonGroup">
+              <string notr="true">EmozioneGroup</string>
+             </attribute>
+            </widget>
+           </item>
+           <item alignment="Qt::AlignHCenter">
+            <widget class="QRadioButton" name="radioButton_2">
+             <property name="text">
+              <string/>
+             </property>
+             <attribute name="buttonGroup">
+              <string notr="true">EmozioneGroup</string>
+             </attribute>
+            </widget>
+           </item>
+           <item alignment="Qt::AlignHCenter">
+            <widget class="QRadioButton" name="radioButton_3">
+             <property name="text">
+              <string/>
+             </property>
+             <attribute name="buttonGroup">
+              <string notr="true">EmozioneGroup</string>
+             </attribute>
+            </widget>
+           </item>
+           <item alignment="Qt::AlignHCenter">
+            <widget class="QRadioButton" name="radioButton_4">
+             <property name="text">
+              <string/>
+             </property>
+             <attribute name="buttonGroup">
+              <string notr="true">EmozioneGroup</string>
+             </attribute>
+            </widget>
+           </item>
+           <item alignment="Qt::AlignHCenter">
+            <widget class="QRadioButton" name="radioButton_5">
+             <property name="text">
+              <string/>
+             </property>
+             <attribute name="buttonGroup">
+              <string notr="true">EmozioneGroup</string>
+             </attribute>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="emozione_label_2">
+           <property name="styleSheet">
+            <string notr="true">font: 12pt &quot;Rubik Light&quot;;</string>
+           </property>
+           <property name="text">
+            <string>Emozione2</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item alignment="Qt::AlignHCenter">
+            <widget class="QRadioButton" name="radioButton_6">
+             <property name="text">
+              <string/>
+             </property>
+             <attribute name="buttonGroup">
+              <string notr="true">buttonGroup</string>
+             </attribute>
+            </widget>
+           </item>
+           <item alignment="Qt::AlignHCenter">
+            <widget class="QRadioButton" name="radioButton_7">
+             <property name="text">
+              <string/>
+             </property>
+             <attribute name="buttonGroup">
+              <string notr="true">buttonGroup</string>
+             </attribute>
+            </widget>
+           </item>
+           <item alignment="Qt::AlignHCenter">
+            <widget class="QRadioButton" name="radioButton_8">
+             <property name="text">
+              <string/>
+             </property>
+             <attribute name="buttonGroup">
+              <string notr="true">buttonGroup</string>
+             </attribute>
+            </widget>
+           </item>
+           <item alignment="Qt::AlignHCenter">
+            <widget class="QRadioButton" name="radioButton_9">
+             <property name="text">
+              <string/>
+             </property>
+             <attribute name="buttonGroup">
+              <string notr="true">buttonGroup</string>
+             </attribute>
+            </widget>
+           </item>
+           <item alignment="Qt::AlignHCenter">
+            <widget class="QRadioButton" name="radioButton_10">
+             <property name="text">
+              <string/>
+             </property>
+             <attribute name="buttonGroup">
+              <string notr="true">buttonGroup</string>
+             </attribute>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="buttons_layout">
+     <item alignment="Qt::AlignRight">
+      <widget class="QLabel" name="error_text">
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 10pt &quot;Rubik Light&quot;;
+background-color: rgba(255, 255, 255, 0);
+color: rgb(255,0,0);</string>
+       </property>
+       <property name="text">
+        <string>Per favore rispondi a tutte le domande.</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="next_button">
+       <property name="minimumSize">
+        <size>
+         <width>300</width>
+         <height>50</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>250</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-radius: 10px;
+font: 15pt &quot;Rubik Light&quot;;
+color: rgb(255,255,255);
+background-color: rgb(0, 64, 130);</string>
+       </property>
+       <property name="text">
+        <string>Avanti</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+  <zorder>title</zorder>
+  <zorder>question</zorder>
+  <zorder></zorder>
+  <zorder>scrollArea</zorder>
+ </widget>
+ <resources/>
+ <connections/>
+ <buttongroups>
+  <buttongroup name="buttonGroup_2"/>
+  <buttongroup name="EmozioneGroup"/>
+  <buttongroup name="buttonGroup"/>
+ </buttongroups>
+</ui>

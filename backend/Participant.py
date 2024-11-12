@@ -56,6 +56,12 @@ class Participant:
         self.questions.append(question.replace('\n', '').replace('\t',''))
         self.answers.append(answer)
         
+    def add_answers(self, questions:list, answers:list):
+        if len(questions) != len(answers):
+            raise ValueError("Lengths of questions and answers to add to participant don't match - Missing answers?")
+        self.questions += [question.replace('\n', '').replace('\t','') for question in questions]
+        self.answers += answers
+        
     def dump_to_file(self, dest_dir:str, filename='data.csv'):
         
         with open(os.path.join(dest_dir, filename), 'w', newline='') as file:
