@@ -97,15 +97,6 @@ class EyeTracker:
         
         """ Run a single trial """
 
-        # initialize sample data and button input variables
-        # new_smp = None
-        # smp = None
-
-        # open a plain text file to save the sample data
-        # csv_file = os.path.join('results', 'eye-tracking.csv')
-        # sample_csv = open(csv_file, 'w')
-        # sample_csv.write('timestamp,x,y\n')
-
         # get the currently active tracker object (connection)
         el_active = pylink.getEYELINK()
 
@@ -179,72 +170,6 @@ class EyeTracker:
         # reset keys and buttons on tracker
         self.el_tracker.flushKeybuttons(0)
 
-        # get trial start time
-        # start_time = pylink.currentTime()
-        # # poll link events and samples
-        # while True:
-        #     # first check if recording is aborted
-        #     # (returns 0 if no error, otherwise return codes, e.g.,
-        #     # REPEAT_TRIAL, SKIP_TRIAL, ABORT_EXPT, TRIAL_ERROR )
-        #     error = self.el_tracker.isRecording()
-        #     if error != pylink.TRIAL_OK:
-        #         self.stop_recording()
-        #         return error
-            
-        #     # check if trial duration exceeded
-        #     if pylink.currentTime() > (start_time + duration):
-        #         self.el_tracker.sendMessage("TIMEOUT")
-        #         self.stop_recording()
-        #         break
-
-        #     # program termination or ALT-F4 or CTRL-C keys
-        #     if self.el_tracker.breakPressed():
-        #         self.stop_recording()
-        #         return pylink.ABORT_EXPT
-
-        #     # check for local ESC key to abort trial (useful in debugging)
-        #     elif self.el_tracker.escapePressed():
-        #         self.stop_recording()
-        #         return pylink.SKIP_TRIAL
-
-        #     # do we have a sample in the sample buffer?
-        #     # and does it differ from the one we've seen before?
-        #     new_smp = self.el_tracker.getNewestSample()
-        #     if new_smp is not None:
-        #         if(smp is None or new_smp.getTime() != smp.getTime()):
-        #             # it is a new sample, mark it for future comparisons
-        #             smp = new_smp
-        #             # Check if the new sample has data for the eye
-        #             # currently being tracked,
-        #             if eye_used == EyeTracker.RIGHT_EYE and smp.isRightSample():
-        #                 sample = smp.getRightEye().getGaze()
-        #             elif eye_used != EyeTracker.RIGHT_EYE and smp.isLeftSample():
-        #                 sample = smp.getLeftEye().getGaze()
-
-        #             # INSERT OWN CODE (EX: GAZE-CONTINGENT GRAPHICS)
-
-        #             # save the sample time stamp and gaze position in the TXT file
-        #             # IMPORTANT: Sample data is saved in EDF data files on the Host
-        #             # PC users do not need to (and we do not recommend) recording
-        #             # sample data this way. We write samples to the TXT file here
-        #             # only for illustration purposes.
-        #             smp_to_save = (smp.getTime() + self.ts_start, sample[0], sample[1])
-        #             sample_csv.write('%.1f,%.2f,%.2f\n' % smp_to_save)
-
-        # # close the TXT file
-        # sample_csv.close()
-
-        # record the trial variable in a message recognized by Data Viewer
-        # el_active.sendMessage("!V TRIAL_VAR trial %d" % participant_id)
-
-        # return exit record status
-        # ret_value = el_active.getRecordingStatus()
-
-        # end real-time mode
-        # pylink.endRealTimeMode()
-        
-        # return ret_value
-      
     def stop_recording(self):
         """Ends recording
 
