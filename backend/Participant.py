@@ -53,14 +53,18 @@ class Participant:
         self.video_end_timestamp = self.timestamp()
         
     def add_answer(self, question:str, answer:str):
-        self.questions.append(question.replace('\n', '').replace('\t',''))
-        self.answers.append(answer)
+        question = question.replace('\n', '').replace('\t','')
+        self.questions.append(question)
+        self.answers.append(answer) 
+        self.questions.append(question + "_TS")
+        self.answers.append(self.timestamp())
         
-    def add_answers(self, questions:list, answers:list):
+    def add_answers(self, questions:list[str], answers:list[str]):
         if len(questions) != len(answers):
             raise ValueError("Lengths of questions and answers to add to participant don't match - Missing answers?")
         self.questions += [question.replace('\n', '').replace('\t','') for question in questions]
         self.answers += answers
+        
         
     def dump_to_file(self, dest_dir:str, filename='data.csv'):
         
