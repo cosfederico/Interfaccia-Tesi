@@ -6,6 +6,8 @@ A simple wizard-like application to automate the data acquisition and analysis p
 
 The intent of the research is to analyize the effects on viewers of AI Generated Videos in education. The application shows the viewer a short educational video, asking generic experience-evaluation questions, with answers on a scale from 1 to 5, and open questions specific about the topic discussed in the videos. The video displayed will be randomly picked to be a real video or a "fake" video, as in a video generated with Artificial Intelligence (AI).
 
+The application also uses the [PANAS (Positive and Negative Affect Schedule)](https://en.wikipedia.org/wiki/Positive_and_Negative_Affect_Schedule) test to allow users to self-report their positive and negative affect before and after watching the video. 
+
 The whole session is recorded via the built-in webcam and data about the experiment is saved to a `.csv` file, like the time of start and end of the session, the answers to each question, what video was showed, if it was real or fake, and the timestamps of each event.
 
 The program makes use of the built-in webcam (necessary) to capture the whole session. Please make sure a valid webcam is connected to the machine before running the application.
@@ -79,6 +81,8 @@ For the main application:
 - `"QUESTIONS"`: dictionary containing the keys `"BEFORE"` and `"AFTER"`, for specifying the questions to be asked before and after watching the video. The questions and its relative answers are automatically saved inside the CSV file, with answers on a scale from 1 to 5
 - `"QUESTIONS":"BEFORE"`: list of questions to ask before watching the video, with answers on a scale from 1 to 5
 - `"QUESTIONS":"AFTER"`: list of questions to ask after watching the video, with answers on a scale from 1 to 5  
+- `"QUESTIONS":"PANAS"`: list of emotions to build the PANAS self-evaluation questionnaire
+- `"QUESTIONS":"SCALE"`: verbal frequency scale for all the questions on a scale of 1-to-5 (ie. "from not at all" to "very much")
 
 For downloading data from Empatica:
 - `"BUCKET_NAME"`: The S3 Data Bucket of your organization provided by Empatica
@@ -105,6 +109,14 @@ This is the [JSON Schema](https://json-schema.org) associated with the `config.j
                 "QUESTIONS": {
                     "type": "object",
                     "properties": {
+                        "SCALE": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                        },
+                        "PANAS": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                        },
                         "BEFORE": {
                             "type": "array",
                             "items": { "type": "string" }
@@ -114,7 +126,7 @@ This is the [JSON Schema](https://json-schema.org) associated with the `config.j
                             "items": { "type": "string" }
                         }
                     },
-                    "required": ["BEFORE", "AFTER"]
+                    "required": ["SCALE", "PANAS", "BEFORE", "AFTER"]
                 }
             },
             "required": ["DATA_FOLDER", "VIDEO_FOLDER", "QUESTIONS"]
