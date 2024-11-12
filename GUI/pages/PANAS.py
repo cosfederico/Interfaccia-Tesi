@@ -5,13 +5,15 @@ class PANAS(QWidget):
     
     nextClicked = pyqtSignal(list, list, str)
     
-    def __init__(self, parent, emotions:list, scale:list, flag="", error_text="Per rispondi a tutte le domande."):
+    def __init__(self, parent, emotions:list, scale:list, positive, negative, flag="", error_text="Per favore rispondi a tutte le domande."):
         super().__init__()
         self.parent_window = parent
         self.error_text_str = error_text
         self.scale = scale        
         self.emotions = emotions
         self.flag = flag
+        self.positive = positive
+        self.negative = negative
         
         self.setupUi()
         self.setContentsMargins(100,100,100,100)
@@ -30,6 +32,14 @@ class PANAS(QWidget):
             
             emotions.append(button_group.objectName() + "_" + self.flag)
             answers.append(self.scale.index(checked_button.objectName())+1)
+            
+        positive_score = sum([answers[i-1] for i in self.positive])
+        negative_score = sum([answers[i-1] for i in self.negative])
+        
+        emotions.append("PANAS_POSITIVE_SCORE_" + self.flag)
+        answers.append(positive_score)
+        emotions.append("PANAS_NEGATIVE_SCORE_" + self.flag)
+        answers.append(negative_score)
         
         self.nextClicked.emit(emotions, answers, "PANAS_" + self.flag)
         self.parent_window.next_page()

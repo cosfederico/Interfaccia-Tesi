@@ -43,17 +43,12 @@ class MainWindow(QMainWindow):
         
         self.VIDEO_FOLDER = config['app']['VIDEO_FOLDER']
         self.DATA_FOLDER = config['app']['DATA_FOLDER']
-        self.QUESTIONS_SCALE = config['app']['QUESTIONS']['SCALE']
-        self.PANAS_EMOTIONS = config['app']['QUESTIONS']['PANAS']
-        
-        try:
-            self.QUESTIONS_BEFORE = config['app']['QUESTIONS']['BEFORE']
-        except KeyError as e:
-            self.QUESTIONS_BEFORE = []
-        try:
-            self.QUESTIONS_AFTER = config['app']['QUESTIONS']['AFTER']
-        except KeyError as e:
-            self.QUESTIONS_AFTER= []
+        self.PANAS_SCALE = config['app']['QUESTIONS']['PANAS']['SCALE']
+        self.PANAS_EMOTIONS = config['app']['QUESTIONS']['PANAS']['EMOTIONS']
+        self.PANAS_POSITIVE = config['app']['QUESTIONS']['PANAS']['POSITIVE']
+        self.PANAS_NEGATIVE = config['app']['QUESTIONS']['PANAS']['NEGATIVE']
+        self.QUESTIONS_BEFORE = config['app']['QUESTIONS']['BEFORE']
+        self.QUESTIONS_AFTER = config['app']['QUESTIONS']['AFTER']
             
         self.setup_eye_tracker()
              
@@ -138,7 +133,7 @@ class MainWindow(QMainWindow):
         intro_page.exitClicked.connect(self.close)
         
         self.add_page(DataCollectionPage(self))
-        panas_page_before = self.add_page(PANAS(self, emotions=self.PANAS_EMOTIONS, scale=self.QUESTIONS_SCALE, flag="PRIMA"))
+        panas_page_before = self.add_page(PANAS(self, emotions=self.PANAS_EMOTIONS, scale=self.PANAS_SCALE, positive=self.PANAS_POSITIVE, negative=self.PANAS_NEGATIVE, flag="PRIMA"))
         panas_page_before.nextClicked.connect(self.participant.add_answers)
         for question in self.QUESTIONS_BEFORE:
             self.add_page(QuestionScalePage(self, "Questionario Preparatorio", question))
@@ -149,7 +144,7 @@ class MainWindow(QMainWindow):
         self.add_page(CountDownPage(self, seconds=3))     
         self.add_page(VideoPage(self, self.video.getRandomVideo(real=real), video_type='real' if real else 'fake'))
         self.add_page(TextPage(self, "Question Time!", "Quando sei pronto, premi Avanti per iniziare il questionario.", "Avanti"))
-        panas_page_after = self.add_page(PANAS(self, emotions=self.PANAS_EMOTIONS, scale=self.QUESTIONS_SCALE, flag="DOPO"))
+        panas_page_after = self.add_page(PANAS(self, emotions=self.PANAS_EMOTIONS, scale=self.PANAS_SCALE, positive=self.PANAS_POSITIVE, negative=self.PANAS_NEGATIVE, flag="DOPO"))
         panas_page_after.nextClicked.connect(self.participant.add_answers)
         for i, question in enumerate(self.QUESTIONS_AFTER):
             self.add_page(QuestionScalePage(self, "Domanda " + str(i+1), question))
