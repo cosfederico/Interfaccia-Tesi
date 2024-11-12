@@ -59,11 +59,13 @@ class Participant:
         self.questions.append(question + "_TS")
         self.answers.append(self.timestamp())
         
-    def add_answers(self, questions:list[str], answers:list[str]):
+    def add_answers(self, questions:list[str], answers:list[str], timestamp_tag):
         if len(questions) != len(answers):
             raise ValueError("Lengths of questions and answers to add to participant don't match - Missing answers?")
         self.questions += [question.replace('\n', '').replace('\t','') for question in questions]
         self.answers += answers
+        self.questions.append(timestamp_tag + "_TS")
+        self.answers.append(self.timestamp())
         
         
     def dump_to_file(self, dest_dir:str, filename='data.csv'):

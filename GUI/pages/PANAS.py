@@ -3,7 +3,7 @@ from PyQt5.QtCore import *
 
 class PANAS(QWidget):
     
-    nextClicked = pyqtSignal(list, list)
+    nextClicked = pyqtSignal(list, list, str)
     
     def __init__(self, parent, emotions:list, scale:list, flag="", error_text="Per rispondi a tutte le domande."):
         super().__init__()
@@ -31,7 +31,7 @@ class PANAS(QWidget):
             emotions.append(button_group.objectName() + "_" + self.flag)
             answers.append(self.scale.index(checked_button.objectName())+1)
         
-        self.nextClicked.emit(emotions, answers)
+        self.nextClicked.emit(emotions, answers, "PANAS_" + self.flag)
         self.parent_window.next_page()
         
     def setupUi(self):
