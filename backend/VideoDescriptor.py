@@ -1,5 +1,6 @@
 import os
 import random
+import json
 
 class VideoDescriptor:
     
@@ -25,18 +26,11 @@ class VideoDescriptor:
         if len(self.real) == 0 or len(self.fake) == 0:
             raise Exception("Nessun video valido trovato in\n\n" + self.path)
     
-        questions = []
         try:
-            with open(os.path.join(self.path, "questions.txt"), 'r', encoding='UTF-8') as f:
-                for line in f:
-                    line = line.strip()
-                    if len(line) == 0:
-                        continue
-                    questions.append(line)
+            with open(os.path.join(self.path, "questions.json"), 'r', encoding='UTF-8') as f:
+                self.questions = json.load(f)
         except:
-            raise Exception("File delle domande non valido o non trovato per il video\n\n" + self.path)
-        
-        self.questions = questions
+            raise Exception("File delle domande invalido o non trovato per il video\n\n" + self.path)
     
     def getRandomReal(self):
         return os.path.join(self.path, 'real', random.choice(self.real))

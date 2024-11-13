@@ -5,6 +5,7 @@ from GUI.pages.TextPage import *
 from GUI.pages.IntroPage import *
 from GUI.pages.DataCollectionPage import *
 from GUI.pages.QuestionScalePage import *
+from GUI.pages.MultipleChoiceQuestionPage import *
 from GUI.pages.CountDownPage import *
 from GUI.pages.VideoPage import *
 from GUI.pages.PANAS import *
@@ -133,21 +134,39 @@ class MainWindow(QMainWindow):
         intro_page.exitClicked.connect(self.close)
         
         self.add_page(DataCollectionPage(self))
+        
         panas_page_before = self.add_page(PANAS(self, emotions=self.PANAS_EMOTIONS, scale=self.PANAS_SCALE, positive=self.PANAS_POSITIVE, negative=self.PANAS_NEGATIVE, flag="PRIMA"))
         panas_page_before.nextClicked.connect(self.participant.add_answers)
+        
         for question in self.QUESTIONS_BEFORE:
             self.add_page(QuestionScalePage(self, "Questionario Preparatorio", question))
+        
         self.add_page(TextPage(self, "È tutto pronto!", "Quando sei pronto, premi Avanti per iniziare. Il video inizierà a seguito di un breve conto alla rovescia.", "Avanti"))
-        
-        real = random.choice([True, False])
-        
+
+        real = random.choice([True, False])        
         self.add_page(CountDownPage(self, seconds=3))     
         self.add_page(VideoPage(self, self.video.getRandomVideo(real=real), video_type='real' if real else 'fake'))
-        self.add_page(TextPage(self, "Question Time!", "Quando sei pronto, premi Avanti per iniziare il questionario.", "Avanti"))
+        
+        self.add_page(TextPage(self, "Question Time!", "Quando sei pronto, premi Inizia per iniziare il questionario.", "Inizia"))
+        
         panas_page_after = self.add_page(PANAS(self, emotions=self.PANAS_EMOTIONS, scale=self.PANAS_SCALE, positive=self.PANAS_POSITIVE, negative=self.PANAS_NEGATIVE, flag="DOPO"))
         panas_page_after.nextClicked.connect(self.participant.add_answers)
+        
         for i, question in enumerate(self.QUESTIONS_AFTER):
             self.add_page(QuestionScalePage(self, "Domanda " + str(i+1), question))
+        
+        self.add_page(TextPage(self, "Bene!", "Ora passiamo ad alcune domande di comprensione a risposta multipla sulla lezione che hai appena visto.\nMi raccomando, scegli la risposta corretta!", "Inizia"))
+            
+        questions = self.video.getQuestions()
+        for i, question in enumerate(questions):
+            try:
+                right_answer = questions[question]["RIGHT_ANSWER"]
+                wrong_answers = questions[question]["WRONG_ANSWERS"]
+            except KeyError as e:
+                print(e)
+                raise KeyError("Invalid questions.json for video " + self.video.path)
+            question_page = self.add_page(MultipleChoiceQuestionPage(self, "Domanda di comprensione", question, right_answer, wrong_answers))
+            question_page.nextClicked.connect(self.participant.add_answers)
   
         self.add_page(TextPage(self, "Fine!", "Il nostro esperimento si è concluso, grazie mille per la partecipazione.\nPremi Fine per uscire.", "Fine", button_slot=self.save_and_close))
         
