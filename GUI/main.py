@@ -77,14 +77,6 @@ class MainWindow(QMainWindow):
         
     def load_resources(self):
         
-        self.index = None
-        try:
-            with open(os.path.join(self.VIDEO_FOLDER, 'index'), 'r') as f:
-                self.index = int(f.readline())
-        except:
-            self.add_page(TextPage(self, "Errore", "Il file di indice dei video è invalido o inesistente.", "Esci", button_slot=self.close))
-            return
-        
         try:
             videos = [VideoDescriptor(os.path.join(self.VIDEO_FOLDER, video)) for video in next(os.walk(self.VIDEO_FOLDER))[1]]
         except Exception as e:
@@ -94,12 +86,10 @@ class MainWindow(QMainWindow):
         if len(videos) == 0:
             self.add_page(TextPage(self, "Cartella video vuota", "Nessun video da riprodurre trovato.\nPer favore carica dei video da riprodurre e riavvia il programma.", "Esci", self.close))
             return
-        
-        self.video = videos[self.index % len(videos)]
-        self.index = (self.index + 1) % len(videos)
-        
+                
         if self.cap is None:
-            raise RuntimeError("Cap not initialized")
+            self.add_page(TextPage(self, "Impossibile trovare la webcam", "Qualcosa è andato storto nel caricamento della webcam, assicurarsi non sia in uso da un altro programma e riavviare il programma.", "Esci", self.close))
+            return
         
         self.temp_dir = tempfile.mkdtemp()
         try:
@@ -114,6 +104,8 @@ class MainWindow(QMainWindow):
             participant_ids.sort()
             participant_id = int(participant_ids.pop()) + 1
         self.participant = Participant(participant_id, self.DATA_FOLDER)
+        
+        self.video = videos[participant_id % len(videos)]
         
         screen_size = self.app.primaryScreen().size()
         self.screenRecorder = ScreenRecorder(output_file=os.path.join(self.temp_dir, "screen.mp4"), fps=24.0, resolution=(screen_size.width(), screen_size.height()), daemon=True)
@@ -221,12 +213,6 @@ class MainWindow(QMainWindow):
         self.stop_capture()
         
         shutil.copytree(self.temp_dir, self.participant.participant_dir(), dirs_exist_ok=True)
-        
-        try:
-            with open(os.path.join(self.VIDEO_FOLDER, 'index'), 'w') as f:
-                f.write(str(self.index))
-        except:
-            pass
         
         msg.close()
         self.close()
