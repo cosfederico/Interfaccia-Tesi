@@ -7,7 +7,7 @@ class VideoDescriptor:
     def __init__(self, path):
         
         self.path = path
-        self.questions = None
+        self.questions = {}
         
         self.real = []
         self.fake = []
@@ -29,8 +29,10 @@ class VideoDescriptor:
         try:
             with open(os.path.join(self.path, "questions.json"), 'r', encoding='UTF-8') as f:
                 self.questions = json.load(f)
+        except FileNotFoundError as e:
+            print("File delle domande non trovato per il video " + self.path + ", no questions will be asked")
         except:
-            raise Exception("File delle domande invalido o non trovato per il video\n\n" + self.path)
+            raise Exception("File delle domande invalido per il video\n\n" + self.path)
     
     def getRandomReal(self):
         return os.path.join(self.path, 'real', random.choice(self.real))
