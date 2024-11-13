@@ -23,8 +23,55 @@ To add videos you can simply add another directory in the `videos` folder. It is
 A video folder must contain:
 - `real/`: a folder containing the original video *(`.mp4` or `.avi`)*
 - `fake/`: a folder containing all the fakes generated from the real video *(`.mp4` or `.avi`)*
+- `questions.json`: a JSON file containing the multiple choice questions to ask about the topic discussed in the video. (Can be omitted)
 
 The videos can be in `.mp4` or `.avi` format. You can technically put more than one video in the `real` folder, if there are more real videos that follow the same script. A random video will be picked for display.
+
+### Adding questions
+
+You can add multiple choice questions about the topics of the video. The answers' order will be randomized, and it will be saved the selected answer, wether it was correct or not, and its relative timestamp. To specify questions, create a `questions.json` file in your video's folder. The file must follow the following structure:
+
+``` json
+{
+    "Question?": {
+        "RIGHT_ANSWER": "Right answer",
+        "WRONG_ANSWERS": [
+            "Wrong answer 1",
+            "Wrong answer 2"
+        ]
+    }
+}
+```
+
+You can have as many wrong answers you want per question, but there can only be one right answer. The structure can be repeated. For example for a three-question test, your json structure would look like:
+
+``` json
+{
+    "Question 1?": {
+        "RIGHT_ANSWER": "Right answer",
+        "WRONG_ANSWERS": [
+            "Wrong answer 1",
+            "Wrong answer 2"
+        ]
+    },
+    "Question 2?": {
+        "RIGHT_ANSWER": "Right answer",
+        "WRONG_ANSWERS": [
+            "Wrong answer 1",
+            "Wrong answer 2"
+        ]
+    },
+    "Question 3?": {
+        "RIGHT_ANSWER": "Right answer",
+        "WRONG_ANSWERS": [
+            "Wrong answer 1",
+            "Wrong answer 2"
+        ]
+    }
+}
+```
+
+If no `questions.json` is provided for a specific video, no multiple choice questions will be asked were that video be picked.
 
 ## Empatica 
 
@@ -80,7 +127,8 @@ For the main application:
 - `"VIDEO_FOLDER"`: the folder where videos are selected for playback, refer to the "Videos" section for more details
 - `"QUESTIONS"`: dictionary containing the keys `"BEFORE"` and `"AFTER"`, for specifying the questions to be asked before and after watching the video. The questions and its relative answers are automatically saved inside the CSV file, with answers on a scale from 1 to 5
 - `"[QUESTIONS"]["BEFORE"]`: list of questions to ask before watching the video, with answers on a scale from 1 to 5
-- `"[QUESTIONS"]["AFTER"]`: list of questions to ask after watching the video, with answers on a scale from 1 to 5  
+- `"[QUESTIONS"]["AFTER"]`: list of questions to ask after watching the video, with answers on a scale from 1 to 5 
+- `"[QUESTIONS"]["PANAS"]"`: dictionary containing the keys `"EMOTIONS"`, `"SCALE"`, `"POSITIVE"` and `"NEGATIVE"`, for building the PANAS self-evaluation questionnaire
 - `"[QUESTIONS"]["PANAS"]["EMOTIONS"]`: list of emotions to build the PANAS self-evaluation questionnaire
 - `"[QUESTIONS"]["PANAS"]["SCALE"]`: verbal frequency scale for the PANAS self-evaluation questionnaire (ie. "from not at all" to "very much")
 - `"[QUESTIONS"]["PANAS"]["POSITIVE"]`: indexes (*starting from 1*) of **positive** emotions in the list of emotions provided
