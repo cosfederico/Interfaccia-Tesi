@@ -27,7 +27,7 @@ A video folder must contain:
 
 The videos can be in `.mp4` or `.avi` format. You can technically put more than one video in the `real` folder, if there are more real videos that follow the same script. A random video will be picked for display.
 
-### Adding questions
+### Adding Questions
 
 You can add multiple choice questions about the topics of the video. The answers' order will be randomized, and it will be saved the selected answer, wether it was correct or not, and its relative timestamp. To specify questions, create a `questions.json` file in your video's folder. The file must follow the following structure:
 
