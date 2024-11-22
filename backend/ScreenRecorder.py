@@ -1,69 +1,76 @@
-import threading
-from PIL import Image
+from multiprocessing import Process, Queue
 import mss
 import cv2
 import numpy as np
-import queue
 import time
+from PIL import Image
 
-class ScreenRecorder(threading.Thread):
-    
+def capture_frames(queue:Queue, fps:int, resolution:tuple, recording_flag):
+    with mss.mss() as sct:
+        frame_interval = 1.0 / fps
+        next_frame_time = time.time()
+
+        while recording_flag.value:
+            
+            current_time = time.time()
+            if current_time >= next_frame_time:
+                screenshot = sct.grab((0, 0, resolution[0], resolution[1]))
+                queue.put(screenshot)
+                next_frame_time += frame_interval
+
+            if time.time() > next_frame_time + frame_interval:
+                next_frame_time = time.time() + frame_interval
+
+        # Signal the writer process to stop
+        queue.put(None)
+
+def screenshot_to_frame(screenshot):
+    img = Image.frombytes('RGB', screenshot.size, screenshot.bgra, 'raw', 'BGRX')
+    frame = cv2.cvtColor(np.array(img), cv2.COLOR_BGR2RGB)
+    return frame
+
+def write_frames(queue:Queue, output_file:str, fps:int, resolution:tuple):
+    out = cv2.VideoWriter(
+        output_file,
+        cv2.VideoWriter_fourcc(*'mp4v'),
+        fps,
+        resolution
+    )
+
+    while True:
+        screenshot = queue.get()
+        if screenshot is None:  # Sentinel value to terminate
+            break
+
+        out.write(screenshot_to_frame(screenshot))
+
+    out.release()
+
+class ScreenRecorder:
     def __init__(self, output_file="screen.mp4", fps=24.0, resolution=(1920, 1080), daemon=False):
-        super(ScreenRecorder, self).__init__()
-                
         self.output_file = output_file
         self.fps = fps
-        self.daemon = daemon
-
-        self.buffer = queue.Queue()
         self.resolution = resolution
-        print(self.resolution)
-        self.recording = False
-        self.frame_interval = 1.0 / self.fps
-                
-        self.writing_thread = threading.Thread(target=self.start_writing_thread, args=(), daemon=self.daemon)
-        self.capture_thread = threading.Thread(target=self.start_capture_thread, args=(), daemon=self.daemon)
+        self.recording_flag = None
+        self.frame_queue = Queue() 
 
-    def start_capture_thread(self):
-        with mss.mss() as sct:
-            next_frame_time = time.time()
-                    
-            while self.recording:
-                current_time = time.time()
-                
-                if current_time >= next_frame_time:
-                    screenshot = sct.grab((0, 0, self.resolution[0], self.resolution[1]))
-                    self.buffer.put(screenshot)
-                    next_frame_time += self.frame_interval
+    def start(self):
+        from multiprocessing import Value  # Moved here to avoid serialization issues
+        self.recording = Value('b', True)  # Shared boolean for recording state
 
-                # If we're significantly behind, skip to the next correct frame time
-                if time.time() > next_frame_time + self.frame_interval:
-                    next_frame_time = time.time() + self.frame_interval
+        self.capture_process = Process(
+            target=capture_frames,
+            args=(self.frame_queue, self.fps, self.resolution, self.recording)
+        )
+        self.writer_process = Process(
+            target=write_frames,
+            args=(self.frame_queue, self.output_file, self.fps, self.resolution)
+        )
 
-    def start_writing_thread(self):
-        while self.recording or not self.buffer.empty():
-            try:
-                screenshot = self.buffer.get(block=True, timeout=self.frame_interval)
-            except queue.Empty:
-                print("Missed frame")
-                continue
-            
-            # Convert screenshot to frame and write to file
-            self.out.write(self.screenshot_to_frame(screenshot))
-            
-    def run(self):
-        self.out = cv2.VideoWriter(self.output_file, cv2.VideoWriter_fourcc('m','p','4','v'), self.fps, self.resolution)
-        self.recording = True
-        self.capture_thread.start()
-        self.writing_thread.start()
-        
+        self.capture_process.start()
+        self.writer_process.start()
+
     def stop(self):
-        self.recording = False
-        self.capture_thread.join() 
-        self.writing_thread.join()
-        self.out.release()
-    
-    def screenshot_to_frame(self, screenshot):
-        img = Image.frombytes('RGB', screenshot.size, screenshot.bgra, 'raw', 'BGRX')
-        frame = cv2.cvtColor(np.array(img), cv2.COLOR_BGR2RGB)
-        return frame
+        self.recording.value = False
+        self.capture_process.join()
+        self.writer_process.join()
