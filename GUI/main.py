@@ -15,7 +15,7 @@ from GUI.pages.WebcamSelectionWindow import *
 from backend.config import load_config
 from backend.WebcamRecorder import *
 from backend.ScreenRecorder import *
-from backend.VideoDescriptor import *
+from backend.VideosManager import *
 from backend.Participant import *
 from backend.eye_tracking.EyeTracker import *
 
@@ -32,6 +32,7 @@ class MainWindow(QMainWindow):
         self.app = app
         self.webcamRecorder = None
         self.screenRecorder = None
+        self.videosManager = None
         self.eyeTracker = None
         self.participant = None
         self.temp_dir = None
@@ -78,13 +79,9 @@ class MainWindow(QMainWindow):
     def load_resources(self):
         
         try:
-            videos = [VideoDescriptor(os.path.join(self.VIDEO_FOLDER, video)) for video in next(os.walk(self.VIDEO_FOLDER))[1]]
+            self.videosManager = VideosManager(videos_folder=self.VIDEO_FOLDER)
         except Exception as e:
             self.add_page(TextPage(self, "Errore nel caricamento video", str(e), "Esci", button_slot=self.close))
-            return
-        
-        if len(videos) == 0:
-            self.add_page(TextPage(self, "Cartella video vuota", "Nessun video da riprodurre trovato.\nPer favore carica dei video da riprodurre e riavvia il programma.", "Esci", self.close))
             return
                 
         if self.cap is None:
@@ -104,9 +101,7 @@ class MainWindow(QMainWindow):
             participant_ids.sort()
             participant_id = int(participant_ids.pop()) + 1
         self.participant = Participant(participant_id, self.DATA_FOLDER)
-        
-        self.video = videos[participant_id % len(videos)]
-        
+                
         screen_size = self.app.primaryScreen().size()
         self.screenRecorder = ScreenRecorder(output_file=os.path.join(self.temp_dir, "screen.mp4"), fps=24.0, resolution=(screen_size.width(), screen_size.height()), daemon=True)
         
@@ -135,9 +130,10 @@ class MainWindow(QMainWindow):
         
         self.add_page(TextPage(self, "È tutto pronto!", "Quando sei pronto, premi Avanti per iniziare. Il video inizierà a seguito di un breve conto alla rovescia.", "Avanti"))
 
-        real = random.choice([True, False])        
         self.add_page(CountDownPage(self, seconds=3))     
-        self.add_page(VideoPage(self, self.video.getRandomVideo(real=real), video_type='real' if real else 'fake'))
+        video_page = self.add_page(VideoPage(self, self.videosManager.getVideoPath(self.participant.id)))
+        video_page.videoStarted.connect(self.participant.set_video_start_timestamp)
+        video_page.videoEnded.connect(self.participant.set_video_end_timestamp)
         
         self.add_page(TextPage(self, "Question Time!", "Quando sei pronto, premi Inizia per iniziare il questionario.", "Inizia"))
         
@@ -149,14 +145,14 @@ class MainWindow(QMainWindow):
         
         self.add_page(TextPage(self, "Bene!", "Ora passiamo ad alcune domande di comprensione a risposta multipla sulla lezione che hai appena visto.\nMi raccomando, scegli la risposta corretta!", "Inizia"))
             
-        questions = self.video.getQuestions()
+        questions = self.videosManager.getVideoQuestions(self.participant.id)
         for i, question in enumerate(questions):
             try:
                 right_answer = questions[question]["RIGHT_ANSWER"]
                 wrong_answers = questions[question]["WRONG_ANSWERS"]
             except KeyError as e:
                 print(e)
-                raise KeyError("Invalid questions.json for video " + self.video.path)
+                raise KeyError("Invalid questions.json for video " + video_page.video_path)
             question_page = self.add_page(MultipleChoiceQuestionPage(self, "Domanda di comprensione", question, right_answer, wrong_answers))
             question_page.nextClicked.connect(self.participant.add_answers)
   
