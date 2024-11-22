@@ -18,9 +18,6 @@ class Participant:
         self.session_start_timestamp = None
         self.session_end_timestamp = None
         
-        self.video_start_timestamp = None
-        self.video_end_timestamp = None
-        
         self.questions = []
         self.answers = []
         
@@ -43,13 +40,24 @@ class Participant:
         self.session_end_timestamp =self.timestamp()
         
     def set_video_start_timestamp(self):
-        self.video_start_timestamp = self.timestamp()
+        self.questions.append(self.uniquify("Video Start Timestamp"))
+        self.answers.append(self.timestamp())
         
     def set_video_end_timestamp(self):
-        self.video_end_timestamp = self.timestamp()
+        self.questions.append(self.uniquify("Video End Timestamp"))
+        self.answers.append(self.timestamp())
+
+    def uniquify(self, question):
+        unique_question = question
+        counter = 1
+        while unique_question in self.questions:
+            unique_question = question + str(counter)
+            counter += 1
+        return unique_question
         
     def add_answer(self, question:str, answer:str, save_timestamp=True):
         question = question.replace('\n', '').replace('\t','')
+        question = self.uniquify(question)
         self.questions.append(question)
         self.answers.append(answer)
         if save_timestamp:
@@ -59,11 +67,12 @@ class Participant:
     def add_answers(self, questions:list[str], answers:list[str], timestamp_tag):
         if len(questions) != len(answers):
             raise ValueError("Lengths of questions and answers to add to participant don't match - Missing answers?")
-        self.questions += [question.replace('\n', '').replace('\t','') for question in questions]
+        questions = [question.replace('\n', '').replace('\t','') for question in questions]
+        questions = [self.uniquify(question) for question in questions]
+        self.questions += questions
         self.answers += answers
         self.questions.append(timestamp_tag + "_TS")
         self.answers.append(self.timestamp())
-        
         
     def dump_to_file(self, dest_dir:str, filename='data.csv'):
         
@@ -74,9 +83,6 @@ class Participant:
             
             fields = ["Id", "Age", "Gender", "Nationality", "English Level", "Date", "Session Start Timestamp", "Session End Timestamp"]
             row = [self.id, self.age, self.gender, self.nationality, self.english_level, date, self.session_start_timestamp, self.session_end_timestamp]
-            
-            fields += ["Video Start Timestamp", "Video End Timestamp"]
-            row += [self.video_start_timestamp, self.video_end_timestamp]
                 
             for question, answer in zip(self.questions, self.answers):
                 fields.append(question)

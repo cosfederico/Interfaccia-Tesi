@@ -6,12 +6,13 @@ from PyQt5.QtWidgets import *
 class VideoPage(QWidget):
     
     videoStarted = pyqtSignal()
-    videoEnded = pyqtSignal()
+    videoEnded = pyqtSignal(int)
     
-    def __init__(self, parent, video_path:str):
+    def __init__(self, parent, video_path:str, participant_id:int):
         super().__init__()
         self.parent_window = parent
         self.video_path = video_path
+        self.participant_id = participant_id
         
         self.video = QVideoWidget(self)
         self.video.resize(self.parent_window.frameSize())
@@ -38,7 +39,7 @@ class VideoPage(QWidget):
             self.video.hide()
             self.player.stop()
             self.parent_window.next_page()
-            self.videoEnded.emit()
+            self.videoEnded.emit(self.participant_id)
 
     def showEvent(self, QShowEvent):
         self.player.play()

@@ -117,13 +117,13 @@ class MainWindow(QMainWindow):
     def video_started(self):
         self.participant.set_video_start_timestamp()
 
-    def video_ended(self):
+    def video_ended(self, participant_id):
+        self.participant.set_video_end_timestamp()
         features_names = self.videosManager.getFeaturesNames()
-        features = self.videosManager.getVideoFeatures(self.participant.id)
+        features = self.videosManager.getVideoFeatures(participant_id)
         for name, feature in zip(features_names, features):
             self.participant.add_answer("Video " + name.title(), feature.title(), save_timestamp=False)
-        self.participant.add_answer("Video File", self.videosManager.getVideoPath(self.participant.id), save_timestamp=False)    
-        self.participant.set_video_end_timestamp()
+        self.participant.add_answer("Video File", self.videosManager.getVideoPath(participant_id), save_timestamp=False)    
 
     def setup_pages(self):
         
@@ -138,34 +138,36 @@ class MainWindow(QMainWindow):
         
         for question in self.QUESTIONS_BEFORE:
             self.add_page(QuestionScalePage(self, "Questionario Preparatorio", question))
-        
-        self.add_page(TextPage(self, "È tutto pronto!", "Quando sei pronto, premi Avanti per iniziare. Il video inizierà a seguito di un breve conto alla rovescia.", "Avanti"))
+                
+        for participant_id in [self.participant.id, ~self.participant.id]:
 
-        self.add_page(CountDownPage(self, seconds=3))     
-        video_page = self.add_page(VideoPage(self, self.videosManager.getVideoPath(self.participant.id)))
-        video_page.videoStarted.connect(self.video_started)
-        video_page.videoEnded.connect(self.video_ended)
+            self.add_page(TextPage(self, "È tutto pronto!", "Quando sei pronto, premi Avanti per iniziare. Il video inizierà a seguito di un breve conto alla rovescia.", "Avanti"))
+
+            self.add_page(CountDownPage(self, seconds=3))
+            video_page = self.add_page(VideoPage(self, self.videosManager.getVideoPath(participant_id), participant_id))
+            video_page.videoStarted.connect(self.video_started)
+            video_page.videoEnded.connect(self.video_ended)
         
-        self.add_page(TextPage(self, "Question Time!", "Quando sei pronto, premi Inizia per iniziare il questionario.", "Inizia"))
+            self.add_page(TextPage(self, "Question Time!", "Quando sei pronto, premi Inizia per iniziare il questionario.", "Inizia"))
+                
+            panas_page_after = self.add_page(PANAS(self, emotions=self.PANAS_EMOTIONS, scale=self.PANAS_SCALE, positive=self.PANAS_POSITIVE, negative=self.PANAS_NEGATIVE, flag="DOPO"))
+            panas_page_after.nextClicked.connect(self.participant.add_answers)
         
-        panas_page_after = self.add_page(PANAS(self, emotions=self.PANAS_EMOTIONS, scale=self.PANAS_SCALE, positive=self.PANAS_POSITIVE, negative=self.PANAS_NEGATIVE, flag="DOPO"))
-        panas_page_after.nextClicked.connect(self.participant.add_answers)
-        
-        for i, question in enumerate(self.QUESTIONS_AFTER):
-            self.add_page(QuestionScalePage(self, "Domanda " + str(i+1), question))
-        
-        self.add_page(TextPage(self, "Bene!", "Ora passiamo ad alcune domande di comprensione a risposta multipla sulla lezione che hai appena visto.\nMi raccomando, scegli la risposta corretta!", "Inizia"))
+            for i, question in enumerate(self.QUESTIONS_AFTER):
+                self.add_page(QuestionScalePage(self, "Domanda " + str(i+1), question))
             
-        questions = self.videosManager.getVideoQuestions(self.participant.id)
-        for i, question in enumerate(questions):
-            try:
-                right_answer = questions[question]["RIGHT_ANSWER"]
-                wrong_answers = questions[question]["WRONG_ANSWERS"]
-            except KeyError as e:
-                print(e)
-                raise KeyError("Invalid questions.json for video " + video_page.video_path)
-            question_page = self.add_page(MultipleChoiceQuestionPage(self, "Domanda di comprensione", question, right_answer, wrong_answers))
-            question_page.nextClicked.connect(self.participant.add_answers)
+            self.add_page(TextPage(self, "Bene!", "Ora passiamo ad alcune domande di comprensione a risposta multipla sulla lezione che hai appena visto.\nMi raccomando, scegli la risposta corretta!", "Inizia"))
+            
+            questions = self.videosManager.getVideoQuestions(participant_id)    
+            for i, question in enumerate(questions):
+                try:
+                    right_answer = questions[question]["RIGHT_ANSWER"]
+                    wrong_answers = questions[question]["WRONG_ANSWERS"]
+                except KeyError as e:
+                    print(e)
+                    raise KeyError("Invalid questions.json for video " + video_page.video_path)
+                question_page = self.add_page(MultipleChoiceQuestionPage(self, "Domanda di comprensione", question, right_answer, wrong_answers))
+                question_page.nextClicked.connect(self.participant.add_answers)
   
         self.add_page(TextPage(self, "Fine!", "Il nostro esperimento si è concluso, grazie mille per la partecipazione.\nPremi Fine per uscire.", "Fine", button_slot=self.save_and_close))
         
