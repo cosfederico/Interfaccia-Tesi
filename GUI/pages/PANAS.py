@@ -107,7 +107,7 @@ class PANAS(QWidget):
             for level in self.scale:
                 rb = QRadioButton(self)
                 rb.setObjectName(level)
-                rb.setStyleSheet('QRadioButton::indicator { width: 20px; height: 20px;};')
+                rb.setStyleSheet('QRadioButton::indicator { width: 26px; height: 26px;};')
                 rb.setText("")
                 hLayout.addWidget(rb, 0, Qt.AlignCenter)
                 button_group.addButton(rb)
