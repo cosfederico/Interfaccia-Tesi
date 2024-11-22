@@ -18,7 +18,6 @@ class Participant:
         self.session_start_timestamp = None
         self.session_end_timestamp = None
         
-        self.video_name = None
         self.video_start_timestamp = None
         self.video_end_timestamp = None
         
@@ -43,8 +42,7 @@ class Participant:
     def set_session_end_timestamp(self):
         self.session_end_timestamp =self.timestamp()
         
-    def set_video_start_timestamp(self, video_name:str):
-        self.video_name = video_name
+    def set_video_start_timestamp(self):
         self.video_start_timestamp = self.timestamp()
         
     def set_video_end_timestamp(self):
@@ -74,11 +72,11 @@ class Participant:
             
             date = datetime.today().strftime('%Y-%m-%d')
             
-            fields = ["id", "age", "gender", "nationality", "english_level", "date", "session_start_timestamp", "session_end_timestamp"]
+            fields = ["Id", "Age", "Gender", "Nationality", "English Level", "Date", "Session Start Timestamp", "Session End Timestamp"]
             row = [self.id, self.age, self.gender, self.nationality, self.english_level, date, self.session_start_timestamp, self.session_end_timestamp]
             
-            fields += ["video_name", "video_start_timestamp", "video_end_timestamp"]
-            row += [self.video_name, self.video_start_timestamp, self.video_end_timestamp]
+            fields += ["Video Start Timestamp", "Video End Timestamp"]
+            row += [self.video_start_timestamp, self.video_end_timestamp]
                 
             for question, answer in zip(self.questions, self.answers):
                 fields.append(question)

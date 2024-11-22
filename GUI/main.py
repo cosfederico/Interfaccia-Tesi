@@ -114,6 +114,17 @@ class MainWindow(QMainWindow):
         if self.eyeTracker:
             self.eyeTracker.setup_tracking()
             
+    def video_started(self):
+        self.participant.set_video_start_timestamp()
+
+    def video_ended(self):
+        features_names = self.videosManager.getFeaturesNames()
+        features = self.videosManager.getVideoFeatures(self.participant.id)
+        for name, feature in zip(features_names, features):
+            self.participant.add_answer("Video " + name.title(), feature.title(), save_timestamp=False)
+        self.participant.add_answer("Video File", self.videosManager.getVideoPath(self.participant.id), save_timestamp=False)    
+        self.participant.set_video_end_timestamp()
+
     def setup_pages(self):
         
         intro_page = self.add_page(IntroPage(self, "Benvenuto!", "Grazie per aver accettato di partecipare a questo studio.\nDurante la sessione, ti sarà richiesto di guardare una breve videolezione di circa 5-10 minuti su un tema didattico. Mentre guardi il video, alcuni dispositivi registreranno automaticamente i tuoi movimenti oculari e il tuo battito cardiaco, e sarà inoltre monitorata l’espressione facciale per analizzare le reazioni emotive.\n\nDopo la visione, ti chiederemo di completare alcuni questionari. L’intera sessione durerà circa 15-20 minuti. Ti invitiamo a seguire il video con attenzione e a rispondere ai questionari finali.\n", "Inizia", warning_text="Siediti comodamente, ma cerca di non muovere la mano dove indossi l'orologio, interagendo con questa interfaccia solo con la mano libera, facendo uso del mouse. Evita di coprire il volto con la mano e leggi a mente.", bottom_text="I dati raccolti saranno utilizzati esclusivamente per scopi di ricerca, e tutte le informazioni rimarranno anonime.\nSe in qualsiasi momento desideri interrompere l’esperimento, sei libero di farlo. Buona visione e grazie per il tuo tempo!", error_text="Per favore fornisci il tuo consenso per iniziare lo studio"))
@@ -132,8 +143,8 @@ class MainWindow(QMainWindow):
 
         self.add_page(CountDownPage(self, seconds=3))     
         video_page = self.add_page(VideoPage(self, self.videosManager.getVideoPath(self.participant.id)))
-        video_page.videoStarted.connect(self.participant.set_video_start_timestamp)
-        video_page.videoEnded.connect(self.participant.set_video_end_timestamp)
+        video_page.videoStarted.connect(self.video_started)
+        video_page.videoEnded.connect(self.video_ended)
         
         self.add_page(TextPage(self, "Question Time!", "Quando sei pronto, premi Inizia per iniziare il questionario.", "Inizia"))
         

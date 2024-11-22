@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import *
 
 class VideoPage(QWidget):
     
-    videoStarted = pyqtSignal(str)
+    videoStarted = pyqtSignal()
     videoEnded = pyqtSignal()
     
     def __init__(self, parent, video_path:str):
@@ -43,4 +43,4 @@ class VideoPage(QWidget):
     def showEvent(self, QShowEvent):
         self.player.play()
         self.video.show()
-        self.videoStarted.emit(self.video_path)
+        self.videoStarted.emit()
