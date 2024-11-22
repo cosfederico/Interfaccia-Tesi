@@ -1,5 +1,6 @@
 import os
 import json
+import random
 
 class VideosManager:
     def __init__(self, videos_folder='videos'):
@@ -38,8 +39,11 @@ class VideosManager:
             for f in os.listdir(folder_path)
             if f.endswith('.mp4') or f.endswith('.avi')
         ]
+        
+        if len(videos) == 0:
+            raise FileNotFoundError("No videos found for the selected video combination: " + folder_path)
                 
-        return videos[0]
+        return random.choice(videos)
     
     def getVideoName(self, participant_id:int) -> str:
         return self.getVideoFeatures(participant_id)[0]
