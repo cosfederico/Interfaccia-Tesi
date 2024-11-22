@@ -4,13 +4,13 @@
 
 A simple wizard-like application to automate the data acquisition and analysis process for my thesis research.
 
-The intent of the research is to analyize the effects on viewers of AI Generated Videos in education. The application shows the viewer a short educational video, asking generic experience-evaluation questions, with answers on a scale from 1 to 5, and open questions specific about the topic discussed in the videos. The video displayed will be randomly picked to be a real video or a "fake" video, as in a video generated with Artificial Intelligence (AI).
+The intent of the research is to analyize the effects on viewers of AI Generated Videos in education. The application shows the viewer two short educational videos, asking generic experience-evaluation questions, with answers on a scale from 1 to 5, and open questions specific about the topic discussed in the videos. Based on the participant's number (ID), the program will establish what type of video they will watch for their first and second video. Both a real and fake video are always showed. In other words, if the first video is real, the second video will be fake, or viceversa. 
 
-The application also uses the [PANAS (Positive and Negative Affect Schedule)](https://en.wikipedia.org/wiki/Positive_and_Negative_Affect_Schedule) test to allow users to self-report their positive and negative affect before and after watching the video. 
+The application uses the [PANAS (Positive and Negative Affect Schedule)](https://en.wikipedia.org/wiki/Positive_and_Negative_Affect_Schedule) test to allow users to self-report their positive and negative affect before and after watching each video. 
 
 The whole session is recorded via the built-in webcam and data about the experiment is saved to a `.csv` file, like the time of start and end of the session, the answers to each question, what video was showed, if it was real or fake, and the timestamps of each event.
 
-The program makes use of the built-in webcam (necessary) to capture the whole session. Please make sure a valid webcam is connected to the machine before running the application.
+The program makes use of the built-in webcam (necessary) to capture the whole session. Please make sure at least one valid webcam is connected to the machine before running the application.
 
 ## Videos
 
