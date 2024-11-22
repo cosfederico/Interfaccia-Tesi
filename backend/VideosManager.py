@@ -1,6 +1,7 @@
 import os
 import json
 import random
+from collections import OrderedDict
 
 class VideosManager:
     def __init__(self, videos_folder='videos'):
@@ -14,15 +15,20 @@ class VideosManager:
         if len(self.contents) == 0:
             raise RuntimeError("Cartella dei video specificata vuota.\nPer favore carica dei video da riprodurre e riavvia il programma.")
         
-        self.types = ['real', 'fake']
-        self.genders = ['M', 'F']
+        self.features = OrderedDict({
+            "content": next(os.walk(self.videos_folder))[1],
+            "type": ['real', 'fake'],
+            "gender": ['M', 'F']
+        })
         
-        self.features = (self.contents, self.types, self.genders)
-        self.sizes = [len(feature) for feature in self.features]
+        self.sizes = [len(feature) for feature in self.features.values()]
     
-    def getVideoFeatures(self, participant_id:int) -> list:
+    def getFeaturesNames(self) -> list[str]:
+        return list(self.features.keys())
+    
+    def getVideoFeatures(self, participant_id:int) -> list[str]:
         selected_features = []
-        for feature, size in zip(self.features, self.sizes):
+        for feature, size in zip(list(self.features.values()), self.sizes):
             selected_features.append(feature[participant_id % size])
             participant_id = participant_id // size
         return selected_features
@@ -45,17 +51,16 @@ class VideosManager:
                 
         return random.choice(videos)
     
-    def getVideoName(self, participant_id:int) -> str:
-        return self.getVideoFeatures(participant_id)[0]
+    def getVideoFeatureByName(self, participant_id:int, feature_name:str) -> str:
+        features_names = self.getFeaturesNames()
+        if feature_name not in features_names:        
+            raise KeyError("No feature found with the given name '" + feature_name + "', known video features are: " + str(features_names))
+        video_features = self.getVideoFeatures(participant_id)
+        return video_features[features_names.index(feature_name)]
+
     
-    def getVideoType(self, participant_id:int) -> str:
-        return self.getVideoFeatures(participant_id)[1]      
-    
-    def getVideoGender(self, participant_id:int) -> str:
-        return self.getVideoFeatures(participant_id)[2]      
-    
-    def getVideoQuestions(self, participant_id:int, filename='questions.json'):
-        path = os.path.join(self.videos_folder, self.getVideoName(participant_id))
+    def getVideoQuestions(self, participant_id:int, filename='questions.json') -> dict:
+        path = os.path.join(self.videos_folder, self.getVideoFeatureByName(participant_id, 'content'))
         questions = None
         try:
             with open(os.path.join(path, filename), 'r', encoding='UTF-8') as f:
