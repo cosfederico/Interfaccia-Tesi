@@ -14,22 +14,25 @@ The program makes use of the built-in webcam (necessary) to capture the whole se
 
 ## Videos
 
-The videos are stored in and picked from the `videos` folder, where every subfolder represents a video, and inside each subfolder there are is real video and its fake AI Generated copies, along with the questions associated with the video.
+The videos are stored in and picked from the `videos` folder, where every subfolder represents a video lesson. For each lesson, you can have:
+- **Real** videos presented by a **male** speaker
+- **Real** videos presented by a **female** speaker
+- **Fake** videos presented by a **male** speaker
+- **Fake** videos presented by a **female** speaker
 
-### Adding Videos
+The different type of videos are separated by a hierarchical folder structure. They are separated first by type (`real` or `fake`), then by gender (`M` or `F`).
 
-To add videos you can simply add another directory in the `videos` folder. It is **very important** that you setup the folder structure properly when adding new videos.
+For example, for a video lesson called `LessonA`, the necessary subfolders are:
+- `LessonA/real/M`
+- `LessonA/real/F`
+- `LessonA/fake/M`
+- `LessonA/fake/F`
 
-A video folder must contain:
-- `real/`: a folder containing the original video *(`.mp4` or `.avi`)*
-- `fake/`: a folder containing all the fakes generated from the real video *(`.mp4` or `.avi`)*
-- `questions.json`: a JSON file containing the multiple choice questions to ask about the topic discussed in the video. (Can be omitted)
+In each of these folders you can have as many videos as you want, but a video will be picked randomly. It is recommended to have one video for folder. As participants use the program, the program cycles through all the possible video combinations, ensuring that, with given enough captures, all videos have been selected equally over the course of the experiment.
 
-The videos can be in `.mp4` or `.avi` format. You can technically put more than one video in the `real` folder, if there are more real videos that follow the same script. A random video will be picked for display.
+### Video Questions
 
-### Adding Questions
-
-You can add multiple choice questions about the topics of the video. The answers' order will be randomized, and it will be saved the selected answer, wether it was correct or not, and its relative timestamp. To specify questions, create a `questions.json` file in your video's folder. The file must follow the following structure:
+You can add multiple choice questions about the topics of the video. The answers' order will be randomized, and it will be saved the selected answer, wether it was correct or not, and its relative timestamp. To specify questions, create a `questions.json` file in your video lesson's folder. The file must follow the following structure:
 
 ``` json
 {
@@ -43,7 +46,7 @@ You can add multiple choice questions about the topics of the video. The answers
 }
 ```
 
-You can have as many wrong answers you want per question, but there can only be one right answer. The structure can be repeated. For example for a three-question test, your json structure would look like:
+You can have as many wrong answers you want per question, but there can only be one right answer. The structure can be repeated. For example, for a three-question poll, your json structure would look like:
 
 ``` json
 {
@@ -72,6 +75,19 @@ You can have as many wrong answers you want per question, but there can only be 
 ```
 
 If no `questions.json` is provided for a specific video, no multiple choice questions will be asked were that video be picked.
+
+### Adding Videos
+
+To add videos you can simply add another directory in the `videos` folder. It is **very important** that you setup the folder structure properly when adding new videos.
+
+A video folder must contain:
+- `real/M/`: a folder containing the real video performed by a **male** presenter *(`.mp4` or `.avi`)*
+- `real/M/`: a folder containing the real video performed by a **female** presenter *(`.mp4` or `.avi`)*
+- `fake/M/`: a folder containing the **male** fakes generated from the real video *(`.mp4` or `.avi`)*
+- `fake/F/`: a folder containing the **female** fakes generated from the real video *(`.mp4` or `.avi`)*
+- `questions.json`: a JSON file containing the multiple choice questions to ask about the topic discussed in the video. (Can be omitted)
+
+The videos can be in `.mp4` or `.avi` format. You can technically put more than one video in each folder, a random one will be picked for display.
 
 ## Empatica 
 
