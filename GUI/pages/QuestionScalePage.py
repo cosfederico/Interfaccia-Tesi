@@ -21,7 +21,7 @@ class QuestionScalePage(QWidget):
         self.verticalLayout = QVBoxLayout(self)
         
         self.title = QLabel(self)
-        self.title.setStyleSheet("font: 27pt \"Rubik SemiBold\";\n"
+        self.title.setStyleSheet("font: 30pt \"Rubik SemiBold\";\n"
                 "color: rgb(0, 51, 102);\n"
                 "background-color: rgba(255, 255, 255, 0);\n"
                 "")
@@ -29,7 +29,7 @@ class QuestionScalePage(QWidget):
         self.verticalLayout.addWidget(self.title)
 
         self.question = QLabel(self)
-        self.question.setStyleSheet("font: 16pt \"Rubik light\";\n"
+        self.question.setStyleSheet("font: 20pt \"Rubik light\";\n"
                 "color: rgb(53, 53, 53);\n"
                 "background-color: rgba(255, 255, 255, 0);")
         self.question.setText(self.question_str)
@@ -42,7 +42,7 @@ class QuestionScalePage(QWidget):
         
         for level in self.scale:
                 rb = QRadioButton(self)
-                rb.setStyleSheet("font: 14pt \"Rubik Light\";")
+                rb.setStyleSheet("font: 16pt \"Rubik Light\";")
                 rb.setObjectName(level)
                 rb.setText(level)
                 rb.toggled.connect(self.answer_clicked)
