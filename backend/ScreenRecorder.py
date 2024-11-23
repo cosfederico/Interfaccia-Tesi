@@ -1,4 +1,4 @@
-from multiprocessing import Process, Queue
+from multiprocessing import Process, Queue, Value
 import mss
 import cv2
 import numpy as np
@@ -21,7 +21,7 @@ def capture_frames(queue:Queue, fps:int, resolution:tuple, recording_flag):
             if time.time() > next_frame_time + frame_interval:
                 next_frame_time = time.time() + frame_interval
 
-        # Signal the writer process to stop
+        # Signal the writing process to stop
         queue.put(None)
 
 def screenshot_to_frame(screenshot):
@@ -53,24 +53,29 @@ class ScreenRecorder:
         self.resolution = resolution
         self.recording_flag = None
         self.frame_queue = Queue() 
+        self.recording = Value('b', False)
+        
+        self.capture_process = None
+        self.writing_process = None
 
     def start(self):
-        from multiprocessing import Value  # Moved here to avoid serialization issues
-        self.recording = Value('b', True)  # Shared boolean for recording state
+        self.recording.value = True
 
         self.capture_process = Process(
             target=capture_frames,
             args=(self.frame_queue, self.fps, self.resolution, self.recording)
         )
-        self.writer_process = Process(
+        self.writing_process = Process(
             target=write_frames,
             args=(self.frame_queue, self.output_file, self.fps, self.resolution)
         )
 
         self.capture_process.start()
-        self.writer_process.start()
+        self.writing_process.start()
 
     def stop(self):
         self.recording.value = False
-        self.capture_process.join()
-        self.writer_process.join()
+        if self.capture_process is not None:
+            self.capture_process.join()
+        if self.writing_process is not None:        
+            self.writing_process.join()
