@@ -26,7 +26,7 @@ import shutil
 
 class MainWindow(QMainWindow):
     
-    def __init__(self, app, config_file='config.json'):
+    def __init__(self, app:QApplication, config_file='config.json'):
         super().__init__()
     
         self.app = app
@@ -55,13 +55,25 @@ class MainWindow(QMainWindow):
         self.setup_eye_tracker()
              
     def launch(self):
+        self.webcam_preview_window.close()
+        
+        loading_msg = QMessageBox()
+        loading_msg.setWindowTitle("Interfaccia")
+        loading_msg.setWindowIcon(QIcon(os.path.join('GUI', 'icons', 'webcam.png')))
+        loading_msg.setText("Caricamento...\t")
+        loading_msg.setStandardButtons(QMessageBox.NoButton)
+        loading_msg.show()
+        self.app.processEvents()
+        
         self.setupUI()        
         self.load_resources()
         self.setup_pages()
+        loading_msg.close()
         self.showFullScreen()
 
-    def show_webcam_preview_window(self, cap):
+    def show_webcam_preview_window(self, cap, cap_id):
         self.cap = cap
+        self.cap_id = cap_id
         self.webcam_preview_window = WebcamPreviewWindow(self, self.cap)
         self.webcam_preview_window.okClicked.connect(self.launch)        
         self.webcam_preview_window.show()
@@ -90,7 +102,7 @@ class MainWindow(QMainWindow):
         
         self.temp_dir = tempfile.mkdtemp()
         try:
-            self.webcamRecorder = WebcamRecorder(output_file=os.path.join(self.temp_dir, "webcam.mp4"), daemon=True, cap=self.cap)
+            self.webcamRecorder = WebcamRecorder(cap_id=self.cap_id, cap=self.cap, output_file=os.path.join(self.temp_dir, "webcam.mp4"))
         except Exception as e:
             self.add_page(TextPage(self, str(e), "Assicuratevi che un dispositivo webcam sia collegato e funzioni correttamente.", "Esci", button_slot=self.close))
             return
@@ -189,14 +201,14 @@ class MainWindow(QMainWindow):
             self.participant.set_session_start_timestamp()
             
     def stop_capture(self):
-        if self.webcamRecorder is not None and self.webcamRecorder.recording:
+        if self.webcamRecorder is not None:
             self.webcamRecorder.stop()
         if self.eyeTracker is not None:
             try:
                 self.eyeTracker.stop_recording()
             except:
                 pass
-        if self.screenRecorder is not None and self.screenRecorder.recording:
+        if self.screenRecorder is not None:
             self.screenRecorder.stop()
             
     def closeEvent(self, QCloseEvent):
@@ -238,6 +250,7 @@ def run_main():
     opening_msg.setText("Stiamo caricando le risorse necessarie...\t")
     opening_msg.setStandardButtons(QMessageBox.NoButton)
     opening_msg.show()
+    app.processEvents()
     window = MainWindow(app)
     window.webcam_selection_window.show()
     opening_msg.reject()

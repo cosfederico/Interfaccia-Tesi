@@ -75,7 +75,10 @@ class ScreenRecorder:
 
     def stop(self):
         self.recording.value = False
-        if self.capture_process is not None:
+        if self.capture_process is not None and self.capture_process.is_alive():
             self.capture_process.join()
-        if self.writing_process is not None:        
+        if self.writing_process is not None and self.writing_process.is_alive():        
             self.writing_process.join()
+            
+    def isRecording(self):
+        return self.recording.value

@@ -67,7 +67,7 @@ class CameraBox(QGroupBox):
     
 class WebcamSelectionWindow(QDialog):
     
-    capSelected = pyqtSignal(cv2.VideoCapture)
+    capSelected = pyqtSignal(cv2.VideoCapture, int)
         
     def __init__(self, app, text="Scegli la webcam da utilizzare per la cattura del volto", text2="Premi il pulsante sottostante per verificare che l'audio funzioni correttamente", text3="Se non senti nessun suono premendo il bottone, verifica il dispositivo audio in uso, e riprova prima di cominciare.", error_text="Scegli una webcam per cominciare."):
         super().__init__()
@@ -154,7 +154,7 @@ class WebcamSelectionWindow(QDialog):
             if box != self.selected_box:
                 box.release_resources()
         
-        self.capSelected.emit(self.selected_box.cap)
+        self.capSelected.emit(self.selected_box.cap, self.selected_box.id)
         self.close()
         
     def get_working_webcams(self):
