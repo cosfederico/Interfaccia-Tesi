@@ -4,7 +4,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtMultimedia import *
 from PyQt5.uic import loadUi
 
-from GUI.pages.WebcamPreviewWindow import *
+from GUI.windows.WebcamPreviewWindow import *
 
 import cv2
 import sys

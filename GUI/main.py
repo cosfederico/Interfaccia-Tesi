@@ -9,8 +9,10 @@ from GUI.pages.MultipleChoiceQuestionPage import *
 from GUI.pages.CountDownPage import *
 from GUI.pages.VideoPage import *
 from GUI.pages.PANAS import *
-from GUI.pages.WebcamPreviewWindow import *
-from GUI.pages.WebcamSelectionWindow import *
+
+from GUI.windows.WebcamPreviewWindow import *
+from GUI.windows.WebcamSelectionWindow import *
+from GUI.windows.LoadingPopup import *
 
 from backend.config import load_config
 from backend.WebcamRecorder import *
@@ -55,16 +57,8 @@ class MainWindow(QMainWindow):
         self.setup_eye_tracker()
              
     def launch(self):
-        self.webcam_preview_window.close()
-        
-        loading_msg = QMessageBox()
-        loading_msg.setWindowTitle("Interfaccia")
-        loading_msg.setWindowIcon(QIcon(os.path.join('GUI', 'icons', 'webcam.png')))
-        loading_msg.setText("Caricamento...\t")
-        loading_msg.setStandardButtons(QMessageBox.NoButton)
-        loading_msg.show()
-        self.app.processEvents()
-        
+        self.webcam_preview_window.close() 
+        loading_msg = LoadingPopup(self.app, "Caricamento...")
         self.setupUI()        
         self.load_resources()
         self.setup_pages()
@@ -219,13 +213,7 @@ class MainWindow(QMainWindow):
     def save_and_close(self):
         self.hide()
         
-        msg = QMessageBox(self)
-        msg.setWindowTitle("Interfaccia")
-        msg.setWindowIcon(QIcon(os.path.join('GUI', 'icons', 'webcam.png')))
-        msg.setText("Salvataggio dei dati raccolti...\t")
-        msg.setStandardButtons(QMessageBox.NoButton)
-        msg.show()
-        self.app.processEvents()
+        msg = LoadingPopup(self.app, "Salvataggio dei dati raccolti...")
                 
         if self.participant is not None:
             self.participant.set_session_end_timestamp()
@@ -244,13 +232,7 @@ def run_main():
         
     app = QApplication(sys.argv)
     
-    opening_msg = QMessageBox()
-    opening_msg.setWindowTitle("Interfaccia")
-    opening_msg.setWindowIcon(QIcon(os.path.join('GUI', 'icons', 'webcam.png')))
-    opening_msg.setText("Stiamo caricando le risorse necessarie...\t")
-    opening_msg.setStandardButtons(QMessageBox.NoButton)
-    opening_msg.show()
-    app.processEvents()
+    opening_msg = LoadingPopup(app, "Stiamo caricando le risorse necessarie...")
     window = MainWindow(app)
     window.webcam_selection_window.show()
     opening_msg.reject()
