@@ -34,7 +34,7 @@ class CameraBox(QGroupBox):
         self.frame = QLabel()
         self.update_frame()
         box_layout.addWidget(self.frame, alignment=Qt.AlignCenter)
-        box_layout.addWidget(QLabel("Webcam %d (%d x %d)" %(self.id+1, self.frame_width, self.frame_height)), alignment=Qt.AlignCenter)
+        box_layout.addWidget(QLabel("Webcam %d (%d x %d)" %(self.id, self.frame_width, self.frame_height)), alignment=Qt.AlignCenter)
         self.setLayout(box_layout)
     
     def mousePressEvent(self, event):
@@ -110,7 +110,7 @@ class WebcamSelectionWindow(QDialog):
         
     def load_cams(self):
         
-        cams = self.get_working_webcams()
+        cams, cams_ids = self.get_working_webcams()
         
         if len(cams) == 0:
             error_msg = QMessageBox()
@@ -123,12 +123,14 @@ class WebcamSelectionWindow(QDialog):
             
         videos_layout = QGridLayout()
         
-        for i, cam in enumerate(cams):
-            box = CameraBox(cam, id=i)
+        i = 0
+        for cam, id in zip(cams, cams_ids):
+            box = CameraBox(cam, id=id)
             box.selected.connect(self.box_selected)   
             box.deselected.connect(self.box_deselected)   
             self.boxes.append(box)
             videos_layout.addWidget(box, i/3, i%3, alignment=Qt.AlignTop)
+            i += 1
         
         self.box.setLayout(videos_layout)
         
@@ -159,6 +161,7 @@ class WebcamSelectionWindow(QDialog):
 
         camera_idx = 0
         cams = []
+        cams_ids = []
         
         while True:
             camera = cv2.VideoCapture(camera_idx)
@@ -168,10 +171,11 @@ class WebcamSelectionWindow(QDialog):
             is_reading, _ = camera.read()            
             if is_reading:
                 cams.append(camera)
+                cams_ids.append(camera_idx)
                 
             camera_idx +=1
 
-        return cams
+        return cams, cams_ids
     
     def play(self):
         self.player.play()    
