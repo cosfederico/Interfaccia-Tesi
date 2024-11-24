@@ -2,7 +2,7 @@ import os
 import json
 import jsonschema
 
-def load_config(config_file='config.json', schema_file='schema.json'):
+def load_config(config_file='config.json', schema_file="backend" + os.sep + "schema.json"):
     
     try:
         with open(config_file, 'r', encoding='utf-8') as f:
