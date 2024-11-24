@@ -80,10 +80,7 @@ class WebcamSelectionWindow(QDialog):
         self.boxes = []
         self.selected_box = None
                         
-        self.setupUI()
-                
-    def setupUI(self):
-        loadUi("GUI/qtdesigner/WebcamSelectionWindow.ui",self)
+        self.setupUi()
         self.setContentsMargins(50,50,50,50)
         self.setWindowTitle("Selezione Webcam")
         self.setWindowIcon(QIcon(os.path.join('GUI', 'icons','webcam.png')))
@@ -103,6 +100,78 @@ class WebcamSelectionWindow(QDialog):
         self.player.setVolume(100)
                             
         self.load_cams()
+                
+    # Generated with QtDesigner
+    def setupUi(self):
+        self.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.verticalLayout = QVBoxLayout(self)
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.title = QLabel(self)
+        self.title.setStyleSheet("font: 30pt \"Rubik Light\";\n"
+"background-color: rgba(255, 255, 255, 0);")
+        self.title.setObjectName("title")
+        self.verticalLayout.addWidget(self.title, 0, Qt.AlignHCenter)
+        self.text = QLabel(self)
+        self.text.setStyleSheet("font: 17pt \"Rubik Light\";\n"
+"background-color: rgba(255, 255, 255, 0);")
+        self.text.setObjectName("text")
+        self.verticalLayout.addWidget(self.text, 0, Qt.AlignHCenter)
+        self.box = QGroupBox(self)
+        self.box.setMinimumSize(QSize(0, 0))
+        font = QFont()
+        font.setFamily("Rubik Light")
+        font.setPointSize(10)
+        font.setItalic(True)
+        self.box.setFont(font)
+        self.box.setTitle("")
+        self.box.setObjectName("box")
+        self.verticalLayout.addWidget(self.box)
+        spacerItem = QSpacerItem(0, 40, QSizePolicy.Minimum, QSizePolicy.Maximum)
+        self.verticalLayout.addItem(spacerItem)
+        self.text2 = QLabel(self)
+        self.text2.setStyleSheet("font: 17pt \"Rubik Light\";\n"
+"background-color: rgba(255, 255, 255, 0);")
+        self.text2.setObjectName("text2")
+        self.verticalLayout.addWidget(self.text2, 0, Qt.AlignHCenter)
+        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.audio_button = QPushButton(self)
+        self.audio_button.setMinimumSize(QSize(0, 0))
+        self.audio_button.setStyleSheet("font: 11pt \"Rubik Light\";\n"
+"background-color: rgb(250, 250, 250);")
+        self.audio_button.setCheckable(False)
+        self.audio_button.setObjectName("audio_button")
+        self.horizontalLayout.addWidget(self.audio_button, 0, Qt.AlignRight)
+        self.audio_icon = QLabel(self)
+        self.audio_icon.setText("")
+        self.audio_icon.setObjectName("audio_icon")
+        self.horizontalLayout.addWidget(self.audio_icon, 0, Qt.AlignLeft)
+        self.verticalLayout.addLayout(self.horizontalLayout)
+        self.text3 = QLabel(self)
+        self.text3.setStyleSheet("font: 17pt \"Rubik Light\";\n"
+"background-color: rgba(255, 255, 255, 0);")
+        self.text3.setObjectName("text3")
+        self.verticalLayout.addWidget(self.text3, 0, Qt.AlignHCenter)
+        spacerItem1 = QSpacerItem(0, 60, QSizePolicy.Minimum, QSizePolicy.Minimum)
+        self.verticalLayout.addItem(spacerItem1)
+        self.error_text = QLabel(self)
+        self.error_text.setStyleSheet("font: 13pt \"Rubik Light\";\n"
+"color: rgb(255, 0, 0)")
+        self.error_text.setText("")
+        self.error_text.setObjectName("error_text")
+        self.verticalLayout.addWidget(self.error_text, 0, Qt.AlignHCenter)
+        self.done_button = QPushButton(self)
+        self.done_button.setMinimumSize(QSize(200, 50))
+        self.done_button.setStyleSheet("border-radius: 20px;\n"
+"background-color: rgb(0, 64, 130);\n"
+"font: 14pt \"Rubik Light\";\n"
+"color: rgb(255,255,255);")
+        self.done_button.setObjectName("done_button")
+        self.verticalLayout.addWidget(self.done_button, 0, Qt.AlignHCenter)
+
+        self.title.setText("Prima di iniziare")
+        self.audio_button.setText("Prova audio")
+        self.done_button.setText("Fatto")
         
     def media_status_changed(self, state):
         if state == QMediaPlayer.EndOfMedia:

@@ -1,6 +1,5 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-from PyQt5.uic import loadUi
 
 class CountDownPage(QWidget):
     
@@ -9,8 +8,20 @@ class CountDownPage(QWidget):
         self.parent_window = parent
         self.seconds = list(range(1, seconds))
         
-        loadUi("GUI/qtdesigner/CountDownPage.ui", self)
+        self.setupUi()
         self.text.setText(str(seconds))
+        
+    # Generated with QtDesigner        
+    def setupUi(self):
+        self.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.gridLayout = QGridLayout(self)
+        self.gridLayout.setObjectName("gridLayout")
+        self.text = QLabel(self)
+        self.text.setStyleSheet("font: 80pt \"Rubik\";\n"
+"color: rgb(200,200,200);\n"
+"background-color: rgba(255, 255, 255, 0);")
+        self.text.setObjectName("text")
+        self.gridLayout.addWidget(self.text, 0, 0, 1, 1, Qt.AlignHCenter)
         
     def showEvent(self, QShowEvent):
         self.play()
