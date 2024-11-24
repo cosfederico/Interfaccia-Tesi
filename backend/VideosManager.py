@@ -8,12 +8,12 @@ class VideosManager:
         self.videos_folder = videos_folder
         
         if not os.path.exists(self.videos_folder):
-            raise NotADirectoryError("Cartella dei video specificata inesistente.")
+            raise NotADirectoryError("Cartella dei video specificata inesistente.\n\nCartella specificata: " + self.videos_folder)
         
         self.contents = next(os.walk(self.videos_folder))[1]
         
         if len(self.contents) == 0:
-            raise RuntimeError("Cartella dei video specificata vuota.\nPer favore carica dei video da riprodurre e riavvia il programma.")
+            raise RuntimeError("Cartella dei video specificata vuota. Per favore carica dei video da riprodurre per iniziare a usare il programma.\n\nCartella dei video specificata: " + self.videos_folder)
         
         self.features = OrderedDict({
             "content": next(os.walk(self.videos_folder))[1],
