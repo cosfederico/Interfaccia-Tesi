@@ -102,6 +102,8 @@ class MainWindow(QMainWindow):
             return
         
         participant_id = 0
+        if not os.path.exists(self.DATA_FOLDER):
+            os.mkdir(self.DATA_FOLDER)
         participant_ids = os.listdir(self.DATA_FOLDER)
         if len(participant_ids) != 0:
             participant_ids.sort()
