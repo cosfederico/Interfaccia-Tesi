@@ -25,7 +25,7 @@ class EyeTracker:
             print(error)
             raise RuntimeError('Error connecting to the eye-tracker Host PC. Is the ethernet cable connected? Is the local IP Address setup correctly (100.1.1.2 / 255.255.255.0)')
         
-        self.ts_start = datetime.datetime.now(datetime.timezone.utc).timestamp() * 1e3
+        self.ts_start = int(datetime.datetime.now(datetime.timezone.utc).timestamp() * 1e3)
         
         disp = pylink.getDisplayInformation()
         self.SCN_WIDTH = disp.width
@@ -141,7 +141,7 @@ class EyeTracker:
         # INSERT CODE TO DRAW INITIAL DISPLAY HERE
 
         # log a message to mark the time at which the initial display came on
-        self.el_tracker.sendMessage("SYNCTIME")
+        self.el_tracker.sendMessage("START_TS\t" + str(self.ts_start))
 
         # wait for link data to arrive
         try:
