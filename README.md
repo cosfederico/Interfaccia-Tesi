@@ -100,7 +100,7 @@ It is included with the application a script for automating the process of downl
 To automatically download and synchronize the Empatica data make sure you have installed Python >= 3.9 and all the required dependencies, then run the script:
 
 ```
-python prepare_data.py
+python download_empatica_data.py
 ```
 
 Then follow the instructions on screen.
