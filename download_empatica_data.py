@@ -69,7 +69,6 @@ if len(participants) == 0:
     print("No recorded data found. Please record some data with the main app, then run this script to download the Empatica data associated with the recordings.")
     quit()
 
-from backend.video.process_video import process_video
 from backend.empatica.sync_empatica_data import sync_empatica_data
 from backend.empatica.download_empatica_data import download_empatica_data
 from backend.empatica.avro_to_csv import convert_empatica_data_to_csv
@@ -79,7 +78,8 @@ from backend.empatica.rr import estimate_rr
 print("Found participants:", participants)
 
 while True:
-    ans = input("Start data download and synchronization? [yes/no] ").lower()
+    print("This script automatically downloads physiological data from the Empatica servers and synchronizes it with the recorded sessions.")
+    ans = input("Start data download and synchronization for all participants? [yes/no] ").lower()
     
     if ans == 'yes' or ans == 'y':
         print("Starting..")
@@ -122,8 +122,6 @@ while True:
             with open(os.path.join(participant_dir, "fs.json"), 'r') as f:
                 fs = json.load(f)      
             estimate_rr(participant_dir, fs=int(fs["bvp"]), save_to_file=True, delete_bvp_file_after=False)
-            print("\tExtracting AU, landmarks and REF from video...")
-            process_video(participant_dir)
             
         print("\nAll available data has been downloaded synchronized and is ready for analysis.")
                 
