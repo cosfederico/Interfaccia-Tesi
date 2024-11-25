@@ -93,7 +93,7 @@ The videos can be in `.mp4` or `.avi` format. You can technically put more than 
 
 ## Empatica 
 
-The software is designed to be used in parallel with an Empatica EmbracePlus watch worn on the user wrist, to monitor non-invasely values like Heart Rate (HR), Respiratory Rate (RR) and ElectroDermal Activity (EDA). If you wish to use Empatica to accompany the data capture process, please make sure to setup the watch and start capturing data with Empatica **before** running the application.
+The software is designed to be used in parallel with an Empatica EmbracePlus watch worn on the user wrist, to monitor non-invasely values like Heart Rate (HR) and ElectroDermal Activity (EDA). If you wish to use Empatica to accompany the data capture process, please make sure to setup the watch and start capturing data with Empatica **before** running the application.
 
 It is included with the application a script for automating the process of downloading the recorded data from Empatica after the session and synchronizing it with the video capture.
 
@@ -250,13 +250,11 @@ For the data analyisis:
 - numpy
 - boto3
 - avro
-- PyWavelets
-- scipy
 - py-feat
 - jsonschema
 
 ```
-pip install PyQt5 opencv-python pandas numpy boto3 avro PyWavelets scipy py-feat jsonschema mss
+pip install PyQt5 opencv-python pandas numpy boto3 avro py-feat jsonschema mss
 ```
 
 Or you can also simply use the `requirements.txt` file:
