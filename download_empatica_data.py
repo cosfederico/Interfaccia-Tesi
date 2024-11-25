@@ -1,7 +1,6 @@
 import os
 import sys
 import argparse
-import json
 
 parser = argparse.ArgumentParser(
                     formatter_class=argparse.RawTextHelpFormatter,
@@ -77,7 +76,6 @@ from backend.empatica.sync_empatica_data import sync_empatica_data
 from backend.empatica.download_empatica_data import download_empatica_data
 from backend.empatica.avro_to_csv import convert_empatica_data_to_csv
 from backend.empatica.hr import estimate_hr
-from backend.empatica.rr import estimate_rr
 
 print("Found participants:", participants)
 
@@ -123,10 +121,6 @@ while True:
             sync_empatica_data(participant_dir)
             print("\tExtracting Heart Rate (HR)...")
             estimate_hr(participant_dir, save_to_file=True, delete_peaks_file_after=True)
-            print("\tExtracting Respiratory Rate (RR)...")
-            with open(os.path.join(participant_dir, "fs.json"), 'r') as f:
-                fs = json.load(f)      
-            estimate_rr(participant_dir, fs=int(fs["bvp"]), save_to_file=True, delete_bvp_file_after=False)
             
         print("\nAll available data has been downloaded synchronized and is ready for analysis.")
                 

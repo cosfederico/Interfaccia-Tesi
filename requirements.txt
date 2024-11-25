@@ -4,8 +4,6 @@ pandas
 numpy
 boto3
 avro
-PyWavelets
-scipy
 py-feat
 jsonschema
 mss
