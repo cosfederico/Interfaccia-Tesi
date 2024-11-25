@@ -28,7 +28,7 @@ if len(participants) == 0:
 print("Found participants:", participants)
 
 while True:
-    print("The following script converts all recorded eye-tracker data (.edf files) in .CSV raw data.")
+    print("The following script converts all recorded eye-tracker data (.edf files) in .CSV raw data. This operation is already performed by the application, but you can use this script if you want to do it manually, if something went wrong in the main app.")
     ans = input("Start conversion for all participants? [yes/no] ").lower()
     
     if ans == 'yes' or ans == 'y':
@@ -74,7 +74,7 @@ while True:
             with open(os.path.join(participant_dir, 'eye.asc'), 'r') as f:
                 for line in f.readlines():
                     fields = line.split("  ")
-                    ts.append(fields[0].strip())
+                    ts.append(int(fields[0].strip()) + start_ts)
                     x.append(fields[1].strip())
                     y.append(fields[2].strip())
                     pupil.append(fields[3].strip())
