@@ -8,8 +8,8 @@ def sync_empatica_data(subject_dir):
     peaks = pd.read_csv(os.path.join(subject_dir, 'systolic_peaks.csv'), sep=',')
     eda = pd.read_csv(os.path.join(subject_dir, 'eda.csv'), sep=',')
     
-    video_start_ts = data['session_start_timestamp'].iloc[0]
-    video_end_ts = data['session_end_timestamp'].iloc[0]
+    video_start_ts = data['Session Start Timestamp'].iloc[0]
+    video_end_ts = data['Session End Timestamp'].iloc[0]
     
     bvp = bvp[(bvp.unix_timestamp >= video_start_ts * 10**6) & (bvp.unix_timestamp <= video_end_ts * 10**6)]
     peaks = peaks[(peaks.systolic_peak_timestamp >= video_start_ts * 10**9) & (peaks.systolic_peak_timestamp <= video_end_ts * 10**9)]

@@ -96,8 +96,8 @@ while True:
             print("\nSynchronizing data for participant", participant)
 
             participant_data = pd.read_csv(os.path.join(participant_dir, 'data.csv'), sep=';', encoding="latin1") # per le è/é accentate
-            start_ts = participant_data['session_start_timestamp'].iloc[0]
-            date = participant_data['date'].iloc[0]
+            start_ts = participant_data['Session Start Timestamp'].iloc[0]
+            date = participant_data['Date'].iloc[0]
 
             print("\tDownloading Empatica Data...")
             try:
@@ -110,7 +110,7 @@ while True:
                                                         study_id=STUDY_ID)
             except ValueError as e:
                 print("\t", e, "- skipping")
-                open(os.path.join(participant_dir, "NO-DATA-FOUND-FOR-THIS-PARTICIPANT"), 'a').close()
+                open(os.path.join(participant_dir, "NO-EMPATICA-DATA-FOUND-FOR-THIS-PARTICIPANT"), 'a').close()
                 continue
             except Exception as e:
                 print("\n", e)
