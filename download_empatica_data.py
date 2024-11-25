@@ -1,4 +1,5 @@
 import os
+import sys
 import argparse
 import json
 
@@ -30,6 +31,10 @@ https://manuals.empatica.com/ehmp/careportal/data_access/v2.7e/en.pdf
 
 parser.parse_args()
 
+def quit():
+    input("Press ENTER to quit...")
+    sys.exit()
+
 HOME = os.getenv('HOME')
 if not HOME:
     HOME = os.getenv('USERPROFILE')
@@ -44,14 +49,13 @@ if not os.path.isdir(os.path.join(HOME, '.aws')) or not os.path.isfile(os.path.j
     print("\n\tpython", os.path.split(sys.argv[0])[1], "-h\n")
     quit()
 
-print("loading resources...")
-
-import pandas as pd
-
 from backend.config import load_config
 
-config = load_config()
-print("successfully loaded config")
+try:
+    config = load_config()
+except Exception as e:
+    print("Impossibile caricare il file di config: ", e)
+    quit()
 
 DATA_FOLDER = config['app']['DATA_FOLDER'] 
 BUCKET_NAME = config['empatica']['BUCKET_NAME']
@@ -83,6 +87,7 @@ while True:
     
     if ans == 'yes' or ans == 'y':
         print("Starting..")
+        import pandas as pd
                   
         for participant in participants:
             
@@ -129,4 +134,4 @@ while True:
     
     elif ans == 'no' or ans == 'n':
         print("No action taken.")
-        break
+        quit()

@@ -1,10 +1,16 @@
-print("loading resources...")
-
 from backend.config import load_config
 import os
+import sys
 
-config = load_config()
-print("successfully loaded config")
+try:
+    config = load_config()
+except Exception as e:
+    print("Impossibile caricare il file di config: ", e)
+    quit()
+
+def quit():
+    input("Press ENTER to quit...")
+    sys.exit()
 
 DATA_FOLDER = config['app']['DATA_FOLDER'] 
 
@@ -39,4 +45,4 @@ while True:
 
     elif ans == 'no' or ans == 'n':
         print("No action taken.")
-        break
+        quit()
