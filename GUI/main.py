@@ -86,7 +86,7 @@ class MainWindow(QMainWindow):
         try:
             self.videosManager = VideosManager(videos_folder=self.VIDEO_FOLDER)
         except Exception as e:
-            self.add_page(TextPage(self, "Errore nel caricamento video", str(e), "Esci", button_slot=self.close))
+            self.add_page(TextPage(self, "Benvenuto!", "Carica dei video per iniziare. Il percorso selezionato per il caricamento dei video è:\"" + self.VIDEO_FOLDER + "\".\nPuoi cambiare questo percorso nel file di configurazione config.json.", "Esci", button_slot=self.close))
             return
                 
         if self.cap is None:
