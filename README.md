@@ -245,6 +245,7 @@ For the time being the dependencies are, for the GUI:
 - pandas
 - jsonschema
 - mss
+- pylink
 
 For the data analyisis:
 - numpy
@@ -254,7 +255,7 @@ For the data analyisis:
 - jsonschema
 
 ```
-pip install PyQt5 opencv-python pandas numpy boto3 avro py-feat jsonschema mss
+pip install PyQt5 opencv-python pandas numpy boto3 avro py-feat jsonschema mss pylink
 ```
 
 Or you can also simply use the `requirements.txt` file:
