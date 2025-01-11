@@ -32,6 +32,7 @@ class MainWindow(QMainWindow):
         super().__init__()
     
         self.app = app
+        self.config_file = config_file
         self.webcamRecorder = None
         self.screenRecorder = None
         self.videosManager = None
@@ -43,7 +44,7 @@ class MainWindow(QMainWindow):
         self.webcam_selection_window = WebcamSelectionWindow(app)
         self.webcam_selection_window.capSelected.connect(self.show_webcam_preview_window)
 
-        config = load_config(config_file)
+        config = load_config(self.config_file)
         
         self.VIDEO_FOLDER = config['app']['VIDEO_FOLDER']
         self.DATA_FOLDER = config['app']['DATA_FOLDER']
@@ -86,7 +87,7 @@ class MainWindow(QMainWindow):
         try:
             self.videosManager = VideosManager(videos_folder=self.VIDEO_FOLDER)
         except Exception as e:
-            self.add_page(TextPage(self, "Benvenuto!", str(e) + "\nPuoi cambiare questo percorso nel file di configurazione config.json.", "Esci", button_slot=self.close))
+            self.add_page(TextPage(self, "Benvenuto!", str(e) + "\nPuoi cambiare questo percorso nel file di configurazione " + self.config_file + ".", "Esci", button_slot=self.close))
             return
                 
         if self.cap is None:
