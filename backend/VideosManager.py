@@ -8,8 +8,8 @@ class VideosManager:
         self.videos_folder = videos_folder
         
         if not os.path.exists(self.videos_folder):
-            raise NotADirectoryError("Cartella dei video specificata inesistente.\n\nCartella specificata: " + self.videos_folder)
-        
+            os.makedirs(self.videos_folder)
+
         self.contents = next(os.walk(self.videos_folder))[1]
         
         if len(self.contents) == 0:
