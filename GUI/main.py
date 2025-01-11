@@ -75,7 +75,6 @@ class MainWindow(QMainWindow):
     def setupUI(self):
         self.setWindowTitle("Interfaccia")
         self.setWindowIcon(QIcon(os.path.join('GUI', 'icons', 'webcam.png')))
-        self.resize(QApplication.desktop().availableGeometry(0).size())
         
         self.setStyleSheet("background-color: white;") 
         
