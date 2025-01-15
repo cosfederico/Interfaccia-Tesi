@@ -223,6 +223,11 @@ class WebcamSelectionWindow(QDialog):
             if box != self.selected_box:
                 box.release_resources()
         
+        try:
+            self.selected_box.timer.stop()
+        except:
+            pass
+
         self.capSelected.emit(self.selected_box.cap, self.selected_box.id)
         self.close()
         
