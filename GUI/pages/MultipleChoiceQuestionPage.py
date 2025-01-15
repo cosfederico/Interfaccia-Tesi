@@ -38,6 +38,7 @@ class MultipleChoiceQuestionPage(QWidget):
         self.question.setStyleSheet("font: 20pt \"Rubik light\";\n"
                 "color: rgb(53, 53, 53);\n"
                 "background-color: rgba(255, 255, 255, 0);")
+        self.question.setWordWrap(True)
         self.question.setText(self.question_str)
         self.verticalLayout.addWidget(self.question)
 
