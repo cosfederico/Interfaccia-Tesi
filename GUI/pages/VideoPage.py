@@ -14,9 +14,7 @@ class VideoPage(QWidget):
         self.video_path = video_path
         self.participant_id = participant_id
         
-        self.video = QVideoWidget(self)
-        self.video.resize(self.parent_window.frameSize())
-        
+        self.video = QVideoWidget(self)        
         self.player = QMediaPlayer()
         self.player.setVideoOutput(self.video)
         
@@ -42,6 +40,7 @@ class VideoPage(QWidget):
             self.videoEnded.emit(self.participant_id)
 
     def showEvent(self, QShowEvent):
+        self.video.resize(self.parent_window.frameSize())
         self.player.play()
         self.video.show()
         self.videoStarted.emit()
