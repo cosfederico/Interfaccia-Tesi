@@ -82,8 +82,6 @@ class DataCollectionPage(QWidget):
         self.gender.setStyleSheet("font: 14pt \"Rubik Light\";\n"
 "selection-background-color: rgb(0, 64, 130);")
         self.gender.setObjectName("gender")
-        self.gender.addItem("")
-        self.gender.addItem("")
         self.horizontalLayout_2.addWidget(self.gender)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
         self.horizontalLayout_5 = QHBoxLayout()
@@ -102,25 +100,18 @@ class DataCollectionPage(QWidget):
         self.verticalLayout.addLayout(self.horizontalLayout_5)
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        self.english_level_label = QLabel(self.groupBox)
-        self.english_level_label.setStyleSheet("font: 14pt \"Rubik Light\";\n"
+        self.education_label = QLabel(self.groupBox)
+        self.education_label.setStyleSheet("font: 14pt \"Rubik Light\";\n"
 "background-color: rgba(255, 255, 255, 0);")
-        self.english_level_label.setObjectName("english_level_label")
-        self.horizontalLayout_3.addWidget(self.english_level_label)
-        self.english_level = QComboBox(self.groupBox)
-        self.english_level.setMaximumSize(QSize(250, 16777215))
-        self.english_level.setStyleSheet("font: 14pt \"Rubik Light\";\n"
+        self.education_label.setObjectName("education_label")
+        self.horizontalLayout_3.addWidget(self.education_label)
+        self.education = QComboBox(self.groupBox)
+        self.education.setMaximumSize(QSize(250, 16777215))
+        self.education.setStyleSheet("font: 14pt \"Rubik Light\";\n"
 "selection-background-color: rgb(0, 64, 130);\n"
 "selection-color: rgb(255, 255, 255);")
-        self.english_level.setObjectName("english_level")
-        self.english_level.addItem("")
-        self.english_level.addItem("")
-        self.english_level.addItem("")
-        self.english_level.addItem("")
-        self.english_level.addItem("")
-        self.english_level.addItem("")
-        self.english_level.addItem("")
-        self.horizontalLayout_3.addWidget(self.english_level)
+        self.education.setObjectName("education")
+        self.horizontalLayout_3.addWidget(self.education)
         self.verticalLayout.addLayout(self.horizontalLayout_3)
         self.verticalLayout_2.addWidget(self.groupBox, 0, Qt.AlignHCenter)
         spacerItem1 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
@@ -145,26 +136,27 @@ class DataCollectionPage(QWidget):
         self.title.setText("Inserisci i tuoi dati")
         self.age_label.setText("Età")
         self.gender_label.setText("Genere")
-        self.gender.setItemText(0, "M")
-        self.gender.setItemText(1, "F")
+        self.gender.addItem("M")
+        self.gender.addItem("F")
         self.nationality_label.setText("Nazionalità")
-        self.english_level_label.setText("Livello di Inglese")
-        self.english_level.setItemText(0, "A1")
-        self.english_level.setItemText(1, "A2")
-        self.english_level.setItemText(2, "B1")
-        self.english_level.setItemText(3, "B2")
-        self.english_level.setItemText(4, "C1")
-        self.english_level.setItemText(5, "C2")
-        self.english_level.setItemText(6, "Madrelingua")
+        self.education_label.setText("Titolo di studio")
+        self.education.addItem("Nessuno")
+        self.education.addItem("Licenza elementare")
+        self.education.addItem("Licenza media")
+        self.education.addItem("Diploma di scuola superiore")
+        self.education.addItem("Laurea triennale")
+        self.education.addItem("Laurea magistrale o ciclo unico")
+        self.education.addItem("Dottorato di ricerca")
+        self.education.addItem("Altro titolo")
         self.done_button.setText( "Avanti")
 
     def done_button_clicked(self):
         age = self.age.text()
         gender = self.gender.currentText()
-        english_level = self.english_level.currentText()
+        education = self.education.currentText()
         nationality = self.nationality.currentText()
                             
-        if (len(age)==0 or not nationality or not gender or not english_level):
+        if (len(age)==0 or not nationality or not gender or not education):
             self.error_text.setText("Per favore compila tutti i campi.")
             return
         
@@ -178,7 +170,7 @@ class DataCollectionPage(QWidget):
             self.error_text.setText("Inserire un'età valida.")
         else:
             if (age > 18 and age < 100):
-                self.parent_window.participant.set_data(age, gender, nationality, english_level)
+                self.parent_window.participant.set_data(age, gender, nationality, education)
                 self.parent_window.next_page()
             else:
                 self.error_text.setText("Inserire un'età valida.")

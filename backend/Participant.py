@@ -13,7 +13,7 @@ class Participant:
         self.age = None
         self.gender = None
         self.nationality = None
-        self.english_level = None
+        self.education = None
         
         self.session_start_timestamp = None
         self.session_end_timestamp = None
@@ -27,11 +27,11 @@ class Participant:
     def participant_dir(self):
         return os.path.join(self.data_dir, str(self.id))
         
-    def set_data(self, age:int, gender:str, nationality:str, english_level:str):
+    def set_data(self, age:int, gender:str, nationality:str, education:str):
         self.age=age
         self.gender=gender
         self.nationality=nationality
-        self.english_level=english_level
+        self.education=education
         
     def set_session_start_timestamp(self):
         self.session_start_timestamp =self.timestamp()
@@ -81,8 +81,8 @@ class Participant:
             
             date = datetime.today().strftime('%Y-%m-%d')
             
-            fields = ["Id", "Age", "Gender", "Nationality", "English Level", "Date", "Session Start Timestamp", "Session End Timestamp"]
-            row = [self.id, self.age, self.gender, self.nationality, self.english_level, date, self.session_start_timestamp, self.session_end_timestamp]
+            fields = ["Id", "Age", "Gender", "Nationality", "Education", "Date", "Session Start Timestamp", "Session End Timestamp"]
+            row = [self.id, self.age, self.gender, self.nationality, self.education, date, self.session_start_timestamp, self.session_end_timestamp]
                 
             for question, answer in zip(self.questions, self.answers):
                 fields.append(question)
