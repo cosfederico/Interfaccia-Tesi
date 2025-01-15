@@ -150,6 +150,9 @@ class DataCollectionPage(QWidget):
         self.education.addItem("Altro titolo")
         self.done_button.setText( "Avanti")
 
+        for i in range(self.education.count()):
+                self.education.setItemData(i, self.education.itemText(i), Qt.ToolTipRole)
+
     def done_button_clicked(self):
         age = self.age.text()
         gender = self.gender.currentText()
