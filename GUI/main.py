@@ -55,6 +55,7 @@ class MainWindow(QMainWindow):
         self.QUESTIONS_BEFORE = config['app']['QUESTIONS']['BEFORE']
         self.QUESTIONS_AFTER = config['app']['QUESTIONS']['AFTER']
             
+        self.temp_dir = tempfile.mkdtemp()
         self.setup_eye_tracker()
              
     def launch(self):
@@ -93,7 +94,6 @@ class MainWindow(QMainWindow):
             self.add_page(TextPage(self, "Impossibile trovare la webcam", "Qualcosa è andato storto nel caricamento della webcam, assicurarsi non sia in uso da un altro programma e riavviare il programma.", "Esci", self.close))
             return
         
-        self.temp_dir = tempfile.mkdtemp()
         try:
             self.webcamRecorder = WebcamRecorder(cap_id=self.cap_id, cap=self.cap, output_file=os.path.join(self.temp_dir, "webcam.mp4"))
         except Exception as e:
