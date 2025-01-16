@@ -66,14 +66,14 @@ while True:
             print("\tExtracting gaze data...")
             subprocess.run(["edf2asc", "-s", edf_file], capture_output=True)
             
-            print("Converting gaze data to CSV...")
+            print("\tConverting gaze data to CSV...")
             ts = []
             x = []
             y = []
             pupil=[]
             with open(os.path.join(participant_dir, 'eye.asc'), 'r') as f:
                 for line in f.readlines():
-                    fields = line.split("  ")
+                    fields = line.split("\t")
                     ts.append(int(fields[0].strip()) + start_ts)
                     x.append(fields[1].strip())
                     y.append(fields[2].strip())
