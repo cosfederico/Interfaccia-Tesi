@@ -54,8 +54,8 @@ while True:
             
             data = pd.read_csv(os.path.join(participant_dir, 'data.csv'), sep=';')
             try:
-                tracker_start_relative_ts = data["EyeTracker_Start_Tracker_Time"]
-                tracker_start_absolute_ts = data["EyeTracker_Start_Tracker_Time_TS"]
+                tracker_start_relative_ts = data["EyeTracker_Start_Tracker_Time"][0]
+                tracker_start_absolute_ts = data["EyeTracker_Start_Tracker_Time_TS"][0]
             except:
                 print("\tNo eye-tracker synchronization data found for the participant: ", participant, " - skipping")
             
