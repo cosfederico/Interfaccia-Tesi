@@ -14,7 +14,7 @@ class EyeTracker:
     LEFT_EYE = 0
     BINOCULAR = 2
     
-    def __init__(self, save_folder, edf_file_name='eye_tracking.edf'):
+    def __init__(self, save_folder, edf_file_name='eye.edf'):
         
         self.save_folder = save_folder
         self.edf_file_name = edf_file_name
