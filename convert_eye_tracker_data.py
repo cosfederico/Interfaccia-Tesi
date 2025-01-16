@@ -45,23 +45,19 @@ while True:
             edf_file = os.path.join(participant_dir, edf_file_name)
             asc_file = os.path.join(participant_dir, "eye.asc")
             if not os.path.exists(edf_file):
-                print("\tNo eye-tracker data found for the participant:", participant,"- skipping")
+                print("\tNo eye-tracker data found for the participant: ", participant," - skipping")
                 continue
             
             print("\tSynchronizing data...")
             if os.path.exists(asc_file):
                 os.remove(asc_file)
-            subprocess.run(["edf2asc", "-neye", edf_file], capture_output=True)
-            start_ts = None
-            with open(os.path.join(participant_dir, 'eye.asc'), 'r') as f:
-                for line in f.readlines():
-                    if "START_TS" in line:
-                        start_ts = int(line.split('\t')[2])
-            os.remove(asc_file)
-
-            if start_ts is None:
-                print("\tCould not figure start of eye-tracker recording - skipping")
-                continue
+            
+            data = pd.read_csv(os.path.join(participant_dir, 'data.csv'), sep=';')
+            try:
+                tracker_start_relative_ts = data["EyeTracker_Start_Tracker_Time"]
+                tracker_start_absolute_ts = data["EyeTracker_Start_Tracker_Time_TS"]
+            except:
+                print("\tNo eye-tracker synchronization data found for the participant: ", participant, " - skipping")
             
             print("\tExtracting gaze data...")
             subprocess.run(["edf2asc", "-s", edf_file], capture_output=True)
@@ -74,7 +70,10 @@ while True:
             with open(os.path.join(participant_dir, 'eye.asc'), 'r') as f:
                 for line in f.readlines():
                     fields = line.split("\t")
-                    ts.append(int(fields[0].strip()) + start_ts)
+                    normalized_ts = int(fields[0].strip()) - tracker_start_relative_ts
+                    if normalized_ts < 0:
+                        continue
+                    ts.append(normalized_ts + tracker_start_absolute_ts)
                     x.append(fields[1].strip())
                     y.append(fields[2].strip())
                     pupil.append(fields[3].strip())
@@ -84,7 +83,7 @@ while True:
             data.to_csv(os.path.join(participant_dir, "eye.csv"), index=False)
             os.remove(asc_file)
         
-        print("\nAll facial features have been successfully extracted.")
+        print("\nAll eye-tracking data has been converted and synchronized.")
 
         break
 

@@ -28,8 +28,6 @@ class EyeTracker:
             print(error)
             raise RuntimeError('Error connecting to the eye-tracker Host PC. Is the ethernet cable connected? Is the local IP Address setup correctly (100.1.1.2 / 255.255.255.0)')
         
-        self.ts_start = int(datetime.datetime.now(datetime.timezone.utc).timestamp() * 1e3)
-        
         disp = pylink.getDisplayInformation()
         self.SCN_WIDTH = disp.width
         self.SCN_HEIGHT = disp.height
@@ -143,9 +141,6 @@ class EyeTracker:
 
         # INSERT CODE TO DRAW INITIAL DISPLAY HERE
 
-        # log a message to mark the time at which the initial display came on
-        self.el_tracker.sendMessage("START_TS\t" + str(self.ts_start))
-
         # wait for link data to arrive
         try:
             self.el_tracker.waitForBlockStart(100, 1, 1)
@@ -212,38 +207,10 @@ class EyeTracker:
         self.el_tracker.close()
         # Close the experiment graphics
         pylink.closeGraphics()
-        self.convert_data_to_csv()
         
     def log(self, message):
         self.el_tracker.sendMessage(message)
-        
-    def convert_data_to_csv(self):
-        edf_file = os.path.join(self.save_folder, self.edf_file_name)
-        asc_file = os.path.join(self.save_folder, "eye.asc")
-        
-        if not os.path.exists(edf_file):
-            return       
-        if os.path.exists(asc_file):
-            os.remove(asc_file)
-        
-        try:
-            subprocess.run(["edf2asc", "-s", edf_file], capture_output=True)
-        except FileNotFoundError:
-            print("[WARNING] Was unable to run EyeLink command \"edf2asc\" necessary to open and convert eye-tracking data. Did you install the EyeLink Developer Tools correctly?")
-            return
-        
-        ts = []
-        x = []
-        y = []
-        pupil=[]
-        with open(asc_file, 'r') as f:
-            for line in f.readlines():
-                fields = line.split("\t")
-                ts.append(int(fields[0].strip()) + self.ts_start)
-                x.append(fields[1].strip())
-                y.append(fields[2].strip())
-                pupil.append(fields[3].strip())
-                
-        data = pd.DataFrame({"timestamp":ts,"x":x, "y":y, "pupil":pupil})
-        data.to_csv("eye.csv", index=False)
-        os.remove(asc_file)
+
+    def time(self):
+        el_active = pylink.getEYELINK()
+        return el_active.trackerTime()

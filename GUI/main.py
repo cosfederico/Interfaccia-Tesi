@@ -196,6 +196,8 @@ class MainWindow(QMainWindow):
             self.screenRecorder.start()
         if self.participant is not None:
             self.participant.set_session_start_timestamp()
+            if self.eyeTracker is not None:
+                self.participant.add_answer("EyeTracker_Start_Tracker_Time", self.eyeTracker.time())
             
     def stop_capture(self):
         if self.webcamRecorder is not None:
