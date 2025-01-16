@@ -7,4 +7,4 @@ avro
 py-feat
 jsonschema
 mss
-pylink
+sr-research-pylink
