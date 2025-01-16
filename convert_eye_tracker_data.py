@@ -81,7 +81,7 @@ while True:
                     
             print("\tSaving results...")
             data = pd.DataFrame({"timestamp":ts,"x":x, "y":y, "pupil":pupil})
-            data.to_csv("eye.csv", index=False)
+            data.to_csv(os.path.join(participant_dir, "eye.csv"), index=False)
             os.remove(asc_file)
         
         print("\nAll facial features have been successfully extracted.")
