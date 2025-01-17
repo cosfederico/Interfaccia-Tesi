@@ -168,9 +168,12 @@ class MainWindow(QMainWindow):
 
         VES_intro = 'Indica quanto ti identifichi nelle seguenti affermazioni, in una scala da 1 a 7, dove 1 indica "Per niente", e 7 indica "Completamente".'
     
-        for participant_id in [self.participant.id, ~self.participant.id]:
+        for i, participant_id in enumerate([self.participant.id, ~self.participant.id]):
 
-            self.add_page(TextPage(self, "È tutto pronto!", "Quando sei pronto, premi Avanti per iniziare. Il video inizierà a seguito di un breve conto alla rovescia.", "Avanti"))
+            if i == 0:
+                self.add_page(TextPage(self, "Video " + str(i+1), "Quando sei pronto, premi Avanti per iniziare. Il video inizierà a seguito di un breve conto alla rovescia.", "Avanti"))
+            else:
+                self.add_page(TextPage(self, "Video " + str(i+1), "Quando sei pronto, premi Avanti per proseguire. Il prossima video inizierà a seguito di un breve conto alla rovescia.", "Avanti"))
 
             self.add_page(CountDownPage(self, seconds=3))
             video_page = self.add_page(VideoPage(self, self.videosManager.getVideoPath(participant_id), participant_id))
