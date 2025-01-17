@@ -177,8 +177,16 @@ class MainWindow(QMainWindow):
             video_page.videoStarted.connect(self.video_started)
             video_page.videoEnded.connect(self.video_ended)
         
-            self.add_page(TextPage(self, "Question Time!", "Grazie mille per la visione. Ora ti invitiamo a rispondere a un paio di domande di comprensione sui contenuti appena visualizzati.\nMi raccomando, scegli la risposta corretta!\nQuando sei pronto, premi Inizia per iniziare il questionario.", "Inizia"))            
+            self.add_page(TextPage(self, "Question Time!", "Grazie mille per la visione. Ora ti invitiamo a rispondere a un paio di domande di valutazione sul video che hai appena visto.", "Inizia"))
             
+            panas_page_after = self.add_page(PANAS(self, emotions=self.PANAS_EMOTIONS, scale=self.PANAS_SCALE, positive=self.PANAS_POSITIVE, negative=self.PANAS_NEGATIVE, flag="DOPO"))
+            panas_page_after.nextClicked.connect(self.participant.add_answers)
+        
+            for i, question in enumerate(self.QUESTIONS_AFTER):
+                self.add_page(QuestionScalePage(self, "Domanda di valutazione " + str(i+1), question))
+  
+            self.add_page(TextPage(self, "Bene!", "Ora passiamo ad alcune domande di comprensione a risposta multipla sulla lezione che hai appena visto.\nMi raccomando, scegli la risposta corretta!", "Inizia"))
+
             questions = self.videosManager.getVideoQuestions(participant_id)    
             for i, question in enumerate(questions):
                 try:
@@ -190,17 +198,9 @@ class MainWindow(QMainWindow):
                 question_page = self.add_page(MultipleChoiceQuestionPage(self, "Domanda di comprensione " + str(i+1), question, right_answer, wrong_answers))
                 question_page.nextClicked.connect(self.participant.add_answers)
 
-            self.add_page(TextPage(self, "Bene!", "Ora passiamo ad alcune domande di valutazione della tua esperienza emotiva durante la visione e del video che hai appena visto.", "Inizia"))
-
-            panas_page_after = self.add_page(PANAS(self, emotions=self.PANAS_EMOTIONS, scale=self.PANAS_SCALE, positive=self.PANAS_POSITIVE, negative=self.PANAS_NEGATIVE, flag="DOPO"))
-            panas_page_after.nextClicked.connect(self.participant.add_answers)
-        
-            for i, question in enumerate(self.QUESTIONS_AFTER):
-                self.add_page(QuestionScalePage(self, "Domanda di valutazione " + str(i+1), question))
-  
             self.add_page(QuestionScalePage(self, "Domanda di familiarità", "Quanto eri già familiare o a conoscenza dei contenuti mostrati nel video?"))
 
-            self.add_page(TextPage(self, "Grazie mille!", "Per concludere con questo video, compila un questionario sulla valutazione dell'engagement (Video Engagement Scale, o VES).\n" + VES_intro, "Avanti"))
+            self.add_page(TextPage(self, "Ben fatto!", "Per concludere con questo video, compila un questionario sulla valutazione dell'engagement (Video Engagement Scale, o VES).\n" + VES_intro, "Avanti"))
 
             for item in VES:
                 self.add_page(QuestionScalePage(self, "VES", item, scale=[str(i+1) for i in range(7)]))
