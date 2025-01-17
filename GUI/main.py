@@ -147,7 +147,27 @@ class MainWindow(QMainWindow):
         
         for question in self.QUESTIONS_BEFORE:
             self.add_page(QuestionScalePage(self, "Questionario Preparatorio", question))
-                
+
+        VES = [
+            "Durante la visione ero pienamente concentrato sul video.",
+            "Durante la visione era come se fossi presente solo a ciò che il video presentava.",
+            "Quando stavo vedendo il video, i miei pensieri erano esclusivamente sul video.",
+            "Dopo che il video si è concluso, ho avuto la sensazione di essere tornato nel 'mondo reale'.",
+            "Dopo un po' di tempo che continuavo a vedere il video, mi è sembrato di diventare una cosa sola con la persona presente nel video.",
+            "Mi sono immedesimato nella persona che parlava nel video.",
+            "I contenuti del video sono stati coinvolgenti.",
+            "Quando stavo vedendo il video, nella mia mente seguivo solo i suoi contenuti.",
+            "Durante la visione del video, ho provato le stesse emozioni che provava la persona presente nel video.",
+            "Ho trovato il video ingaggiante.",
+            "Ho trovato interessante la persona presente nel video.",
+            "Durante la visione del video, ero poco attento a cosa ci fosse o a cosa accadesse attorno a me.",
+            "Ho avuto la sensazione pensare alle stesse cose che la persona presente nel video diceva.",
+            "Nella mia immaginazione, era come se io fossi la persona che parlava nel video.",
+            "Grazie al video, mi sono sentito soddisfatto."
+        ]
+
+        VES_intro = 'Indica quanto ti identifichi nelle seguenti affermazioni, in una scala da 1 a 7, dove 1 indica "Per niente", e 7 indica "Completamente".'
+    
         for participant_id in [self.participant.id, ~self.participant.id]:
 
             self.add_page(TextPage(self, "È tutto pronto!", "Quando sei pronto, premi Avanti per iniziare. Il video inizierà a seguito di un breve conto alla rovescia.", "Avanti"))
@@ -157,15 +177,7 @@ class MainWindow(QMainWindow):
             video_page.videoStarted.connect(self.video_started)
             video_page.videoEnded.connect(self.video_ended)
         
-            self.add_page(TextPage(self, "Question Time!", "Quando sei pronto, premi Inizia per iniziare il questionario.", "Inizia"))
-                
-            panas_page_after = self.add_page(PANAS(self, emotions=self.PANAS_EMOTIONS, scale=self.PANAS_SCALE, positive=self.PANAS_POSITIVE, negative=self.PANAS_NEGATIVE, flag="DOPO"))
-            panas_page_after.nextClicked.connect(self.participant.add_answers)
-        
-            for i, question in enumerate(self.QUESTIONS_AFTER):
-                self.add_page(QuestionScalePage(self, "Domanda " + str(i+1), question))
-            
-            self.add_page(TextPage(self, "Bene!", "Ora passiamo ad alcune domande di comprensione a risposta multipla sulla lezione che hai appena visto.\nMi raccomando, scegli la risposta corretta!", "Inizia"))
+            self.add_page(TextPage(self, "Question Time!", "Grazie mille per la visione. Ora ti invitiamo a rispondere a un paio di domande di comprensione sui contenuti appena visualizzati.\nMi raccomando, scegli la risposta corretta!\nQuando sei pronto, premi Inizia per iniziare il questionario.", "Inizia"))            
             
             questions = self.videosManager.getVideoQuestions(participant_id)    
             for i, question in enumerate(questions):
@@ -175,10 +187,25 @@ class MainWindow(QMainWindow):
                 except KeyError as e:
                     print(e)
                     raise KeyError("Invalid questions.json for video " + video_page.video_path)
-                question_page = self.add_page(MultipleChoiceQuestionPage(self, "Domanda di comprensione", question, right_answer, wrong_answers))
+                question_page = self.add_page(MultipleChoiceQuestionPage(self, "Domanda di comprensione " + str(i+1), question, right_answer, wrong_answers))
                 question_page.nextClicked.connect(self.participant.add_answers)
+
+            self.add_page(TextPage(self, "Bene!", "Ora passiamo ad alcune domande di valutazione della tua esperienza emotiva durante la visione e del video che hai appena visto.", "Inizia"))
+
+            panas_page_after = self.add_page(PANAS(self, emotions=self.PANAS_EMOTIONS, scale=self.PANAS_SCALE, positive=self.PANAS_POSITIVE, negative=self.PANAS_NEGATIVE, flag="DOPO"))
+            panas_page_after.nextClicked.connect(self.participant.add_answers)
+        
+            for i, question in enumerate(self.QUESTIONS_AFTER):
+                self.add_page(QuestionScalePage(self, "Domanda di valutazione " + str(i+1), question))
   
-        self.add_page(TextPage(self, "Fine!", "Il nostro esperimento si è concluso, grazie mille per la partecipazione.\nPremi Fine per uscire.", "Fine", button_slot=self.save_and_close))
+            self.add_page(QuestionScalePage(self, "Domanda di familiarità", "Quanto eri già familiare o a conoscenza dei contenuti mostrati nel video?"))
+
+            self.add_page(TextPage(self, "Grazie mille!", "Per concludere con questo video, compila un questionario sulla valutazione dell'engagement (Video Engagement Scale, o VES).\n" + VES_intro, "Avanti"))
+
+            for item in VES:
+                self.add_page(QuestionScalePage(self, "VES", item, scale=[str(i+1) for i in range(7)]))
+
+        self.add_page(TextPage(self, "Fin.", "Il nostro esperimento si è concluso, grazie mille per aver partecipato.\nPremi Fine per uscire.", "Fine", button_slot=self.save_and_close))
         
     def add_page(self, page):
         self.stacked_widget.addWidget(page)
