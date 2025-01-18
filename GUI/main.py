@@ -202,6 +202,7 @@ class MainWindow(QMainWindow):
                 question_page.nextClicked.connect(self.participant.add_answers)
 
             self.add_page(QuestionScalePage(self, "Domanda di familiarità", "Quanto eri già familiare o a conoscenza dei contenuti mostrati nel video?"))
+            self.add_page(QuestionScalePage(self, "Domanda di utilità", "Quanto ti è sembrato utile e/o informativo questo contenuto?"))
 
             self.add_page(TextPage(self, "Ben fatto!", "Per concludere con questo video, compila un questionario sulla valutazione dell'engagement (Video Engagement Scale, o VES).\n" + VES_intro, "Avanti"))
 
