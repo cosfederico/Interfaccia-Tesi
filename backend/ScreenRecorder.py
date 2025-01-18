@@ -4,6 +4,7 @@ import cv2
 import numpy as np
 import time
 from PIL import Image
+import subprocess
 
 def capture_frames(queue:Queue, fps:int, resolution:tuple, recording_flag):
     with mss.mss() as sct:
@@ -30,21 +31,40 @@ def screenshot_to_frame(screenshot):
     return frame
 
 def write_frames(queue:Queue, output_file:str, fps:int, resolution:tuple):
-    out = cv2.VideoWriter(
-        output_file,
-        cv2.VideoWriter_fourcc(*'mp4v'),
-        fps,
-        resolution
-    )
 
+    width, height = resolution
+
+    # FFmpeg command for piping
+    ffmpeg_command = [
+        "ffmpeg",
+        "-y",  # Overwrite output file if it exists
+        "-f", "rawvideo",  # Input format is raw video
+        "-vcodec", "rawvideo",  # Codec is raw video
+        "-pix_fmt", "bgr24",  # Pixel format (OpenCV uses BGR by default)
+        "-s", f"{width}x{height}",  # Frame size
+        "-r", str(fps),  # Frame rate
+        "-i", "-",  # Input comes from stdin (pipe)
+        "-c:v", "h264_nvenc",  # Use NVIDIA NVENC encoder
+        "-preset", "veryfast",  # Set NVENC preset (fast encoding)
+        "-b:v", "5M",  # Set video bitrate to 5 Mbps
+        output_file
+    ]
+
+    # Start FFmpeg process
+    ffmpeg_process = subprocess.Popen(ffmpeg_command, stdin=subprocess.PIPE)
+
+    # Open a video capture device (or replace with your frame source, e.g., mss)
     while True:
         screenshot = queue.get()
         if screenshot is None:  # Sentinel value to terminate
             break
 
-        out.write(screenshot_to_frame(screenshot))
+        # Write the frame to FFmpeg's stdin
+        ffmpeg_process.stdin.write(screenshot_to_frame(screenshot).tobytes())
 
-    out.release()
+    # Clean up
+    ffmpeg_process.stdin.close()
+    ffmpeg_process.wait()  # Wait for FFmpeg to finish encoding
 
 class ScreenRecorder:
     def __init__(self, output_file="screen.mp4", fps=24.0, resolution=(1920, 1080), daemon=False):
