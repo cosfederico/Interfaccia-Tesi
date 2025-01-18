@@ -6,6 +6,28 @@ import time
 from PIL import Image
 import subprocess
 
+def has_nvidia_gpu():
+    try:
+        # Run `nvidia-smi` to check for NVIDIA GPU
+        result = subprocess.run(
+            ["nvidia-smi"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+        )
+        # If the command succeeds, an NVIDIA GPU is available
+        return result.returncode == 0
+    except FileNotFoundError:
+        # `nvidia-smi` not found, assume no NVIDIA GPU
+        return False
+
+def select_encoder():
+    if has_nvidia_gpu():
+        return "h264_nvenc"
+    else:
+        return "mpeg4"
+        
+
 def capture_frames(queue:Queue, fps:int, resolution:tuple, recording_flag):
     with mss.mss() as sct:
         frame_interval = 1.0 / fps
@@ -33,6 +55,7 @@ def screenshot_to_frame(screenshot):
 def write_frames(queue:Queue, output_file:str, fps:int, resolution:tuple):
 
     width, height = resolution
+    encoder = select_encoder()
 
     # FFmpeg command for piping
     ffmpeg_command = [
@@ -44,7 +67,7 @@ def write_frames(queue:Queue, output_file:str, fps:int, resolution:tuple):
         "-s", f"{width}x{height}",  # Frame size
         "-r", str(fps),  # Frame rate
         "-i", "-",  # Input comes from stdin (pipe)
-        "-c:v", "h264_nvenc",  # Use NVIDIA NVENC encoder
+        "-c:v", encoder,  # Use NVIDIA NVENC encoder
         "-preset", "veryfast",  # Set NVENC preset (fast encoding)
         "-b:v", "5M",  # Set video bitrate to 5 Mbps
         output_file
