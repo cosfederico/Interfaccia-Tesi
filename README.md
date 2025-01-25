@@ -4,11 +4,11 @@
 
 A simple wizard-like application to automate the data acquisition and analysis process for my thesis research.
 
-The intent of the research is to analyize the effects on viewers of AI Generated Videos in education. The application shows the viewer two short educational videos, asking them generic experience-evaluation questions, with answers on a scale from 1 to 5, and open questions specific about the topic discussed in the videos.
+The intent of the research is to analyze the effects on viewers of AI Generated Videos in education. The application shows the viewer two short educational videos, asking them generic experience-evaluation questions, with answers on a scale from 1 to 5, and open questions specific about the topic discussed in the videos.
 
 The program will establish what video the user will watch for their first and second video based on the participant's number (ID). Both a real and fake video are always showed, meaning, if the first video is real, the second video will be fake, and viceversa. The videos are also divided into `Male` and `Female`, based on the gender of the speaker featured in the video. If in the first video the speaker was a male, in the second video it will be a female, and viceversa. This is to ensure the *within-subject* experiment design pattern.
 
-The application uses the [PANAS (Positive and Negative Affect Schedule)](https://en.wikipedia.org/wiki/Positive_and_Negative_Affect_Schedule) test to allow users to self-report their positive and negative affect before and after watching each video. 
+The application uses the [PANAS (Positive and Negative Affect Schedule)](https://en.wikipedia.org/wiki/Positive_and_Negative_Affect_Schedule) test to allow users to self-report their positive and negative affect before and after watching each video. In addition, the [Video Engagement Scale (VES)](https://www.researchgate.net/profile/Marij-Hillen/publication/282130705_Assessing_engagement_while_viewing_video_vignettes_validation_of_the_Video_Engagement_Scale_VES/links/61e941ef9a753545e2e4fdbf/Assessing-engagement-while-viewing-video-vignettes-validation-of-the-Video-Engagement-Scale-VES.pdf) questionnaire is administered after each video.
 
 The whole session is recorded via the built-in webcam and data about the experiment is saved to a `.csv` file, like the time of start and end of the session, the answers to each question, what videos were showed, if they were real or fake, male or female, and the timestamps of each event.
 
@@ -150,7 +150,9 @@ For the main application:
 - `"[QUESTIONS"]["PANAS"]["EMOTIONS"]`: list of emotions to build the PANAS self-evaluation questionnaire
 - `"[QUESTIONS"]["PANAS"]["SCALE"]`: verbal frequency scale for the PANAS self-evaluation questionnaire (ie. "from not at all" to "very much")
 - `"[QUESTIONS"]["PANAS"]["POSITIVE"]`: indexes (*starting from 1*) of **positive** emotions in the list of emotions provided
-- `"[QUESTIONS"]["PANAS"]["NEGATIVE"]`:indexes (*starting from 1*) of **negative** emotions in the list of emotions provided
+- `"[QUESTIONS"]["PANAS"]["NEGATIVE"]`: indexes (*starting from 1*) of **negative** emotions in the list of emotions provided
+- `"[QUESTIONS"]["VES"]["INTRO"]`: Introduction to the Video Engagement Scale questionnaire, explaining the goal and scale
+- `"[QUESTIONS"]["VES"]["ITEMS"]`: List of items contained in the Video Engagement Scale questionnaire, on a scale from 1 to 7
 
 For downloading data from Empatica:
 - `"BUCKET_NAME"`: The S3 Data Bucket of your organization provided by Empatica
