@@ -54,6 +54,8 @@ class MainWindow(QMainWindow):
         self.PANAS_NEGATIVE = config['app']['QUESTIONS']['PANAS']['NEGATIVE']
         self.QUESTIONS_BEFORE = config['app']['QUESTIONS']['BEFORE']
         self.QUESTIONS_AFTER = config['app']['QUESTIONS']['AFTER']
+        self.VES_ITEMS = config['app']['QUESTIONS']['VES']['ITEMS']
+        self.VES_INTRO = config['app']['QUESTIONS']['VES']['INTRO']
             
         self.temp_dir = tempfile.mkdtemp()
         self.setup_eye_tracker()
@@ -148,26 +150,6 @@ class MainWindow(QMainWindow):
         for question in self.QUESTIONS_BEFORE:
             self.add_page(QuestionScalePage(self, "Questionario Preparatorio", question))
 
-        VES = [
-            "Durante la visione ero pienamente concentrato sul video.",
-            "Durante la visione era come se fossi presente solo a ciò che il video presentava.",
-            "Quando stavo vedendo il video, i miei pensieri erano esclusivamente sul video.",
-            "Dopo che il video si è concluso, ho avuto la sensazione di essere tornato nel 'mondo reale'.",
-            "Dopo un po' di tempo che continuavo a vedere il video, mi è sembrato di diventare una cosa sola con la persona presente nel video.",
-            "Mi sono immedesimato nella persona che parlava nel video.",
-            "I contenuti del video sono stati coinvolgenti.",
-            "Quando stavo vedendo il video, nella mia mente seguivo solo i suoi contenuti.",
-            "Durante la visione del video, ho provato le stesse emozioni che provava la persona presente nel video.",
-            "Ho trovato il video ingaggiante.",
-            "Ho trovato interessante la persona presente nel video.",
-            "Durante la visione del video, ero poco attento a cosa ci fosse o a cosa accadesse attorno a me.",
-            "Ho avuto la sensazione pensare alle stesse cose che la persona presente nel video diceva.",
-            "Nella mia immaginazione, era come se io fossi la persona che parlava nel video.",
-            "Grazie al video, mi sono sentito soddisfatto."
-        ]
-
-        VES_intro = 'Indica quanto ti identifichi nelle seguenti affermazioni, in una scala da 1 a 7, dove 1 indica "Per niente", e 7 indica "Completamente".'
-    
         for i, participant_id in enumerate([self.participant.id, ~self.participant.id]):
 
             if i == 0:
@@ -204,10 +186,10 @@ class MainWindow(QMainWindow):
             self.add_page(QuestionScalePage(self, "Domanda di familiarità", "Quanto eri già familiare o a conoscenza dei contenuti mostrati nel video?"))
             self.add_page(QuestionScalePage(self, "Domanda di utilità", "Quanto ti è sembrato utile e/o informativo questo contenuto?"))
 
-            self.add_page(TextPage(self, "Ben fatto!", "Per concludere con questo video, compila un questionario sulla valutazione dell'engagement (Video Engagement Scale, o VES).\n" + VES_intro, "Avanti"))
+            self.add_page(TextPage(self, "Ben fatto!", "Per concludere con questo video, compila un questionario sulla valutazione dell'engagement (Video Engagement Scale, o VES).\n" + self.VES_INTRO, "Avanti"))
 
-            for item in VES:
-                self.add_page(QuestionScalePage(self, "Video Engagement Scale (" + str(i+1) + " di " + str(len(VES)) + ")", item, scale=[str(i+1) for i in range(7)]))
+            for i, item in enumerate(self.VES_ITEMS):
+                self.add_page(QuestionScalePage(self, "Video Engagement Scale (" + str(i+1) + " di " + str(len(self.VES_ITEMS)) + ")", item, scale=[str(i+1) for i in range(7)]))
 
         self.add_page(TextPage(self, "Fin.", "Il nostro esperimento si è concluso, grazie mille per aver partecipato.\nPremi Fine per uscire.", "Fine", button_slot=self.save_and_close))
         

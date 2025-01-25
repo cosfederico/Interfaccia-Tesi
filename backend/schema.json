@@ -39,9 +39,22 @@
                         "AFTER": {
                             "type": "array",
                             "items": { "type": "string" }
+                        },
+                        "VES": {
+                            "type": "object",
+                            "properties": {
+                                "INTRO": {
+                                    "type": "string"
+                                },
+                                "ITEMS": {
+                                    "type": "array",
+                                    "items": { "type": "string" }
+                                }
+                            },
+                            "required": ["INTRO", "ITEMS"]
                         }
                     },
-                    "required": ["PANAS", "BEFORE", "AFTER"]
+                    "required": ["PANAS", "BEFORE", "AFTER", "VES"]
                 }
             },
             "required": ["DATA_FOLDER", "VIDEO_FOLDER", "QUESTIONS"]
