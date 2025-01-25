@@ -186,7 +186,7 @@ class MainWindow(QMainWindow):
             panas_page_after.nextClicked.connect(self.participant.add_answers)
         
             for i, question in enumerate(self.QUESTIONS_AFTER):
-                self.add_page(QuestionScalePage(self, "Domanda di valutazione " + str(i+1), question))
+                self.add_page(QuestionScalePage(self, "Domanda di valutazione (" + str(i+1) + " di " + str(len(self.QUESTIONS_AFTER)) + ")", question))
   
             self.add_page(TextPage(self, "Bene!", "Ora passiamo ad alcune domande di comprensione a risposta multipla sulla lezione che hai appena visto.\nMi raccomando, scegli la risposta corretta!", "Inizia"))
 
@@ -198,7 +198,7 @@ class MainWindow(QMainWindow):
                 except KeyError as e:
                     print(e)
                     raise KeyError("Invalid questions.json for video " + video_page.video_path)
-                question_page = self.add_page(MultipleChoiceQuestionPage(self, "Domanda di comprensione " + str(i+1), question, right_answer, wrong_answers))
+                question_page = self.add_page(MultipleChoiceQuestionPage(self, "Domanda di comprensione (" + str(i+1) + " di " + str(len(questions)) + ")", question, right_answer, wrong_answers))
                 question_page.nextClicked.connect(self.participant.add_answers)
 
             self.add_page(QuestionScalePage(self, "Domanda di familiarità", "Quanto eri già familiare o a conoscenza dei contenuti mostrati nel video?"))
@@ -207,7 +207,7 @@ class MainWindow(QMainWindow):
             self.add_page(TextPage(self, "Ben fatto!", "Per concludere con questo video, compila un questionario sulla valutazione dell'engagement (Video Engagement Scale, o VES).\n" + VES_intro, "Avanti"))
 
             for item in VES:
-                self.add_page(QuestionScalePage(self, "VES", item, scale=[str(i+1) for i in range(7)]))
+                self.add_page(QuestionScalePage(self, "Video Engagement Scale (" + str(i+1) + " di " + str(len(VES)) + ")", item, scale=[str(i+1) for i in range(7)]))
 
         self.add_page(TextPage(self, "Fin.", "Il nostro esperimento si è concluso, grazie mille per aver partecipato.\nPremi Fine per uscire.", "Fine", button_slot=self.save_and_close))
         
