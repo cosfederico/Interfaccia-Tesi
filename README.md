@@ -143,16 +143,7 @@ A brief summary of implemented fields follows.
 For the main application:
 - `""DATA_FOLDER"`: the folder where recorded data will be saved, it contains the folders for each subject/session
 - `"VIDEO_FOLDER"`: the folder where videos are selected for playback, refer to the "Videos" section for more details
-- `"QUESTIONS"`: dictionary containing the keys `"BEFORE"` and `"AFTER"`, for specifying the questions to be asked before and after watching the video. The questions and its relative answers are automatically saved inside the CSV file, with answers on a scale from 1 to 5
-- `"[QUESTIONS"]["BEFORE"]`: list of questions to ask before watching the video, with answers on a scale from 1 to 5
-- `"[QUESTIONS"]["AFTER"]`: list of questions to ask after watching the video, with answers on a scale from 1 to 5 
-- `"[QUESTIONS"]["PANAS"]"`: dictionary containing the keys `"EMOTIONS"`, `"SCALE"`, `"POSITIVE"` and `"NEGATIVE"`, for building the PANAS self-evaluation questionnaire
-- `"[QUESTIONS"]["PANAS"]["EMOTIONS"]`: list of emotions to build the PANAS self-evaluation questionnaire
-- `"[QUESTIONS"]["PANAS"]["SCALE"]`: verbal frequency scale for the PANAS self-evaluation questionnaire (ie. "from not at all" to "very much")
-- `"[QUESTIONS"]["PANAS"]["POSITIVE"]`: indexes (*starting from 1*) of **positive** emotions in the list of emotions provided
-- `"[QUESTIONS"]["PANAS"]["NEGATIVE"]`: indexes (*starting from 1*) of **negative** emotions in the list of emotions provided
-- `"[QUESTIONS"]["VES"]["INTRO"]`: Introduction to the Video Engagement Scale questionnaire, explaining the goal and scale
-- `"[QUESTIONS"]["VES"]["ITEMS"]`: List of items contained in the Video Engagement Scale questionnaire, on a scale from 1 to 7
+- `"QUESTIONS"`: dictionary specifying what questionnaires to administer and when
 
 For downloading data from Empatica:
 - `"BUCKET_NAME"`: The S3 Data Bucket of your organization provided by Empatica
@@ -160,6 +151,45 @@ For downloading data from Empatica:
 - `"PARTICIPANT_ID"`: The ID of the participant used to collect data with Empatica. Can be max 10 characters long, only capital letters and numbers
 - `"ORG_ID"`: The ID of your organization provided by Empatica
 - `"STUDY_ID":`The ID of the study
+
+## Specifying Questionnaires
+
+You can use the `config.json` file to specify what questionnaires to administer.
+
+The field `"QUESTIONS"` is a dictionary, containing two lists, `BEFORE` and `AFTER`:
+- All questionnaires specified inside the `BEFORE` list will be administered, in the order specified within the list, **before** the first video.
+- All questionnaires specified inside the `AFTER` list will be administered, in the order specified within the list, **after each video**. There is no option at the moment for a questionnaire administered at the end of the whole experiment.
+
+A Questionnaire (dictionary contained within the `BEFORE` or `AFTER` list) is a dictionary with the keys:
+- `"TITLE"` (str): title of the questionnaire, the title displayed on the question page 
+- `"INTRO"` (str): optional, a description of the questionnaire, specifying for example scale range, scale values. To omit, use the empty string `""`
+- `"ITEMS"` (list): a list of dictionaries representing each item of the questionnaire
+
+An Item (dictionary contained within the `ITEMS` list) is a dictionary with two keys:
+- `"QUESTION"` (str): the question/item in question.
+- `"SCALE"` (list[str]): a list of strings, representing the scale associated with the question. It can be of any length.
+
+### Example Questionnaire
+
+Here's an example of a questionnaire, constructed with the instructions above, specified inside the `AFTER` list:
+
+``` json
+{
+    "AFTER": [
+        {
+            "TITLE": "Title of your questionnaire",
+            "INTRO": "For each of the following questions, select an appropriate answer.",
+            "ITEMS": [
+                {"QUESTION": "Question 1.", "SCALE": ["Strongly disagree", "Disagree", "Neutral", "Agree" , "Strongly Agree"]},
+                {"QUESTION": "Question 2.", "SCALE": ["Strongly disagree", "Disagree", "Neutral", "Agree" , "Strongly Agree"]},
+                {"QUESTION": "Question 3", "SCALE": ["Strongly disagree", "Disagree", "Neutral", "Agree" , "Strongly Agree"]}
+            ]   
+        }
+    ]
+}
+```
+
+Since it's inside the `AFTER` list, it will be administered after each video.
 
 ## JSON Schema
 
@@ -171,63 +201,107 @@ This is the [JSON Schema](https://json-schema.org) associated with the `config.j
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
     "properties": {
-        "app": {
+      "app": {
+        "type": "object",
+        "properties": {
+          "DATA_FOLDER": { "type": "string" },
+          "VIDEO_FOLDER": { "type": "string" },
+          "QUESTIONS": {
             "type": "object",
             "properties": {
-                "DATA_FOLDER": { "type": "string" },
-                "VIDEO_FOLDER": { "type": "string" },
-                "QUESTIONS": {
-                    "type": "object",
-                    "properties": {
-                        "PANAS": {
-                            "type": "object",
-                            "properties": {
-                                "SCALE": {
-                                    "type": "array",
-                                    "items": { "type": "string" }
-                                },
-                                "EMOTIONS": {
-                                    "type": "array",
-                                    "items": { "type": "string" }
-                                },
-                                "POSITIVE": {
-                                    "type": "array",
-                                    "items": { "type": "integer" }
-                                },
-                                "NEGATIVE": {
-                                    "type": "array",
-                                    "items": { "type": "integer" }
-                                }
-                            },
-                            "required": ["SCALE", "EMOTIONS", "POSITIVE", "NEGATIVE"]
-                        },
-                        "BEFORE": {
+              "PANAS": {
+                "type": "object",
+                "properties": {
+                  "SCALE": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                  },
+                  "EMOTIONS": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                  },
+                  "POSITIVE": {
+                    "type": "array",
+                    "items": { "type": "integer" }
+                  },
+                  "NEGATIVE": {
+                    "type": "array",
+                    "items": { "type": "integer" }
+                  }
+                },
+                "required": ["SCALE", "EMOTIONS", "POSITIVE", "NEGATIVE"]
+              },
+              "BEFORE": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "TITLE": { "type": "string" },
+                    "INTRO": { "type": "string" },
+                    "ITEMS": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "QUESTION": { "type": "string" },
+                          "SCALE": {
                             "type": "array",
                             "items": { "type": "string" }
+                          }
                         },
-                        "AFTER": {
-                            "type": "array",
-                            "items": { "type": "string" }
-                        }
-                    },
-                    "required": ["PANAS", "BEFORE", "AFTER"]
+                        "required": ["QUESTION", "SCALE"]
+                      }
+                    }
+                  },
+                  "required": ["TITLE", "ITEMS"]
                 }
+              },
+              "AFTER": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "TITLE": { "type": "string" },
+                    "INTRO": { "type": "string" },
+                    "ITEMS": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "QUESTION": { "type": "string" },
+                          "SCALE": {
+                            "type": ["array"],
+                            "items": {
+                              "type": ["string"]
+                            }
+                          }
+                        },
+                        "required": ["QUESTION", "SCALE"]
+                      }
+                    }
+                  },
+                  "required": ["TITLE", "ITEMS"]
+                }
+              }
             },
-            "required": ["DATA_FOLDER", "VIDEO_FOLDER", "QUESTIONS"]
+            "required": ["PANAS", "BEFORE", "AFTER"]
+          }
         },
-        "empatica": {
-            "type": "object",
-            "properties": {
-                "BUCKET_NAME": { "type": "string" },
-                "PREFIX": { "type": "string" },
-                "PARTICIPANT_ID": { "type": "string" },
-                "ORG_ID": { "type": "string" },
-                "STUDY_ID": { "type": "string" }
-            },
-            "required": ["BUCKET_NAME", "PREFIX", "PARTICIPANT_ID", "ORG_ID", "STUDY_ID"]
-        }
+        "required": ["DATA_FOLDER", "VIDEO_FOLDER", "QUESTIONS"]
+      },
+      "empatica": {
+        "type": "object",
+        "properties": {
+          "BUCKET_NAME": { "type": "string" },
+          "PREFIX": { "type": "string" },
+          "PARTICIPANT_ID": { "type": "string" },
+          "ORG_ID": { "type": "string" },
+          "STUDY_ID": { "type": "string" }
+        },
+        "required": ["BUCKET_NAME", "PREFIX", "PARTICIPANT_ID", "ORG_ID", "STUDY_ID"]
+      }
     },
-    "required": ["app","empatica"]
+    "required": ["app", "empatica"]
 }
 ```
 
