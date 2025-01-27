@@ -105,7 +105,7 @@
                     "TITLE": "Integrazione nelle pratiche di apprendimento",
                     "INTRO": "Per ognuna delle seguenti frasi, indica il grado di accordo o disaccordo.",
                     "ITEMS": [
-                        {"QUESTION": " miei insegnanti/datori di lavoro incoraggiano l’uso della tecnologia nel processo di apprendimento.", "SCALE": ["Fortemente in disaccordo", "In disaccordo", "Né d'accordo e né in disaccordo", "D'accordo" , "Fortemente d’accordo"]},
+                        {"QUESTION": "I miei insegnanti/datori di lavoro incoraggiano l’uso della tecnologia nel processo di apprendimento.", "SCALE": ["Fortemente in disaccordo", "In disaccordo", "Né d'accordo e né in disaccordo", "D'accordo" , "Fortemente d’accordo"]},
                         {"QUESTION": "Integro regolarmente la tecnologia nella mia routine di studio.", "SCALE": ["Fortemente in disaccordo", "In disaccordo", "Né d'accordo e né in disaccordo", "D'accordo" , "Fortemente d’accordo"]}
                     ]   
                 }
