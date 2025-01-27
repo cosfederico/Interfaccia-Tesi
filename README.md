@@ -182,7 +182,7 @@ Here's an example of a questionnaire, constructed with the instructions above, s
             "ITEMS": [
                 {"QUESTION": "Question 1.", "SCALE": ["Strongly disagree", "Disagree", "Neutral", "Agree" , "Strongly Agree"]},
                 {"QUESTION": "Question 2.", "SCALE": ["Strongly disagree", "Disagree", "Neutral", "Agree" , "Strongly Agree"]},
-                {"QUESTION": "Question 3", "SCALE": ["Strongly disagree", "Disagree", "Neutral", "Agree" , "Strongly Agree"]}
+                {"QUESTION": "Question 3.", "SCALE": ["Strongly disagree", "Disagree", "Neutral", "Agree" , "Strongly Agree"]}
             ]   
         }
     ]
