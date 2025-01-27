@@ -2,74 +2,106 @@
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
     "properties": {
-        "app": {
+      "app": {
+        "type": "object",
+        "properties": {
+          "DATA_FOLDER": { "type": "string" },
+          "VIDEO_FOLDER": { "type": "string" },
+          "QUESTIONS": {
             "type": "object",
             "properties": {
-                "DATA_FOLDER": { "type": "string" },
-                "VIDEO_FOLDER": { "type": "string" },
-                "QUESTIONS": {
-                    "type": "object",
-                    "properties": {
-                        "PANAS": {
-                            "type": "object",
-                            "properties": {
-                                "SCALE": {
-                                    "type": "array",
-                                    "items": { "type": "string" }
-                                },
-                                "EMOTIONS": {
-                                    "type": "array",
-                                    "items": { "type": "string" }
-                                },
-                                "POSITIVE": {
-                                    "type": "array",
-                                    "items": { "type": "integer" }
-                                },
-                                "NEGATIVE": {
-                                    "type": "array",
-                                    "items": { "type": "integer" }
-                                }
-                            },
-                            "required": ["SCALE", "EMOTIONS", "POSITIVE", "NEGATIVE"]
-                        },
-                        "BEFORE": {
+              "PANAS": {
+                "type": "object",
+                "properties": {
+                  "SCALE": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                  },
+                  "EMOTIONS": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                  },
+                  "POSITIVE": {
+                    "type": "array",
+                    "items": { "type": "integer" }
+                  },
+                  "NEGATIVE": {
+                    "type": "array",
+                    "items": { "type": "integer" }
+                  }
+                },
+                "required": ["SCALE", "EMOTIONS", "POSITIVE", "NEGATIVE"]
+              },
+              "BEFORE": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "TITLE": { "type": "string" },
+                    "INTRO": { "type": "string" },
+                    "ITEMS": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "QUESTION": { "type": "string" },
+                          "SCALE": {
                             "type": "array",
                             "items": { "type": "string" }
+                          }
                         },
-                        "AFTER": {
-                            "type": "array",
-                            "items": { "type": "string" }
-                        },
-                        "VES": {
-                            "type": "object",
-                            "properties": {
-                                "INTRO": {
-                                    "type": "string"
-                                },
-                                "ITEMS": {
-                                    "type": "array",
-                                    "items": { "type": "string" }
-                                }
-                            },
-                            "required": ["INTRO", "ITEMS"]
-                        }
-                    },
-                    "required": ["PANAS", "BEFORE", "AFTER", "VES"]
+                        "required": ["QUESTION", "SCALE"]
+                      }
+                    }
+                  },
+                  "required": ["TITLE", "ITEMS"]
                 }
+              },
+              "AFTER": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "TITLE": { "type": "string" },
+                    "INTRO": { "type": "string" },
+                    "ITEMS": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "QUESTION": { "type": "string" },
+                          "SCALE": {
+                            "type": ["array"],
+                            "items": {
+                              "type": ["string"]
+                            }
+                          }
+                        },
+                        "required": ["QUESTION", "SCALE"]
+                      }
+                    }
+                  },
+                  "required": ["TITLE", "ITEMS"]
+                }
+              }
             },
-            "required": ["DATA_FOLDER", "VIDEO_FOLDER", "QUESTIONS"]
+            "required": ["PANAS", "BEFORE", "AFTER"]
+          }
         },
-        "empatica": {
-            "type": "object",
-            "properties": {
-                "BUCKET_NAME": { "type": "string" },
-                "PREFIX": { "type": "string" },
-                "PARTICIPANT_ID": { "type": "string" },
-                "ORG_ID": { "type": "string" },
-                "STUDY_ID": { "type": "string" }
-            },
-            "required": ["BUCKET_NAME", "PREFIX", "PARTICIPANT_ID", "ORG_ID", "STUDY_ID"]
-        }
+        "required": ["DATA_FOLDER", "VIDEO_FOLDER", "QUESTIONS"]
+      },
+      "empatica": {
+        "type": "object",
+        "properties": {
+          "BUCKET_NAME": { "type": "string" },
+          "PREFIX": { "type": "string" },
+          "PARTICIPANT_ID": { "type": "string" },
+          "ORG_ID": { "type": "string" },
+          "STUDY_ID": { "type": "string" }
+        },
+        "required": ["BUCKET_NAME", "PREFIX", "PARTICIPANT_ID", "ORG_ID", "STUDY_ID"]
+      }
     },
-    "required": ["app","empatica"]
-}
+    "required": ["app", "empatica"]
+  }
+  

@@ -37,44 +37,142 @@
                 "NEGATIVE": [1, 8, 9, 10, 12, 13, 15, 16, 17, 18]
             },
             "BEFORE": [
-                "Quanto frequentemente fai utilizzo di contenuti video per l'apprendimento?\n(ad es., lezioni online, tutorial, corsi su piattaforme digitali)"
+                {
+                    "TITLE": "Utilizzo di contenuti per l'apprendimento",
+                    "INTRO": "",
+                    "ITEMS": [
+                        {"QUESTION": "Quanto frequentemente fai utilizzo di contenuti video per l'apprendimento?\n(ad es., lezioni online, tutorial, corsi su piattaforme digitali)", "SCALE" : ["Per niente","Poco","Abbastanza","Molto","Moltissimo"]}
+                    ]
+                },
+                {
+                    "TITLE": "Frequenza di utilizzo della tecnologia",
+                    "INTRO": "Per ogni frase di seguito, indicare la frequenza con cui si mette in atto il comportamento descritto.",
+                    "ITEMS": [
+                        {"QUESTION": "Quanto spesso utilizzi tecnologie digitali (ad esempio, app, piattaforme, dispositivi) per scopi educativi?", "SCALE": ["Mai", "Raramente", "A volte", "Spesso", "Molto frequentemente"]},
+                        {"QUESTION": "Quanto spesso combini più tecnologie (ad esempio, video, quiz online, forum) nel tuo processo di apprendimento?", "SCALE": ["Mai", "Raramente", "A volte", "Spesso", "Molto frequentemente"]}
+                    ]   
+                },
+                {
+                    "TITLE": "Tipi di tecnologie utilizzate",
+                    "INTRO": "Per ogni frase di seguito, indicare la frequenza con cui si mette in atto il comportamento descritto.",
+                    "ITEMS": [
+                        {"QUESTION": "Utilizzo piattaforme di gestione dell'apprendimento (ad esempio, Moodle, Blackboard, Google Classroom).", "SCALE": ["Mai", "Raramente", "A volte", "Spesso", "Molto frequentemente"]},
+                        {"QUESTION": "Utilizzo strumenti collaborativi (ad esempio, Microsoft Teams, Zoom, Google Docs) per scopi educativi.", "SCALE": ["Mai", "Raramente", "A volte", "Spesso", "Molto frequentemente"]},
+                        {"QUESTION": "Utilizzo app o piattaforme educative specializzate (ad esempio, Coursera, Khan Academy, Duolingo).", "SCALE": ["Mai", "Raramente", "A volte", "Spesso", "Molto frequentemente"]}
+                    ]   
+                },
+                {
+                    "TITLE": "Scopi di utilizzo della tecnologia",
+                    "INTRO": "Per ogni frase di seguito, indicare la frequenza con cui si mette in atto il comportamento descritto.",
+                    "ITEMS": [
+                        {"QUESTION": "Utilizzo le tecnologie per accedere a materiali didattici (ad esempio, eBook, video, articoli).", "SCALE": ["Mai", "Raramente", "A volte", "Spesso", "Molto frequentemente"]},
+                        {"QUESTION": "Utilizzo le tecnologie per collaborare con i miei pari o con gli insegnanti/datori di lavoro.", "SCALE": ["Mai", "Raramente", "A volte", "Spesso", "Molto frequentemente"]}
+                    ]   
+                },
+                {
+                    "TITLE": "Impatto percepito sull'apprendimento",
+                    "INTRO": "Per ognuna delle seguenti frasi, indicare il grado di accordo o disaccordo.",
+                    "ITEMS": [
+                        {"QUESTION": "Usare la tecnologia migliora la mia comprensione del materiale.", "SCALE": ["Fortemente in disaccordo", "In disaccordo", "Né d'accordo e né in disaccordo", "D'accordo" , "Fortemente d’accordo"]},
+                        {"QUESTION": "La tecnologia mi aiuta a rimanere organizzato e a gestire meglio il mio apprendimento.", "SCALE": ["Fortemente in disaccordo", "In disaccordo", "Né d'accordo e né in disaccordo", "D'accordo" , "Fortemente d’accordo"]},
+                        {"QUESTION": "Apprendo meglio utilizzando le tecnologie rispetto ai metodi tradizionali.", "SCALE": ["Fortemente in disaccordo", "In disaccordo", "Né d'accordo e né in disaccordo", "D'accordo" , "Fortemente d’accordo"]}
+                    ]   
+                },
+                {
+                    "TITLE": "Adattabilità e competenza",
+                    "INTRO": "Per la seguente frase, indicare il grado di accordo o disaccordo.",
+                    "ITEMS": [
+                        {"QUESTION": "Mi adatto rapidamente alle nuove tecnologie introdotte a scopi educativi.", "SCALE": ["Fortemente in disaccordo", "In disaccordo", "Né d'accordo e né in disaccordo", "D'accordo" , "Fortemente d’accordo"]}
+                    ]   
+                },
+                {
+                    "TITLE": "Sfide e ostacoli",
+                    "INTRO": "Per ognuna delle seguenti frasi, indicare il grado di accordo o disaccordo.",
+                    "ITEMS": [
+                        {"QUESTION": "A volte affronto difficoltà tecniche che ostacolano la mia esperienza di apprendimento.", "SCALE": ["Fortemente in disaccordo", "In disaccordo", "Né d'accordo e né in disaccordo", "D'accordo" , "Fortemente d’accordo"]},
+                        {"QUESTION": "L’accesso limitato a dispositivi o alla connessione internet influenza la mia capacità di usare la tecnologia per apprendere.", "SCALE": ["Fortemente in disaccordo", "In disaccordo", "Né d'accordo e né in disaccordo", "D'accordo" , "Fortemente d’accordo"]}
+                    ]   
+                },
+                {
+                    "TITLE": "Coinvolgimento e motivazione",
+                    "INTRO": "Per ognuna delle seguenti frasi, indicare il grado di accordo o disaccordo.",
+                    "ITEMS": [
+                        {"QUESTION": "La tecnologia rende l’apprendimento più coinvolgente per me.", "SCALE": ["Fortemente in disaccordo", "In disaccordo", "Né d'accordo e né in disaccordo", "D'accordo" , "Fortemente d’accordo"]},
+                        {"QUESTION": "Mi sento motivato a esplorare nuovi argomenti o competenze quando utilizzo la tecnologia.", "SCALE": ["Fortemente in disaccordo", "In disaccordo", "Né d'accordo e né in disaccordo", "D'accordo" , "Fortemente d’accordo"]}
+                    ]   
+                },
+                {
+                    "TITLE": "Integrazione nelle pratiche di apprendimento",
+                    "INTRO": "Per ognuna delle seguenti frasi, indica il grado di accordo o disaccordo.",
+                    "ITEMS": [
+                        {"QUESTION": " miei insegnanti/datori di lavoro incoraggiano l’uso della tecnologia nel processo di apprendimento.", "SCALE": ["Fortemente in disaccordo", "In disaccordo", "Né d'accordo e né in disaccordo", "D'accordo" , "Fortemente d’accordo"]},
+                        {"QUESTION": "Integro regolarmente la tecnologia nella mia routine di studio.", "SCALE": ["Fortemente in disaccordo", "In disaccordo", "Né d'accordo e né in disaccordo", "D'accordo" , "Fortemente d’accordo"]}
+                    ]   
+                }
             ],
             "AFTER": [
-                "Quanto hai trovato chiari i contenuti della lezione?",
-                "Quanto sono stati facili da comprendere i concetti presentati nella lezione?",
-                "Quanto hai trovato ben organizzata la presentazione dei contenuti?",
-                "Quanto pensi di aver appreso dai contenuti presentati?",
-                "Quanto ti senti sicuro/a di ricordare le informazioni apprese nella lezione?",
-                "Quanto ti senti preparato/a ad applicare i concetti appresi?",
-                "Quanto ritieni utile la lezione per il tuo apprendimento?",
-                "Quanto la lezione ha stimolato il tuo interesse per l’argomento?",
-                "Quanto ti senti motivato/a a saperne di più sull’argomento dopo aver visto la lezione?",
-                "Come descriveresti il modo di presentare del relatore?",
-                "Quanto hai trovato efficace il relatore nella trasmissione dei contenuti?",
-                "Quanto ti è sembrato chiaro e sicuro il relatore durante la spiegazione?",
-                "Quanto ti sei sentito/a in sintonia con il relatore?",
-                "Quanto il presentatore ti è sembrato naturale e realistico nella presentazione dei contenuti?"
-            ],
-            "VES": {
-                "INTRO": "Indica quanto ti identifichi nelle seguenti affermazioni, in una scala da 1 a 7, dove 1 indica \"Per niente\", e 7 indica \"Completamente\".",
-                "ITEMS": [
-                    "Durante la visione ero pienamente concentrato sul video.",
-                    "Durante la visione era come se fossi presente solo a ciò che il video presentava.",
-                    "Quando stavo vedendo il video, i miei pensieri erano esclusivamente sul video.",
-                    "Dopo che il video si è concluso, ho avuto la sensazione di essere tornato nel 'mondo reale'.",
-                    "Dopo un po' di tempo che continuavo a vedere il video, mi è sembrato di diventare una cosa sola con la persona presente nel video.",
-                    "Mi sono immedesimato nella persona che parlava nel video.",
-                    "I contenuti del video sono stati coinvolgenti.",
-                    "Quando stavo vedendo il video, nella mia mente seguivo solo i suoi contenuti.",
-                    "Durante la visione del video, ho provato le stesse emozioni che provava la persona presente nel video.",
-                    "Ho trovato il video ingaggiante.",
-                    "Ho trovato interessante la persona presente nel video.",
-                    "Durante la visione del video, ero poco attento a cosa ci fosse o a cosa accadesse attorno a me.",
-                    "Ho avuto la sensazione pensare alle stesse cose che la persona presente nel video diceva.",
-                    "Nella mia immaginazione, era come se io fossi la persona che parlava nel video.",
-                    "Grazie al video, mi sono sentito soddisfatto."
-                ]
-            }
+                {
+                    "TITLE" : "Percezione della qualità dell’apprendimento",
+                    "INTRO": "Per ognuna delle seguenti domande scegli la risposta più appropriata.",
+                    "ITEMS" : [
+                        {"QUESTION": "Quanto hai trovato chiari i contenuti della lezione?", "SCALE" : ["Per niente","Poco","Abbastanza","Molto","Moltissimo"]},
+                        {"QUESTION": "Quanto sono stati facili da comprendere i concetti presentati nella lezione?", "SCALE" : ["Per niente","Poco","Abbastanza","Molto","Moltissimo"]},
+                        {"QUESTION": "Quanto hai trovato ben organizzata la presentazione dei contenuti?", "SCALE" : ["Per niente","Poco","Abbastanza","Molto","Moltissimo"]},
+                        {"QUESTION": "Quanto pensi di aver appreso dai contenuti presentati?", "SCALE" : ["Per niente","Poco","Abbastanza","Molto","Moltissimo"]},
+                        {"QUESTION": "Quanto ti senti sicuro/a di ricordare le informazioni apprese nella lezione?", "SCALE" : ["Per niente","Poco","Abbastanza","Molto","Moltissimo"]},
+                        {"QUESTION": "Quanto ti senti preparato/a ad applicare i concetti appresi?", "SCALE" : ["Per niente","Poco","Abbastanza","Molto","Moltissimo"]},
+                        {"QUESTION": "Quanto ritieni utile la lezione per il tuo apprendimento?", "SCALE" : ["Per niente","Poco","Abbastanza","Molto","Moltissimo"]},
+                        {"QUESTION": "Quanto la lezione ha stimolato il tuo interesse per l’argomento?", "SCALE" : ["Per niente","Poco","Abbastanza","Molto","Moltissimo"]},
+                        {"QUESTION": "Quanto ti senti motivato/a a saperne di più sull’argomento dopo aver visto la lezione?", "SCALE" : ["Per niente","Poco","Abbastanza","Molto","Moltissimo"]}
+                    ]
+                },
+                {
+                    "TITLE":"Valutazione del presentatore",
+                    "INTRO": "Per ognuna delle seguenti domande scegli la risposta più appropriata.",
+                    "ITEMS" : [
+                        {"QUESTION": "Come descriveresti il modo di presentare del relatore?", "SCALE" : ["Molto impersonale","Abbastanza impersonale","Neutrale","Abbastanza Coinvolgente","Molto coinvolgente"]},
+                        {"QUESTION": "Quanto hai trovato efficace il relatore nella trasmissione dei contenuti?", "SCALE" : ["Per niente","Poco","Abbastanza","Molto","Moltissimo"]},
+                        {"QUESTION": "Quanto ti è sembrato chiaro e sicuro il relatore durante la spiegazione?", "SCALE" : ["Per niente","Poco","Abbastanza","Molto","Moltissimo"]},
+                        {"QUESTION": "Quanto ti sei sentito/a in sintonia con il relatore?", "SCALE" : ["Per niente","Poco","Abbastanza","Molto","Moltissimo"]},
+                        {"QUESTION": "Quanto il presentatore ti è sembrato naturale e realistico nella presentazione dei contenuti?", "SCALE" : ["Per niente","Poco","Abbastanza","Molto","Moltissimo"]}
+                    ]                    
+                },
+                {
+                    "TITLE": "Video Engagement Scale (VES)",
+                    "INTRO": "Indica quanto ti identifichi nelle seguenti affermazioni, in una scala da 1 a 7, dove 1 indica \"Per niente\", e 7 indica \"Completamente\".",
+                    "ITEMS": [
+                        {"QUESTION" : "Durante la visione ero pienamente concentrato sul video.", "SCALE" : ["1","2","3","4","5","6","7"]},
+                        {"QUESTION" : "Durante la visione era come se fossi presente solo a ciò che il video presentava.", "SCALE" : ["1","2","3","4","5","6","7"]},
+                        {"QUESTION" : "Quando stavo vedendo il video, i miei pensieri erano esclusivamente sul video.", "SCALE" : ["1","2","3","4","5","6","7"]},
+                        {"QUESTION" : "Dopo che il video si è concluso, ho avuto la sensazione di essere tornato nel 'mondo reale'.", "SCALE" : ["1","2","3","4","5","6","7"]},
+                        {"QUESTION" : "Dopo un po' di tempo che continuavo a vedere il video, mi è sembrato di diventare una cosa sola con la persona presente nel video.", "SCALE" : ["1","2","3","4","5","6","7"]},
+                        {"QUESTION" : "Mi sono immedesimato nella persona che parlava nel video.", "SCALE" : ["1","2","3","4","5","6","7"]},
+                        {"QUESTION" : "I contenuti del video sono stati coinvolgenti.", "SCALE" : ["1","2","3","4","5","6","7"]},
+                        {"QUESTION" : "Quando stavo vedendo il video, nella mia mente seguivo solo i suoi contenuti.", "SCALE" : ["1","2","3","4","5","6","7"]},
+                        {"QUESTION" : "Durante la visione del video, ho provato le stesse emozioni che provava la persona presente nel video.", "SCALE" : ["1","2","3","4","5","6","7"]},
+                        {"QUESTION" : "Ho trovato il video ingaggiante.", "SCALE" : ["1","2","3","4","5","6","7"]},
+                        {"QUESTION" : "Ho trovato interessante la persona presente nel video.", "SCALE" : ["1","2","3","4","5","6","7"]},
+                        {"QUESTION" : "Durante la visione del video, ero poco attento a cosa ci fosse o a cosa accadesse attorno a me.", "SCALE" : ["1","2","3","4","5","6","7"]},
+                        {"QUESTION" : "Ho avuto la sensazione pensare alle stesse cose che la persona presente nel video diceva.", "SCALE" : ["1","2","3","4","5","6","7"]},
+                        {"QUESTION" : "Nella mia immaginazione, era come se io fossi la persona che parlava nel video.", "SCALE" : ["1","2","3","4","5","6","7"]},
+                        {"QUESTION" : "Grazie al video, mi sono sentito soddisfatto.", "SCALE" : ["1","2","3","4","5","6","7"]}
+                    ]
+                },
+                {
+                    "TITLE": "Domanda di familiarità",
+                    "INTRO": "",
+                    "ITEMS": [
+                        {"QUESTION": "Quanto eri già familiare o a conoscenza dei contenuti mostrati nel video?", "SCALE" : ["Per niente","Poco","Abbastanza","Molto","Moltissimo"]}
+                    ]
+                },
+                {
+                    "TITLE": "Domanda di utilità",
+                    "INTRO": "",
+                    "ITEMS": [
+                        {"QUESTION": "Quanto ti è sembrato utile e/o informativo questo contenuto?", "SCALE" : ["Per niente","Poco","Abbastanza","Molto","Moltissimo"]}
+                    ]
+                }
+            ]
         }
     },
     "empatica": {
