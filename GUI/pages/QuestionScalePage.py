@@ -3,17 +3,18 @@ from PyQt5.QtCore import *
 
 class QuestionScalePage(QWidget):
         
-    def __init__(self, parent, title, question, scale=["Per niente", "Poco", "Abbastanza", "Molto", "Moltissimo"], error_text="Per favore scegli una risposta."):
+    def __init__(self, parent, title, question, intro="", scale=["Per niente", "Poco", "Abbastanza", "Molto", "Moltissimo"], error_text="Per favore scegli una risposta."):
         super().__init__()
         self.parent_window = parent
         self.question_str = question
         self.title_str = title
+        self.intro_str = intro
         self.scale = scale
         self.error_text_str = error_text
         self.selected_answer = None
                 
         self.setupUi()
-        self.setContentsMargins(200,300,200,300)
+        self.setContentsMargins(200,250,200,250)
         self.next_button.clicked.connect(self.next_button_clicked)
 
     def setupUi(self):
@@ -25,8 +26,22 @@ class QuestionScalePage(QWidget):
                 "color: rgb(0, 51, 102);\n"
                 "background-color: rgba(255, 255, 255, 0);\n"
                 "")
+        self.title.setWordWrap(True)
         self.title.setText(self.title_str)
         self.verticalLayout.addWidget(self.title)
+
+        if self.intro_str != "":
+            self.intro = QLabel(self)
+            self.intro.setStyleSheet("font: 15pt \"Rubik Light\";\n"
+                    "color: rgb(0, 51, 102);\n"
+                    "background-color: rgba(255, 255, 255, 0);\n"
+                    "")
+            self.intro.setWordWrap(True)
+            self.intro.setText(self.intro_str)
+            self.verticalLayout.addWidget(self.intro)
+
+        spacerItem = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalLayout.addItem(spacerItem)
 
         self.question = QLabel(self)
         self.question.setStyleSheet("font: 20pt \"Rubik light\";\n"
@@ -35,10 +50,10 @@ class QuestionScalePage(QWidget):
         self.question.setWordWrap(True)
         self.question.setText(self.question_str)
         self.verticalLayout.addWidget(self.question)
-
-        spacerItem = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-        self.verticalLayout.addItem(spacerItem)
         
+        spacerItem = QSpacerItem(10, 10, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalLayout.addItem(spacerItem)
+
         self.answer_layout = QHBoxLayout()
         
         for level in self.scale:
