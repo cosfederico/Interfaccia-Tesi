@@ -54,8 +54,6 @@ class MainWindow(QMainWindow):
         self.PANAS_NEGATIVE = config['app']['QUESTIONS']['PANAS']['NEGATIVE']
         self.QUESTIONS_BEFORE = config['app']['QUESTIONS']['BEFORE']
         self.QUESTIONS_AFTER = config['app']['QUESTIONS']['AFTER']
-        self.VES_ITEMS = config['app']['QUESTIONS']['VES']['ITEMS']
-        self.VES_INTRO = config['app']['QUESTIONS']['VES']['INTRO']
             
         self.temp_dir = tempfile.mkdtemp()
         self.setup_eye_tracker()
@@ -147,8 +145,14 @@ class MainWindow(QMainWindow):
         panas_page_before = self.add_page(PANAS(self, emotions=self.PANAS_EMOTIONS, scale=self.PANAS_SCALE, positive=self.PANAS_POSITIVE, negative=self.PANAS_NEGATIVE, flag="PRIMA"))
         panas_page_before.nextClicked.connect(self.participant.add_answers)
         
-        for question in self.QUESTIONS_BEFORE:
-            self.add_page(QuestionScalePage(self, "Questionario Preparatorio", question))
+        for questionnaire in self.QUESTIONS_BEFORE:
+            title = questionnaire["TITLE"]
+            intro = questionnaire["INTRO"]
+            items = questionnaire["ITEMS"]
+            for i, item in enumerate(items):
+                question = item["QUESTION"]
+                scale =  item["SCALE"]
+                self.add_page(QuestionScalePage(self, title=title + " (" + str(i+1) + " di " + str(len(items)) + ")", intro=intro, question=question, scale=scale))
 
         for i, participant_id in enumerate([self.participant.id, ~self.participant.id]):
 
@@ -167,9 +171,15 @@ class MainWindow(QMainWindow):
             panas_page_after = self.add_page(PANAS(self, emotions=self.PANAS_EMOTIONS, scale=self.PANAS_SCALE, positive=self.PANAS_POSITIVE, negative=self.PANAS_NEGATIVE, flag="DOPO"))
             panas_page_after.nextClicked.connect(self.participant.add_answers)
         
-            for i, question in enumerate(self.QUESTIONS_AFTER):
-                self.add_page(QuestionScalePage(self, "Domanda di valutazione (" + str(i+1) + " di " + str(len(self.QUESTIONS_AFTER)) + ")", question))
-  
+            for questionnaire in self.QUESTIONS_AFTER:
+                title = questionnaire["TITLE"]
+                intro = questionnaire["INTRO"]
+                items = questionnaire["ITEMS"]
+                for i, item in enumerate(items):
+                    question = item["QUESTION"]
+                    scale =  item["SCALE"]
+                    self.add_page(QuestionScalePage(self, title=title + " (" + str(i+1) + " di " + str(len(items)) + ")", intro=intro, question=question, scale=scale))
+
             self.add_page(TextPage(self, "Bene!", "Ora passiamo ad alcune domande di comprensione a risposta multipla sulla lezione che hai appena visto.\nMi raccomando, scegli la risposta corretta!", "Inizia"))
 
             questions = self.videosManager.getVideoQuestions(participant_id)    
@@ -182,14 +192,6 @@ class MainWindow(QMainWindow):
                     raise KeyError("Invalid questions.json for video " + video_page.video_path)
                 question_page = self.add_page(MultipleChoiceQuestionPage(self, "Domanda di comprensione (" + str(i+1) + " di " + str(len(questions)) + ")", question, right_answer, wrong_answers))
                 question_page.nextClicked.connect(self.participant.add_answers)
-
-            self.add_page(QuestionScalePage(self, "Domanda di familiarità", "Quanto eri già familiare o a conoscenza dei contenuti mostrati nel video?"))
-            self.add_page(QuestionScalePage(self, "Domanda di utilità", "Quanto ti è sembrato utile e/o informativo questo contenuto?"))
-
-            self.add_page(TextPage(self, "Ben fatto!", "Per concludere con questo video, compila un questionario sulla valutazione dell'engagement (Video Engagement Scale, o VES).\n" + self.VES_INTRO, "Avanti"))
-
-            for i, item in enumerate(self.VES_ITEMS):
-                self.add_page(QuestionScalePage(self, "Video Engagement Scale (" + str(i+1) + " di " + str(len(self.VES_ITEMS)) + ")", item, scale=[str(i+1) for i in range(7)]))
 
         self.add_page(TextPage(self, "Fin.", "Il nostro esperimento si è concluso, grazie mille per aver partecipato.\nPremi Fine per uscire.", "Fine", button_slot=self.save_and_close))
         
