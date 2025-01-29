@@ -110,7 +110,7 @@ class MainWindow(QMainWindow):
         self.participant = Participant(participant_id, self.DATA_FOLDER)
                 
         screen_size = self.app.primaryScreen().size()
-        self.screenRecorder = ScreenRecorder(output_file=os.path.join(self.temp_dir, "screen.mp4"), fps=24.0, resolution=(screen_size.width(), screen_size.height()), daemon=True)
+        self.screenRecorder = ScreenRecorder(output_file=os.path.join(self.temp_dir, "screen.mp4"), fps=12.0, resolution=(screen_size.width(), screen_size.height()), daemon=True)
         
         self.setup_pages()
         
