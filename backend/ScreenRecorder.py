@@ -23,9 +23,9 @@ def has_nvidia_gpu():
 
 def select_encoder():
     if has_nvidia_gpu():
-        return "h264_nvenc"
+        return ("h264_nvenc", "fast")
     else:
-        return "mpeg4"
+        return ("mpeg4", "ultrafast")
         
 
 def capture_frames(queue:Queue, fps:int, resolution:tuple, recording_flag):
@@ -55,7 +55,7 @@ def screenshot_to_frame(screenshot):
 def write_frames(queue:Queue, output_file:str, fps:int, resolution:tuple):
 
     width, height = resolution
-    encoder = select_encoder()
+    encoder, preset = select_encoder()
 
     # FFmpeg command for piping
     ffmpeg_command = [
@@ -68,7 +68,7 @@ def write_frames(queue:Queue, output_file:str, fps:int, resolution:tuple):
         "-r", str(fps),  # Frame rate
         "-i", "-",  # Input comes from stdin (pipe)
         "-c:v", encoder,  # Use NVIDIA NVENC encoder
-        "-preset", "veryfast",  # Set NVENC preset (fast encoding)
+        "-preset", preset,  # Set NVENC preset (fast encoding)
         "-b:v", "5M",  # Set video bitrate to 5 Mbps
         output_file
     ]
