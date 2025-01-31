@@ -178,7 +178,7 @@
     "empatica": {
         "BUCKET_NAME": "empatica-us-east-1-prod-data",
         "PREFIX": "v2/716/",
-        "PARTICIPANT_ID": "TEST",
+        "PARTICIPANT_ID": "VIDEOFAKE",
         "ORG_ID": "1",
         "STUDY_ID": "1"
     }
