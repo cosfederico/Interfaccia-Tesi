@@ -52,7 +52,7 @@ while True:
             if os.path.exists(asc_file):
                 os.remove(asc_file)
             
-            data = pd.read_csv(os.path.join(participant_dir, 'data.csv'), sep=';')
+            data = pd.read_csv(os.path.join(participant_dir, 'data.csv'), sep=';', encoding='latin')
             try:
                 tracker_start_relative_ts = data["EyeTracker_Start_Tracker_Time"][0]
                 tracker_start_absolute_ts = data["EyeTracker_Start_Tracker_Time_TS"][0]
