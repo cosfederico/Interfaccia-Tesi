@@ -17,31 +17,48 @@ def convert_empatica_data_to_csv(avro_file_path, output_dir=None, delete_avro_af
         
     # Read Avro file
     reader = DataFileReader(open(avro_file_path, "rb"), DatumReader())
-    data= next(reader)
-    
-    # BVP
-    bvp = data["rawData"]["bvp"]
+
+    bvp, sps, eda = None, None, None
+
+    try:
+        while True:
+            data= next(reader)
+            if bvp is None:    
+                bvp = data["rawData"]["bvp"]
+            else:
+                bvp["values"] += data["rawData"]["bvp"]["values"]
+
+            if sps is None:    
+                sps = data["rawData"]["systolicPeaks"]     
+            else:
+                sps["peaksTimeNanos"] += data["rawData"]["systolicPeaks"]["peaksTimeNanos"]
+
+            if eda is None:               
+                eda = data["rawData"]["eda"]
+            else:
+                eda["values"] += data["rawData"]["eda"]["values"]
+            
+    except StopIteration:
+        pass
+            
     timestamp = [round(bvp["timestampStart"] + i * (1e6 / bvp["samplingFrequency"])) for i in range(len(bvp["values"]))]
     with open(os.path.join(output_dir, 'bvp.csv'), 'w', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(["unix_timestamp", "bvp"])
         writer.writerows([[ts, bvp] for ts, bvp in zip(timestamp, bvp["values"])])
         
-    # Systolic peaks
-    sps = data["rawData"]["systolicPeaks"]
     with open(os.path.join(output_dir, 'systolic_peaks.csv'), 'w', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(["systolic_peak_timestamp"])
         writer.writerows([[sp] for sp in sps["peaksTimeNanos"]])
             
-    eda = data["rawData"]["eda"]
     timestamp = [round(eda["timestampStart"] + i * (1e6 / eda["samplingFrequency"]))
         for i in range(len(eda["values"]))]
     with open(os.path.join(output_dir, 'eda.csv'), 'w', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(["unix_timestamp", "eda"])
         writer.writerows([[ts, eda] for ts, eda in zip(timestamp, eda["values"])])
-    
+
     reader.close()
     
     with open(os.path.join(output_dir, 'fs.json'), 'w') as f:
