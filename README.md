@@ -348,6 +348,8 @@ Install the application dependencies, then run:
 python Program.py
 ```
 
+If you are on Windows, you can also launch the application by running via file explorer the included `run.bat` file.
+
 # License
 Distributed under the MIT License. See `LICENSE` for more information.
 
