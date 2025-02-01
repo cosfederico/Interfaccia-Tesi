@@ -95,11 +95,12 @@ while True:
 
             participant_data = pd.read_csv(os.path.join(participant_dir, 'data.csv'), sep=';', encoding="latin1") # per le è/é accentate
             start_ts = participant_data['Session Start Timestamp'].iloc[0]
+            end_ts = participant_data['Session End Timestamp'].iloc[0]
             date = participant_data['Date'].iloc[0]
 
             print("\tDownloading Empatica Data...")
             try:
-                avro_file_path = download_empatica_data(start_ts, participant_dir,
+                avro_file_path = download_empatica_data(start_ts, end_ts, participant_dir,
                                                         date=date,
                                                         participant=PARTICIPANT_ID,
                                                         bucket_name=BUCKET_NAME,
