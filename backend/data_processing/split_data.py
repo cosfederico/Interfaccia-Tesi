@@ -50,8 +50,8 @@ def split_videos(dest_dir):
             os.path.join(dest_dir, file + "_" + video1_type.lower() + ".mp4")
         ]
 
-    subprocess.run(ffmpeg0, capture_output=True)
-    subprocess.run(ffmpeg1, capture_output=True)
+        subprocess.run(ffmpeg0, capture_output=True)
+        subprocess.run(ffmpeg1, capture_output=True)
 
 def copy_remaining_files(dest_dir):
     for file in ['fs.json']:
