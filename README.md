@@ -350,6 +350,16 @@ python Program.py
 
 If you are on Windows, you can also launch the application by running via file explorer the included `run.bat` file.
 
+## Data processing
+
+This applications is bundled with with a number of scripts for automating the process of preparing data for analysis. The scripts download the physiological data from the Empatica AWS servers, extract from all the .edf data raw gaze data and fixations and saccades, then split all the data in two groups: real and fake, extracting from each dataset the portion of data that was recorded while watching the associated video, including the recorded videos (webcam and screen). Finally, facial feature extraction is performed on the splitted webcam videos.
+
+To run the data processing scripts, run the following command:
+
+```
+python prepare_data.py
+```
+
 # License
 Distributed under the MIT License. See `LICENSE` for more information.
 
