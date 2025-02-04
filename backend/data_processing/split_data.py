@@ -9,7 +9,7 @@ def split_gaze_data(dest_dir):
     eye[(eye["timestamp"] >= video0_start) & (eye["timestamp"] <= video0_end)].to_csv(os.path.join(dest_dir, "eye_" + video0_type.lower() + ".csv"), index=False)
     eye[(eye["timestamp"] >= video1_start) & (eye["timestamp"] <= video1_end)].to_csv(os.path.join(dest_dir, "eye_" + video1_type.lower() + ".csv"), index=False)
 
-    for file in ['fixations', 'saccades']:
+    for file in ['fixations', 'saccades', 'blinks']:
         df = pd.read_csv(os.path.join(participant_dir, file + ".csv"))
 
         df[((df["start_time"] >= video0_start) & (df["start_time"] <= video0_end)) 
