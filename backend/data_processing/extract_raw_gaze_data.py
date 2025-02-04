@@ -10,10 +10,6 @@ except Exception as e:
     print("Impossibile caricare il file di config: ", e)
     quit()
 
-def quit():
-    input("Press ENTER to quit...")
-    sys.exit()
-
 DATA_FOLDER = config['app']['DATA_FOLDER'] 
 
 if not os.path.exists(DATA_FOLDER):
@@ -89,9 +85,8 @@ while True:
             os.remove(asc_file)
         
         print("\nAll eye-tracking data has been converted and synchronized.")
-
         break
 
     elif ans == 'no' or ans == 'n':
         print("No action taken.")
-        quit()
+        break

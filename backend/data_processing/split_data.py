@@ -116,8 +116,8 @@ while True:
             copy_remaining_files(dest_dir=dest_dir)
 
         print("\nAll data has been split and saved in the directory: " + split_dir + ".")
-        quit()
+        break
 
     elif ans == 'no' or ans == 'n':
         print("No action taken.")
-        quit()
+        break

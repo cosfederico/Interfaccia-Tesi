@@ -128,9 +128,8 @@ while True:
             os.remove(asc_file)
         
         print("\nAll eye-tracking data has been converted and synchronized.")
-
         break
 
     elif ans == 'no' or ans == 'n':
         print("No action taken.")
-        quit()
+        break

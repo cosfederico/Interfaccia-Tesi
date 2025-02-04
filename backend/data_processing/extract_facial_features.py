@@ -31,9 +31,8 @@ while True:
             process_video(participant_dir, video_file_name="webcam_fake.mp4", output_file_name="face_fake.csv", delete_video_after=True)
             
         print("\nAll facial features have been successfully extracted.")
-
         break
 
     elif ans == 'no' or ans == 'n':
         print("No action taken.")
-        quit()
+        break

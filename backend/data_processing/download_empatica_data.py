@@ -30,10 +30,6 @@ https://manuals.empatica.com/ehmp/careportal/data_access/v2.7e/en.pdf
 
 parser.parse_args()
 
-def quit():
-    input("Press ENTER to quit...")
-    sys.exit()
-
 HOME = os.getenv('HOME')
 if not HOME:
     HOME = os.getenv('USERPROFILE')
@@ -128,9 +124,8 @@ while True:
             estimate_hr(participant_dir, save_to_file=True, delete_peaks_file_after=True)
             
         print("\nAll available data has been downloaded synchronized and is ready for analysis.")
-                
         break
     
     elif ans == 'no' or ans == 'n':
         print("No action taken.")
-        quit()
+        break
