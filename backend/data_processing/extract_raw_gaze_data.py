@@ -42,6 +42,11 @@ while True:
             print("\nConverting eye-tracker data for participant", participant)
             
             participant_dir = os.path.join(DATA_FOLDER, participant)
+
+            if 'eye.csv' in os.listdir(participant_dir):
+                print("\tRaw Gaze data already extracted for this participant - skipping")
+                continue
+
             edf_file = os.path.join(participant_dir, edf_file_name)
             asc_file = os.path.join(participant_dir, "eye.asc")
             if not os.path.exists(edf_file):

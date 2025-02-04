@@ -36,6 +36,7 @@ while True:
         for participant in participants:
             
             participant_dir = os.path.join(DATA_FOLDER, participant)
+
             print("\tExtracting AU, landmarks and REF for participant", participant, "...")
             process_video(participant_dir)
             

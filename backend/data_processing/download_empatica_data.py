@@ -90,8 +90,12 @@ while True:
         for participant in participants:
             
             participant_dir = os.path.join(DATA_FOLDER, participant)
-
             print("\nSynchronizing data for participant", participant)
+
+            files_in_dir = os.listdir(participant_dir)
+            if 'hr.csv' in files_in_dir and 'eda.csv' in files_in_dir and 'bvp.csv' in files_in_dir:
+                print("\tEmpatica data already downloaded for this participant - skipping")
+                continue
 
             participant_data = pd.read_csv(os.path.join(participant_dir, 'data.csv'), sep=';', encoding="latin1") # per le è/é accentate
             start_ts = participant_data['Session Start Timestamp'].iloc[0]
