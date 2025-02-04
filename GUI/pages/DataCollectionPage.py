@@ -169,8 +169,9 @@ class DataCollectionPage(QWidget):
         self.occupation.addItem("")
         self.occupation.addItem("Disoccupato/a")
         self.occupation.addItem("Studente")
+        self.occupation.addItem("Lavoratore dipendente")
+        self.occupation.addItem("Lavoratore indipendente")
         self.occupation.addItem("Imprenditore")
-        self.occupation.addItem("Lavoratore Indipendente")
         self.occupation.addItem("Libero professionista")
 
         self.done_button.setText( "Avanti")
