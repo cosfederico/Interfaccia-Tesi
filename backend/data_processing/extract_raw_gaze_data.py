@@ -71,7 +71,7 @@ while True:
             with open(os.path.join(participant_dir, 'eye.asc'), 'r') as f:
                 for line in f.readlines():
                     fields = line.split("\t")
-                    normalized_ts = int(fields[0].strip()) - tracker_start_relative_ts
+                    normalized_ts = (int(fields[0].strip()) - tracker_start_relative_ts) / 1e3
                     if normalized_ts < 0:
                         continue
                     ts.append(normalized_ts + tracker_start_absolute_ts)

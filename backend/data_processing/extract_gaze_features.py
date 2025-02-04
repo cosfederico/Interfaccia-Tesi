@@ -80,8 +80,9 @@ while True:
                         continue 
                     line = line.strip()
                     fields = [field.strip() for field in line.split("\t")]
-                    fields[2] = int(fields[2]) - tracker_start_relative_ts + tracker_start_absolute_ts
-                    fields[3] = int(fields[3]) - tracker_start_relative_ts + tracker_start_absolute_ts
+                    fields[2] = (int(fields[2]) - tracker_start_relative_ts) / 1e3 + tracker_start_absolute_ts
+                    fields[3] = (int(fields[3]) - tracker_start_relative_ts) / 1e3 + tracker_start_absolute_ts
+                    fields[4] = int(fields[4]) / 1e3
                     event = fields[0]
                     if event == "EFIX":
                         fixations.append(fields)
