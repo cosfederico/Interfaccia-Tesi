@@ -1,18 +1,7 @@
-from backend.config import load_config
 import os
 import sys
 
-try:
-    config = load_config()
-except Exception as e:
-    print("Impossibile caricare il file di config: ", e)
-    quit()
-
-def quit():
-    input("Press ENTER to quit...")
-    sys.exit()
-
-DATA_FOLDER = config['app']['DATA_FOLDER'] 
+DATA_FOLDER = 'split_data'
 
 if not os.path.exists(DATA_FOLDER):
     print("Data folder not existent. Please provide a valid folder in the config.json or start recording some data with the main app to extract some features.")
@@ -38,7 +27,8 @@ while True:
             participant_dir = os.path.join(DATA_FOLDER, participant)
 
             print("\tExtracting AU, landmarks and REF for participant", participant, "...")
-            process_video(participant_dir)
+            process_video(participant_dir, video_file_name="webcam_real.mp4", output_file_name="face_real.csv", delete_video_after=True)
+            process_video(participant_dir, video_file_name="webcam_fake.mp4", output_file_name="face_fake.csv", delete_video_after=True)
             
         print("\nAll facial features have been successfully extracted.")
 
