@@ -54,7 +54,7 @@ def split_videos(dest_dir):
         subprocess.run(ffmpeg1, capture_output=True)
 
 def copy_remaining_files(dest_dir):
-    for file in ['fs.json']:
+    for file in ['fs.json', 'data.csv']:
         shutil.copy(os.path.join(participant_dir, file), dest_dir)
 
 try:
