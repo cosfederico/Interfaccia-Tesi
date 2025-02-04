@@ -87,6 +87,9 @@ while True:
                     if event == "EFIX":
                         fixations.append(fields)
                     elif event == "ESACC":
+                        duration = (fields[3] - fields[2])*1e3 + 1
+                        avg_vel = float(fields[9]) / (duration/1e3)
+                        fields.append("%.3f" % avg_vel)
                         saccades.append(fields)
                     elif event == "EBLINK":
                         blinks.append(fields)
@@ -116,7 +119,8 @@ while True:
                 "end_x":saccades[:,7],
                 "end_y":saccades[:,8],
                 "amp":saccades[:,9],
-                "peak_vel":saccades[:,10]
+                "peak_vel":saccades[:,10],
+                "avg_vel":saccades[:,11]
             }).to_csv(os.path.join(participant_dir, "saccades.csv"), index=False)
             
             pd.DataFrame({
