@@ -100,13 +100,17 @@ class MainWindow(QMainWindow):
             self.add_page(TextPage(self, str(e), "Assicuratevi che un dispositivo webcam sia collegato e funzioni correttamente.", "Esci", button_slot=self.close))
             return
         
-        participant_id = 0
         if not os.path.exists(self.DATA_FOLDER):
             os.mkdir(self.DATA_FOLDER)
-        participant_ids = os.listdir(self.DATA_FOLDER)
-        if len(participant_ids) != 0:
-            participant_ids.sort()
-            participant_id = int(participant_ids.pop()) + 1
+        
+        participant_id = 0
+        participants_id = os.listdir(self.DATA_FOLDER)
+        if len(participants_id) != 0:
+            try:
+                participant_id = np.max([int(participant_id) for participant_id in participants_id]) + 1
+            except:
+                self.add_page(TextPage(self, str(e), "Nella cartella dei dati mantenere solo cartelle con nomi numerici.", "Esci", button_slot=self.close))
+                return
         self.participant = Participant(participant_id, self.DATA_FOLDER)
                 
         screen_size = self.app.primaryScreen().size()
