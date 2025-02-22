@@ -221,13 +221,13 @@ class MainWindow(QMainWindow):
     def stop_capture(self):
         if self.webcamRecorder is not None:
             self.webcamRecorder.stop()
+        if self.screenRecorder is not None:
+            self.screenRecorder.stop()
         if self.eyeTracker is not None:
             try:
                 self.eyeTracker.stop_recording()
             except:
                 pass
-        if self.screenRecorder is not None:
-            self.screenRecorder.stop()
             
     def closeEvent(self, QCloseEvent):
         self.stop_capture()
